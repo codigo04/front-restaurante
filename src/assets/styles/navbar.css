@@ -1,0 +1,61 @@
+
+
+.colo-nav{
+    background-color: black;
+    
+}
+
+/* Contenedor principal que usa flexbox */
+.containt {
+    display: flex;
+    width: 100vw; /* Ocupa todo el ancho de la ventana */
+    height: 100vh; /* Ocupa toda la altura de la ventana */
+  }
+  
+  /* Barra lateral */
+  .sidebar {
+    width: 250px; /* Ancho fijo para la barra lateral */
+    background-color: #f5f5f5;
+    color: rgb(0, 0, 0);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sidebar .brand {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+  }
+  
+  .sidebar nav ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .sidebar nav ul li {
+    margin-bottom: 10px;
+  }
+  
+  .sidebar nav ul li a {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  .sidebar nav ul li a:hover {
+    background-color: #444;
+  }
+  
+  .sidebar nav ul li a.disabled {
+    color: #888;
+    pointer-events: none; /* Evita que el enlace sea clickeable */
+  }
+  
+  /* Contenido principal */
+  .content {
+    flex: 1;
+    padding: 20px;
+    background-color: #d1d0d0;
+  }

@@ -1,0 +1,70 @@
+.container-fondo {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* Asegura que ::before esté posicionado relativo al contenedor */
+    background-image: url('../img/fondoLogin.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+}
+
+.container-fondo::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro con opacidad */
+    z-index: -1; /* Asegura que el overlay esté detrás del contenido */
+}
+
+
+/* Asegúrate de que el contenedor tiene algún espacio interno si es necesario */
+
+
+/* Asegúrate de que el contenedor tiene algún espacio interno si es necesario */
+.container-fondo-form {
+    z-index: 1; /* Asegura que el formulario esté sobre el overlay */
+}
+
+
+
+
+
+.container-form{
+    width: 40rem;
+}
+
+
+.container-fondo-form {
+    position: relative;
+    margin: auto;
+    padding: 2rem;
+    background-color: transparent; /* Fondo transparente para el contenedor */
+    color: white;
+    border-radius: 8px;
+    overflow: hidden; /* Para asegurar que la superposición no se desborde */
+}
+
+.container-fondo-form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black; 
+    opacity: 0.5; /* Opacidad del fondo */
+    z-index: -1; /* Asegura que la capa de superposición esté detrás del contenido */
+}
+
+
+
+
+
