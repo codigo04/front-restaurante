@@ -14,7 +14,7 @@
   
   /* Barra lateral */
   .sidebar {
-    width: 250px; /* Ancho fijo para la barra lateral */
+    width: 150px; /* Ancho fijo para la barra lateral */
     background-color: #f5f5f5;
     color: rgb(0, 0, 0);
     padding: 15px;
@@ -33,6 +33,7 @@
   }
   
   .sidebar nav ul li {
+    
     margin-bottom: 10px;
   }
   

@@ -9,7 +9,10 @@ export const Layout = ({sidebar}) => {
         <>
 
             <div className="containt">
+
                 {sidebar}
+
+                
                 <div className="content">
                   <Outlet></Outlet>
                 </div>

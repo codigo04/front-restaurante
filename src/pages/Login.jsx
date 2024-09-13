@@ -5,11 +5,13 @@ import { useNavigate } from 'react-router-dom';
 export const Login = ({ setUserRole }) => {
 
 
-    const [role, setRole] = useState('admin');
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [role, setRole] = useState('¿Quién eres?');
+    const [username, setUsername] = useState('admin@gmail.com');
+    const [password, setPassword] = useState('admin');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();  // Para redirigir al usuario
+
+
 
 
     const getRuta = () => {
@@ -17,16 +19,14 @@ export const Login = ({ setUserRole }) => {
         switch (role) {
 
             case 'admin':
+
+
                 console.log(`/${role}/dashboard`)
-             return `/${role}/dashboard`
+                return `/${role}/dashboard`
             case 'mozo':
-
-             
-
-            case 'caja':
-
-                
-
+                return `/${role}/mesas`
+            case 'cajero':
+                return `/${role}/inicio`
             default:
                 break;
         }
@@ -37,7 +37,7 @@ export const Login = ({ setUserRole }) => {
         e.preventDefault();
 
 
-        console.log(username)
+        console.log(role)
         console.log(password)
         // Ejemplo de lógica de autenticación básica
         const user = {
@@ -49,13 +49,14 @@ export const Login = ({ setUserRole }) => {
         if (username === user.username && password === user.password) {
             // Si las credenciales son correctas, redirigir al Home
 
-            console.log(role)
+
             setUserRole(role);
 
             navigate(`${getRuta()}`);
         } else {
             // Si son incorrectas, mostrar mensaje de error
 
+            console.log(role)
             console.log('contraseña mal')
             setErrorMessage('Credenciales incorrectas, por favor intente de nuevo.');
         }
@@ -98,15 +99,16 @@ export const Login = ({ setUserRole }) => {
                             />
                         </div>
 
-                        <div className="mb-3 form-check">
-                            <input
-                                type="checkbox"
-                                className="form-check-input"
-                                id="exampleCheck1"
-                            />
-                            <label className="form-check-label" htmlFor="exampleCheck1">Soy administrador</label>
+                        <div className="dropdown">
+                            <select onChange={(e) => setRole(e.target.value)} value={role} className="form-select" aria-label="Selecciona un rol">
+                                <option defaultValue="">¿Quién eres?</option>
+                                <option value="admin">Administrador</option>
+                                <option value="mozo">Mozo</option>
+                                <option value="cajero">Cajero</option>
+                            </select>
                         </div>
 
+                        <br />
                         <button type="submit" className="btn btn-primary w-100">Iniciar Sesión</button>
                     </form>
                 </div>
