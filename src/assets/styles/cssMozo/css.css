@@ -1,0 +1,14 @@
+
+
+.container-meza{
+    /* border: solid 1px; */
+    /* border-radius: 5px; */
+    text-align: center;
+
+}
+
+
+.container-num-mesa{
+    display: flex;
+    justify-content: space-around;
+}

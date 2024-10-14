@@ -11,8 +11,8 @@ export const Saludo = ({ nombre }) => {
   
     return (
       <header className="d-flex justify-content-between align-items-center my-4">
-        <h1>Hola, {nombre} </h1>
-        <h1>Chimbote, {formattedDate}</h1>
+        <h2>Hola, {nombre} </h2>
+        <h2>Chimbote, {formattedDate}</h2>
       </header>
     );
 }

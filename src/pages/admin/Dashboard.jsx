@@ -111,7 +111,7 @@ export const Dashboard = () => {
 
         {/* productos en tendencia */}
         <div>
-          <div className="my-4 container" >
+          <div className="my-4 container container-color" >
             <h3>Productos en Tendencia</h3>
             <div className="row">
               <div className="col-md-3">

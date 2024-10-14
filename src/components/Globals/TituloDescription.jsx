@@ -1,12 +1,11 @@
 import React from 'react'
-
-const TituloDescription = ({titulo,decripcion}) => {
+export const TituloDescription = ({titulo,decripcion}) => {
   return (
     <div>
-      <h2>{titulo}</h2>
+      <h2 style={{margin:'0'}}>{titulo}</h2>
       <span>{decripcion}</span>
     </div>
   )
 }
 
-export default TituloDescription
+

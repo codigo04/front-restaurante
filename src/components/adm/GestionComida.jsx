@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import GestionComidaimg from '../../assets/img/adm/gestionComida.jpg';
+import { TituloDescription } from '../Globals/TituloDescription';
 
-import TituloDescription from '../Globals/TituloDescription';
 export const GestionComida = () => {
 
 
@@ -34,7 +34,7 @@ export const GestionComida = () => {
             <div className="row">
                 <div className="col-md-6 container-fluid">
                     
-                    <TituloDescription titulo={'Gestión de Comidas'} decripcion={'Añade y administra los platillos del menú'}></TituloDescription>
+                  <TituloDescription titulo={'Gestión de Comidas'} decripcion={'Añade y administra los platillos del menú'}></TituloDescription>
 
                     <form onSubmit={handleSubmit}>
 
