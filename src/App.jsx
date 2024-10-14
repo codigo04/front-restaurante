@@ -42,6 +42,7 @@ export const App = () => {
     <>
 
       <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login setUserRole={setUserRole} />} />
         <Route
           path="/"
