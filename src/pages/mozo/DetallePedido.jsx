@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 export const DetallePedido = () => {
 
 
-    const { listaPedido, eliminarProducto } = useContext(PedidoContext)
+    const { listaPedido, eliminarProducto , aumentarCantidad, disminuirCantidad} = useContext(PedidoContext)
 
 
 
@@ -55,13 +55,14 @@ export const DetallePedido = () => {
                                         <div className='container-btns'>
                                             <button
                                                 className="btn btn-outline-danger btn-cantidad-mozo"
+                                                onClick={() => aumentarCantidad(producto.id)}
 
                                             >+</button>
                                             <button
-                                                className="btn btn-primary btn-cantidad-mozo" >1</button>
+                                                className="btn btn-primary btn-cantidad-mozo" >{producto.cantidad}</button>
                                             <button
                                                 className="btn btn-outline-danger btn-cantidad-mozo"
-
+                                                onClick={() => disminuirCantidad(producto.id)}
                                             >-</button>
                                         </div>
 
@@ -89,7 +90,7 @@ export const DetallePedido = () => {
             <br />
 
 
-            <div className='container-fluid d-flex  justify-content-between contedor-color  p-4'>
+            <div className='container-fluid d-flex  justify-content-between container-color  p-4'>
 
                 <div className='container d-flex justify-content-between container-detalle-pedido'>
                     <div className=''>

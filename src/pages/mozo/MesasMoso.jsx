@@ -1,8 +1,27 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { MesasMozo } from '../../components/mozo/MesasMozo'
+import { obtenerMesas } from '../../service/mesasService';
 
 export const MesasMoso = () => {
+
+    const [mesas, setMesas] = useState([]);
+
+    console.log(mesas);
+
+    useEffect(() => {
+        const cargarMesas = async () => {
+            try {
+                const response = await obtenerMesas();
+                setMesas(response.data);
+            } catch (error) {
+                console.error('Error al cargar mesas', error);
+            }
+        };
+        cargarMesas();
+    }, []);
+
+
     return (
         <div>
 
@@ -12,27 +31,14 @@ export const MesasMoso = () => {
                 </div>
 
                 <div className="row">
-                    <div className='col p-2'>
-                        <MesasMozo></MesasMozo>
-                    </div>
+                    {
+                        mesas.map(itemMesas =>
 
-
-                    <div className='col p-2'>
-                        <MesasMozo></MesasMozo>
-                    </div>
-
-                    <div className='col p-2'>
-                        <MesasMozo></MesasMozo>
-                    </div>
-
-                    <div className='col p-2'>
-                        <MesasMozo></MesasMozo>
-                    </div>
-
-                    <div className='col p-2'>
-                        <MesasMozo></MesasMozo>
-                    </div>
-                   
+                            <div className='col p-2'>
+                                <MesasMozo numeroMesa={itemMesas.numeroMesa} estado={itemMesas.estado}></MesasMozo>
+                            </div>
+                        )
+                    }
                 </div>
             </div>
 

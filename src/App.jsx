@@ -22,6 +22,7 @@ import { ProductosMozo } from './pages/mozo/ProductosMozo'
 import { ProductosProvider } from './context/ProductosProvider'
 import { PedidoProvider } from './context/PedidoProvider'
 import { DetallePedido } from './pages/mozo/DetallePedido'
+import { MesasAdm } from './pages/admin/MesasAdm'
 
 
 
@@ -72,7 +73,7 @@ export const App = () => {
             <Route path='/admin/ordenes' element={<OrdenesAdm />} />
             <Route path='/admin/clientes' element={<ClientesAdm />}></Route>
             <Route path='/admin/empleados' element={<EmpleadosAdm />}></Route>
-            <Route path='/admin/ingresos' element={<IngresosAdm />}></Route>
+            <Route path='/admin/mesas' element={<MesasAdm />}></Route>
             <Route path='/admin/estadisticas' element={<EstadisticasAdm />}></Route>
 
 

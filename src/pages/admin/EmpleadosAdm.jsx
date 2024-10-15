@@ -123,7 +123,6 @@ export const EmpleadosAdm = () => {
                             </div>
 
                             <div className="col-md-6 mb-3">
-                                <label htmlFor="fechaInicio" className="form-label">Fecha de Ingreso</label>
                                 <input
                                     type="date"
                                     className="form-control"
@@ -136,7 +135,7 @@ export const EmpleadosAdm = () => {
                             </div>
 
                             <div className="col-md-6 mb-3">
-                                <label htmlFor="estado" className="form-label">Estado</label>
+                                <label htmlFor="estado" className="form-label">Estado (por definir)</label>
                                 <input
                                     type="text"
                                     className="form-control"
