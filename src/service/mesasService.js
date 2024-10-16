@@ -33,7 +33,7 @@ export const saveMesa = async (nuevaMesa) => {
 export const actualizarEstadoMesa = async (nuevaMesa,idMesa) => {
 
     try {
-        const response = await axios.put(`${BASE_URL}/api/v1/admin/mesas/actualizar/${1}`, nuevaMesa);
+        const response = await axios.put(`${BASE_URL}/api/v1/admin/mesas/actualizar/${idMesa}`, nuevaMesa);
         return response.data; // Retorna la respuesta para que puedas usarla donde llames a la función
     } catch (error) {
         console.error('Error al actualizar la mesa', error);

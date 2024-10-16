@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { obtenerMesas, saveMesa } from '../../service/mesasService';
+import { MesasContext } from '../../context/MesasProvider';
 
 // { id: 1, numero: 1, capacidad: 4, estado: 'Libre' },
 // { id: 2, numero: 2, capacidad: 2, estado: 'Ocupada' },
@@ -7,27 +8,18 @@ import { obtenerMesas, saveMesa } from '../../service/mesasService';
 
 
 export const MesasAdm = () => {
-    const [mesas, setMesas] = useState([]);
+    
 
     const [numeroMesa, setNumeroMesa] = useState('');
     const [capacidadMesa, setCapacidadMesa] = useState('');
     const [error, setError] = useState('');
     const [mensajeExito, setMensajeExito] = useState('');
 
+       const {mesas,setMesas,cambiarEstado} = useContext(MesasContext);
 
-
-    useEffect(() => {
-        const cargarMesas = async () => {
-            try {
-                const response = await obtenerMesas();
-                setMesas(response.data);
-            } catch (error) {
-                console.error('Error al cargar mesas', error);
-            }
-        };
-        cargarMesas();
-    }, []);
-
+   
+       console.log(mesas)
+    
 
 
     const agregarMesa = async (e) => {
@@ -62,7 +54,11 @@ export const MesasAdm = () => {
         }
     };
 
-    const cambiarEstadoMesa = (id, nuevoEstado) => {
+// (idMesa, numeroMesa, estado)
+    const cambiarEstadoMesa = (id, nuevoEstado,numeroMesa) => {
+
+        cambiarEstado(id,numeroMesa,nuevoEstado)
+
         setMesas(prevMesas =>
             prevMesas.map(mesa => (mesa.id === id ? { ...mesa, estado: nuevoEstado } : mesa))
         );
@@ -147,19 +143,19 @@ export const MesasAdm = () => {
                                         <div className="btn-group" role="group">
                                             <button
                                                 className="btn btn-sm btn-outline-success"
-                                                onClick={() => cambiarEstadoMesa(mesa.id, 'DISPONIBLE')}
+                                                onClick={() => cambiarEstadoMesa(mesa.id, 'DISPONIBLE',mesa.numeroMesa)}
                                             >
                                                 Libre
                                             </button>
                                             <button
                                                 className="btn btn-sm btn-outline-danger"
-                                                onClick={() => cambiarEstadoMesa(mesa.id, 'OCUPADA')}
+                                                onClick={() => cambiarEstadoMesa(mesa.id, 'OCUPADA',mesa.numeroMesa)}
                                             >
                                                 Ocupada
                                             </button>
                                             <button
                                                 className="btn btn-sm btn-outline-warning"
-                                                onClick={() => cambiarEstadoMesa(mesa.id, 'RESERVADA')}
+                                                onClick={() => cambiarEstadoMesa(mesa.id, 'RESERVADA',mesa.numeroMesa)}
                                             >
                                                 Reservada
                                             </button>

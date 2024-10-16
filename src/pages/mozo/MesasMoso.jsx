@@ -1,27 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import { MesasMozo } from '../../components/mozo/MesasMozo'
 import { obtenerMesas } from '../../service/mesasService';
+import { MesasContext } from '../../context/MesasProvider';
 
 export const MesasMoso = () => {
 
-    const [mesas, setMesas] = useState([]);
+    // const [mesas, setMesas] = useState([]);
+    const {mesas, setMesas} = useContext(MesasContext);
 
-    console.log(mesas);
-
-    useEffect(() => {
-        const cargarMesas = async () => {
-            try {
-                const response = await obtenerMesas();
-                setMesas(response.data);
-            } catch (error) {
-                console.error('Error al cargar mesas', error);
-            }
-        };
-        cargarMesas();
-    }, []);
-
-
+   
     return (
         <div>
 
@@ -32,12 +20,16 @@ export const MesasMoso = () => {
 
                 <div className="row">
                     {
-                        mesas.map(itemMesas =>
+                        mesas.map(itemMesas => (
 
-                            <div className='col p-2'>
-                                <MesasMozo numeroMesa={itemMesas.numeroMesa} estado={itemMesas.estado}></MesasMozo>
+                            <div className='col p-2 ' key={itemMesas.id}>
+                                <MesasMozo
+                                    numeroMesa={itemMesas.numeroMesa}
+                                    estado={itemMesas.estado}
+                                    setMesas={setMesas}
+                                    id={itemMesas.id} ></MesasMozo>
                             </div>
-                        )
+                        ))
                     }
                 </div>
             </div>
