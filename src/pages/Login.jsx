@@ -1,65 +1,74 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import '../assets/styles/Login.css'
 import logo from '../assets/img/logito.svg';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthProvider';
 export const Login = ({ setUserRole }) => {
 
 
     const [role, setRole] = useState('¿Quién eres?');
-    const [username, setUsername] = useState('admin@gmail.com');
-    const [password, setPassword] = useState('admin');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();  // Para redirigir al usuario
+    const { iniciarSession, decodToken,isLoading } = useContext(AuthContext);
 
 
 
 
-    const getRuta = () => {
-
-        switch (role) {
-
-            case 'admin':
 
 
-                console.log(`/${role}/dashboard`)
-                return `/${role}/dashboard`
-            case 'mozo':
-                return `/${role}/mesas`
-            case 'cajero':
-                return `/${role}/inicio`
+    const getRuta = (decodedRole) => {
+        switch (decodedRole) {
+            case 'ADMIN':
+                return '/admin/dashboard';
+            case 'MOZO':
+                return '/mozo/mesas';
+            case 'CAJA':
+                return '/cajero/inicio';
             default:
-                break;
+                return '/';
         }
-    }
+    };
 
-    // setRole('admin')
-    const handleLogin = (e) => {
+    const validateForm = () => {
+        if (!username || !password || role === 'Elige tu tipo de usuario') {
+            setErrorMessage('Por favor completa todos los campos');
+            return false;
+        }
+        return true;
+    };
+
+
+    const handleLogin = async (e) => {
         e.preventDefault();
+        if (!validateForm()) return;
 
+        try {
 
-        console.log(role)
-        console.log(password)
-        // Ejemplo de lógica de autenticación básica
-        const user = {
-            username: 'admin@gmail.com',
-            password: 'admin'
-        };
+            // Iniciar sesión y obtener el token
+            const token = await iniciarSession(username, password);
 
-        // Validar credenciales
-        if (username === user.username && password === user.password) {
-            // Si las credenciales son correctas, redirigir al Home
+            if (token) {
+                const decoded = JSON.parse(atob(token.split('.')[1])); // Decodificar token
 
+                const userRole = decoded.roles.find(r => r.authority === role);
 
-            setUserRole(role);
+                if (userRole) {
+                    // Redirigir a la página según el rol
+                    setUserRole(userRole.authority)
+                    navigate(getRuta(userRole.authority));
+                } else {
+                    setErrorMessage('El rol seleccionado no coincide con el usuario');
+                }
+            } else {
+                setErrorMessage('Credenciales incorrectas');
+            }
 
-            navigate(`${getRuta()}`);
-        } else {
-            // Si son incorrectas, mostrar mensaje de error
-
-            console.log(role)
-            console.log('contraseña mal')
-            setErrorMessage('Credenciales incorrectas, por favor intente de nuevo.');
+        } catch (error) {
+            setErrorMessage('Error al iniciar sesión. Inténtalo de nuevo más tarde');
         }
+
     };
 
 
@@ -75,7 +84,9 @@ export const Login = ({ setUserRole }) => {
                         <img src={logo} className="card-img-top" alt="logo" />
 
 
-
+                        <div style={{ color: 'white' }}>
+                            {errorMessage}
+                        </div>
                         <div className="mb-3">
                             <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
                             <input
@@ -101,10 +112,10 @@ export const Login = ({ setUserRole }) => {
 
                         <div className="dropdown">
                             <select onChange={(e) => setRole(e.target.value)} value={role} className="form-select" aria-label="Selecciona un rol">
-                                <option defaultValue="">¿Quién eres?</option>
-                                <option value="admin">Administrador</option>
-                                <option value="mozo">Mozo</option>
-                                <option value="cajero">Cajero</option>
+                                <option defaultValue="">Elige tu tipo de usuario</option>
+                                <option value="ADMIN">Administrador</option>
+                                <option value="MOZO">Mozo</option>
+                                <option value="CAJA">Cajero</option>
                             </select>
                         </div>
 

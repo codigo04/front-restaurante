@@ -24,6 +24,7 @@ import { PedidoProvider } from './context/PedidoProvider'
 import { DetallePedido } from './pages/mozo/DetallePedido'
 import { MesasAdm } from './pages/admin/MesasAdm'
 import { MesasProvider } from './context/MesasProvider'
+import { AuthProvider } from './context/AuthProvider'
 
 
 
@@ -35,11 +36,11 @@ export const App = () => {
   const getSidebar = () => {
     // userRole
     switch (userRole) {
-      case 'admin':
+      case 'ADMIN':
         return <NavBarAdmin></NavBarAdmin>;
-      case 'mozo':
+      case 'MOZO':
         return <NavBarMoso></NavBarMoso>;
-      case 'cajero':
+      case 'CAJA':
         return <NavBarCaja></NavBarCaja>;
       default:
         return null;
@@ -49,56 +50,57 @@ export const App = () => {
 
   return (
     <>
-      <PedidoProvider>
-        <ProductosProvider>
+      <AuthProvider>
+        <PedidoProvider>
+          <ProductosProvider>
+            <MesasProvider>
+              <Routes>
+                <Route path="/" element={<Navigate to="/login" />} />
+                <Route path="/login" element={<Login setUserRole={setUserRole} />} />
+                <Route
+                  path="/"
+                  element={
+                    <ProtectedRoute>
+                      <Layout sidebar={getSidebar()} />
+                    </ProtectedRoute>
+                  }
+                >
 
-        <MesasProvider>
-          <Routes>
-            <Route path="/" element={<Navigate to="/login" />} />
-            <Route path="/login" element={<Login setUserRole={setUserRole} />} />
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute>
-                  <Layout sidebar={getSidebar()} />
-                </ProtectedRoute>
-              }
-            >
+                  {/* Rutas protegidas */}
 
-              {/* Rutas protegidas */}
+                  <Route path='/cajero' element={<Cajero />} />
+                  <Route path='/moso' element={<Moso />} />
 
-              <Route path='/cajero' element={<Cajero />} />
-              <Route path='/moso' element={<Moso />} />
-
-              {/* Rutas del admin */}
-              <Route path='/admin/dashboard' element={<Dashboard />} />
-              <Route path='/admin/productos' element={<ProdutosAdm />} />
-              <Route path='/admin/ordenes' element={<OrdenesAdm />} />
-              <Route path='/admin/clientes' element={<ClientesAdm />}></Route>
-              <Route path='/admin/empleados' element={<EmpleadosAdm />}></Route>
-              <Route path='/admin/mesas' element={<MesasAdm />}></Route>
-              <Route path='/admin/estadisticas' element={<EstadisticasAdm />}></Route>
-
-            
-                {/* mozo /mozo/pedido */}
-                <Route path='/mozo/mesas' element={<MesasMoso />}></Route>
-                <Route path='/mozo/productos' element={<ProductosMozo />}></Route>
-                <Route path='/mozo/pedido' element={<DetallePedido />}></Route>
-             
-
-              {/* caja */}
-              <Route path='/cajero/inicio' element={<Dashboard />}></Route>
+                  {/* Rutas del admin */}
+                  <Route path='/admin/dashboard' element={<Dashboard />} />
+                  <Route path='/admin/productos' element={<ProdutosAdm />} />
+                  <Route path='/admin/ordenes' element={<OrdenesAdm />} />
+                  <Route path='/admin/clientes' element={<ClientesAdm />}></Route>
+                  <Route path='/admin/empleados' element={<EmpleadosAdm />}></Route>
+                  <Route path='/admin/mesas' element={<MesasAdm />}></Route>
+                  <Route path='/admin/estadisticas' element={<EstadisticasAdm />}></Route>
 
 
+                  {/* mozo /mozo/pedido */}
+                  <Route path='/mozo/mesas' element={<MesasMoso />}></Route>
+                  <Route path='/mozo/productos' element={<ProductosMozo />}></Route>
+                  <Route path='/mozo/pedido' element={<DetallePedido />}></Route>
 
-            </Route>
+
+                  {/* caja */}
+                  <Route path='/cajero/inicio' element={<Dashboard />}></Route>
 
 
-            <Route path="*" element={<Navigate to="/login" />} />
-          </Routes>
-          </MesasProvider>
-        </ProductosProvider>
-      </PedidoProvider>
+
+                </Route>
+
+
+                <Route path="*" element={<Navigate to="/login" />} />
+              </Routes>
+            </MesasProvider>
+          </ProductosProvider>
+        </PedidoProvider>
+      </AuthProvider>
     </>
 
   )
