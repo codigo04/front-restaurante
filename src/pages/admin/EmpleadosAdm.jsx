@@ -1,14 +1,17 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { TituloDescription } from '../../components/Globals/TituloDescription';
+import { AuthContext } from '../../context/AuthProvider';
 
 export const EmpleadosAdm = () => {
 
+
+    const { usuarios } = useContext(AuthContext);
     const [foodItems, setFoodItems] = useState([]);
     const [formData, setFormData] = useState({
-        name: '',
+        name: 's',
         apellido: '',
         correo: '',
-        password:'',
+        password: '',
         rol: '',
         fechaInicio: '',
         estado: '',
@@ -25,7 +28,7 @@ export const EmpleadosAdm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         setFoodItems([...foodItems, formData]);
-        setFormData({ name: '', apellido: '', correo: '',password,rol: '', fechaInicio: '', estado: '', dni: '' });
+        setFormData({ name: '', apellido: '', correo: '', password, rol: '', fechaInicio: '', estado: '', dni: '' });
     };
 
     // Función para simular una solicitud externa por DNI y rellenar los campos
@@ -195,14 +198,16 @@ export const EmpleadosAdm = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {foodItems.map((item, index) => (
+                            {usuarios.map((item, index) => (
                                 <tr key={index}>
-                                    <td>{item.name}</td>
+                                    <td>{item.nombres}</td>
                                     <td>{item.correo}</td>
-                                    <td>{item.rol}</td>
+                                    <td>
+                                        {item.roles.map((rol) => rol.nombreRol).join(', ')}
+                                    </td>
                                     <td>{item.fechaInicio}</td>
                                     <td>{item.estado}</td>
-                                    <td>{item.dni}</td>
+                                    <td>{item.numDoc}</td>
                                     <td>
                                         <button className="btn btn-danger btn-sm">Eliminar</button>
                                     </td>

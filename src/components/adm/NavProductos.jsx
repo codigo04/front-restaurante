@@ -6,11 +6,12 @@ export const NavProductos = ({setEstado}) => {
 
     return (
         <div>
-            <ul className="nav nav-pills nav-fill gap-2 p-1 small bg-primary rounded-5 shadow-sm" id="pillNav2" role="tablist" style={{
-                '--bs-nav-link-color': 'var(--bs-white)',
-                '--bs-nav-pills-link-active-color': 'var(--bs-primary)',
-                '--bs-nav-pills-link-active-bg': 'var(--bs-white)',
-                width:'20rem'
+            <ul  className="nav nav-pills nav-fill gap-2 p-1 small  rounded-5 shadow-sm" id="pillNav2" role="tablist" style={{
+                '--bs-nav-link-color': 'black',
+                '--bs-nav-pills-link-active-color': 'white',
+                '--bs-nav-pills-link-active-bg': '#F56606',
+                width:'20rem',
+                backgroundColor:'rgb(241, 241, 241)'
             }}>
                 <li className="nav-item" role="presentation">
                     <button

@@ -10,7 +10,7 @@ export const Saludo = ({ nombre }) => {
     });
   
     return (
-      <header className="d-flex justify-content-between align-items-center my-4">
+      <header className="d-flex justify-content-between align-items-center my-4" style={{paddingLeft:'20px', paddingRight:'20px'}}>
         <h2>Hola, {nombre} </h2>
         <h2>Chimbote, {formattedDate}</h2>
       </header>

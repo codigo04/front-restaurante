@@ -24,7 +24,7 @@ export const OrdenesAdm = () => {
     <>
       <section className='container-fluid container-color'>
         <div>
-          <TituloDescription titulo={'Gestión de Clientes'} decripcion={'Buscar clientes por nombre, correo o teléfono'}></TituloDescription>
+          <TituloDescription titulo={'Gestión de Ordenes'} decripcion={'Buscar '}></TituloDescription>
           <div className=" mt-4">
             <div className="row">
               <div className="col-md-12 mb-3">
@@ -34,7 +34,7 @@ export const OrdenesAdm = () => {
                   className="form-control"
                   id="search"
                   name="search"
-                  placeholder="Buscar platillo..."
+                  placeholder="Buscar Orden..."
                   aria-label="Buscar"
                   onChange={handleSearch}
                 />
@@ -43,7 +43,7 @@ export const OrdenesAdm = () => {
           </div>
 
           <div className="mt-5">
-            <h3>Listado de Usuarios</h3>
+            <h3>Listado de Ordenes</h3>
             <table className="table table-striped">
               <thead>
                 <tr>

@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Saludo } from '../../components/Globals/Saludo'
 import '../../assets/styles/cssAdmin/css.css'
 import { Progress } from '../../components/adm/Progress';
 import  pollo from '../../assets/img/adm/pollo.jpg';
+import { AuthContext } from '../../context/AuthProvider';
 
 
 export const Dashboard = () => {
 
+   const { usuarios } = useContext(AuthContext);
 
   const orders = [
     { client: 'Cliente 1', table: 5, date: '14/08/2001', time: '10:00' },
@@ -38,7 +40,7 @@ export const Dashboard = () => {
           </div>
           <div className="col-md-4">
             <div className="card-gradient">
-              <h2>8</h2>
+              <h2>{usuarios.length}</h2>
               <p>Total Empleados</p>
             </div>
           </div>

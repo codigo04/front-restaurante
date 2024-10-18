@@ -5,6 +5,7 @@ export const PedidoContext = createContext();
 
 const initialState = []
 export const PedidoProvider = ({ children }) => {
+  
   const [productos, setProducto] = useState();
 
   const pedidoReducer = (state = initialState, action = {}) => {

@@ -3,6 +3,8 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import React, { createContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { obtenerEmpledos } from '../service/empleadosService';
+import { obtenerClientes } from '../service/clientesService';
 
 export const AuthContext = createContext();
 
@@ -24,12 +26,51 @@ export const AuthProvider = ({ children }) => {
         SetDecodToken(decodeToken);
 
         console.log(decodeToken)
+    } 
+   
+    const getEmpleados = async (tokenUser) => {
+        
+      
+        try {
+           
+            const {data} = await obtenerEmpledos(tokenUser)
+            setUsuarios(data)
+            console.log(usuarios)
+        } catch (error) {
+            console.error('Error obtener los empleados', error);
+        }
     }
+
+
+    const getClientes = async (tokenUser) => {
+        
+      
+        try {
+           
+            const {data} = await obtenerClientes(tokenUser)
+            setClientes(data.data)
+            console.log(usuarios)
+        } catch (error) {
+            console.error('Error obtener los Clientes', error);
+        }
+    }
+
+
+
+    useEffect(() => {
+        const tokenUser = localStorage.getItem('token')
+        if (!tokenUser) return
+
+        getEmpleados(tokenUser);
+        getClientes(tokenUser);
+    }, []);
+
 
     useEffect(() => {
         const autenticarUser = () => {
             const token = localStorage.getItem('token');
             setRoluser(localStorage.getItem('rolUser'))
+
             if (token) {
                 console.log('si hay tokeen')
                 setAuth(token);
@@ -95,14 +136,15 @@ export const AuthProvider = ({ children }) => {
 
             value={{
                 iniciarSession,
-                cerrarSesionAuth
-                ,
+                cerrarSesionAuth,
                 decodToken,
                 isLoading,
                 setIsLoading,
                 auth,
                 rolUser,
-                 setRoluser
+                setRoluser,
+                usuarios,
+                clientes
             }}
         >
             {children}
