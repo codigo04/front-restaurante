@@ -3,13 +3,22 @@ import axios from "axios";
 
 
 const BASE_URL = 'http://localhost:8080'; // Reemplaza con la URL real de tu API.
-
-
+const token = localStorage.getItem('token')
+const configToken = {
+    headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+    }
+}
 
 export const obtenerMesas = async () => {
+   
+
     try {
-        const response = await axios.get(`${BASE_URL}/api/v1/admin/mesas/todos`);
+       
+        const response = await axios.get(`${BASE_URL}/api/v1/admin/mesas/todos`, configToken);
         return response.data;
+
     } catch (error) {
         console.error('Error al obtener las mesas', error);
         throw error;
@@ -19,8 +28,11 @@ export const obtenerMesas = async () => {
 
 
 export const saveMesa = async (nuevaMesa) => {
+
+
+
     try {
-        const response = await axios.post(`${BASE_URL}/api/v1/admin/mesas/crear`, nuevaMesa);
+        const response = await axios.post(`${BASE_URL}/api/v1/admin/mesas/crear`, nuevaMesa,configToken);
         return response.data;
     } catch (error) {
         console.error('Error al agregar la mesa', error);
@@ -30,10 +42,10 @@ export const saveMesa = async (nuevaMesa) => {
 
 
 // /actualizar/{id}
-export const actualizarEstadoMesa = async (nuevaMesa,idMesa) => {
+export const actualizarEstadoMesa = async (nuevaMesa, idMesa) => {
 
     try {
-        const response = await axios.put(`${BASE_URL}/api/v1/admin/mesas/actualizar/${idMesa}`, nuevaMesa);
+        const response = await axios.put(`${BASE_URL}/api/v1/admin/mesas/actualizar/${idMesa}`, nuevaMesa,configToken);
         return response.data; // Retorna la respuesta para que puedas usarla donde llames a la función
     } catch (error) {
         console.error('Error al actualizar la mesa', error);

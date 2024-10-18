@@ -1,8 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import logo from '../assets/img/logito.svg'
+import { AuthContext } from '../context/AuthProvider'
 
 export const NavBarAdmin = () => {
+ 
+ 
+    const {cerrarSesionAuth}  = useContext(AuthContext);
+
+    
     return (
         <>
             <aside className="sidebar">
@@ -18,7 +24,7 @@ export const NavBarAdmin = () => {
                         <li><Link to="/admin/empleados">Empleados</Link></li>
                         <li><Link to="/admin/mesas">Mesas</Link></li>
                         <li><Link to="/admin/estadisticas">Estadisticas</Link></li>
-                        <li><Link to="/login" className="">Salir</Link></li>
+                        <li onClick={cerrarSesionAuth}><Link to="/login" className="">Salir</Link></li>
                     </ul>
                 </nav>
             </aside>

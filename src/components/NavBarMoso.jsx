@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import logo from '../assets/img/logito.svg'
 import { Link } from 'react-router-dom'
+import { AuthContext } from '../context/AuthProvider';
 export const NavBarMoso = () => {
+  const {cerrarSesionAuth}  = useContext(AuthContext);
   return (
     <>
       <aside className="sidebar">
@@ -12,7 +14,7 @@ export const NavBarMoso = () => {
           <ul>
             <li><Link to="/mozo/mesas">mesas</Link></li>
             
-            <li><Link to="/login" className="">Salir</Link></li>
+            <li onClick={cerrarSesionAuth}><Link to="/login" className="">Salir</Link></li>
           </ul>
         </nav>
       </aside>

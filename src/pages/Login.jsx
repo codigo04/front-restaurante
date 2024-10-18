@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import '../assets/styles/Login.css'
 import logo from '../assets/img/logito.svg';
 import { useNavigate } from 'react-router-dom';
@@ -6,17 +6,12 @@ import { AuthContext } from '../context/AuthProvider';
 export const Login = ({ setUserRole }) => {
 
 
-    const [role, setRole] = useState('¿Quién eres?');
+    const [role, setRole] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();  // Para redirigir al usuario
-    const { iniciarSession, decodToken,isLoading } = useContext(AuthContext);
-
-
-
-
-
+    const { iniciarSession, decodToken, isLoading,setIsLoading, auth, rolUser, setRoluser } = useContext(AuthContext);
 
     const getRuta = (decodedRole) => {
         switch (decodedRole) {
@@ -31,6 +26,28 @@ export const Login = ({ setUserRole }) => {
         }
     };
 
+
+
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            // const decoded = JSON.parse(atob(token.split('.')[1])); // Decodificar token
+
+            // const userRole = decoded.roles.find(r => r.authority);
+            console.log('isLoading')
+             console.log(isLoading)
+            if (rolUser) {
+                setUserRole(rolUser);
+                setRoluser(rolUser)
+                setIsLoading(true)
+                navigate(getRuta(rolUser));
+            }
+        }
+    }, [navigate, role, setUserRole,setIsLoading]);
+
+
+
     const validateForm = () => {
         if (!username || !password || role === 'Elige tu tipo de usuario') {
             setErrorMessage('Por favor completa todos los campos');
@@ -40,24 +57,38 @@ export const Login = ({ setUserRole }) => {
     };
 
 
-    const handleLogin = async (e) => {
+    const handleLogin = async  (e) => {
         e.preventDefault();
+
         if (!validateForm()) return;
 
         try {
 
-            // Iniciar sesión y obtener el token
-            const token = await iniciarSession(username, password);
+            //Iniciar sesión y obtener el token
+          const authToken = await iniciarSession(username, password);
 
-            if (token) {
-                const decoded = JSON.parse(atob(token.split('.')[1])); // Decodificar token
+            if (authToken) {
+                 console.log('entrio a la segunda vez')
+                // console.log('eltoken' + auth);
+                // console.log('eltoken');
+
+                const decoded = JSON.parse(atob(authToken.split('.')[1])); // Decodificar token
 
                 const userRole = decoded.roles.find(r => r.authority === role);
 
                 if (userRole) {
-                    // Redirigir a la página según el rol
+
+                    console.log('es el isLoad ' + isLoading)
+                    console.log('el rol que tien es' + userRole.authority)
+
+                    setRoluser(userRole.authority)
+
                     setUserRole(userRole.authority)
+
+                    localStorage.setItem('rolUser', userRole.authority);
+
                     navigate(getRuta(userRole.authority));
+
                 } else {
                     setErrorMessage('El rol seleccionado no coincide con el usuario');
                 }

@@ -5,7 +5,7 @@ import { AuthContext } from '../context/AuthProvider';
 export const ProtectedRoute = ({ children }) => {
 
  const { iniciarSession, decodToken, isLoading} = useContext(AuthContext); 
-  
+ 
     const userLogin = isLoading; 
 
     if (!userLogin) {
