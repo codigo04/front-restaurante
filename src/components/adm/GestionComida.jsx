@@ -101,7 +101,7 @@ export const GestionComida = () => {
                             </div>
                         </div>
 
-                        <button type="submit" className="btn btn-dark">+ Agregar comida</button>
+                        <button type="submit" className="btn color-primario ">+ Agregar comida</button>
                     </form>
 
 

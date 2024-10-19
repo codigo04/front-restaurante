@@ -178,7 +178,7 @@ export const GestionBebidas = () => {
                             </div>
                         </div>
 
-                        <button type="submit" className="btn btn-dark">+ Agregar comida</button>
+                        <button type="submit" className="btn btn-dark color-primario">+ Agregar bebida</button>
                     </form>
 
 
@@ -205,7 +205,7 @@ export const GestionBebidas = () => {
                                         <td>{item.stock}</td>
 
                                         <td>
-                                            <button className="btn btn-danger btn-sm">Editar</button>
+                                            <button className="btn btn-danger btn-sm color-primario">Editar</button>
                                         </td>
                                     </tr>
                                 ))}

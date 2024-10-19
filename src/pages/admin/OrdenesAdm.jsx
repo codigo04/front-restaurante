@@ -67,7 +67,7 @@ export const OrdenesAdm = () => {
                     <td>{user.orders}</td>
                     <td>
                       <button
-                        className="btn btn-danger btn-sm"
+                        className="btn btn-danger btn-sm color-primario"
                         onClick={() => handleDelete(index)}
                       >
                         Eliminar

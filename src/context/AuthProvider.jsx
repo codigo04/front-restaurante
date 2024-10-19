@@ -134,6 +134,10 @@ export const AuthProvider = ({ children }) => {
     }
 
 
+    useEffect(() => {
+        cerrarSesionAuth()
+    }, []);
+
     return (
         <AuthContext.Provider
 

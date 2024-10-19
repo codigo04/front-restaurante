@@ -46,9 +46,53 @@ button{
 } */
 
 .boton-navbar {
-   
+
     left: 157px;
 }
+
+
+.color-primario {
+    border: 1px solid #F56606;
+    color: white;
+    background-color: #F56606;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; /* Agrega una transición suave */
+}
+
+.color-primario:hover {
+    background-color: #FF7F24; /* Color de fondo ligeramente más claro para el hover */
+    border-color: #FF7F24; /* Cambia también el color del borde en hover */
+    color: white;
+}
+
+
+
+
+
+input[type="text"]  {
+    /* border: 2px solid #F56606; */
+    padding: 10px;
+    border-radius: 5px;
+    outline: none;
+}
+
+
+input[type="text"] :focus {
+    border-color: #FF7F24 !important; /* Color más claro al hacer focus */
+    box-shadow: 0 0 5px rgba(245, 102, 6, 0.5); /* Sombra al hacer focus */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* Estilo para iPhone 12 Pro en modo vertical */
 @media only screen and (max-width: 390px) and (max-height: 844px) {

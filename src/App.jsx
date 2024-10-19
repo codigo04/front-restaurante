@@ -5,7 +5,7 @@ import { Dashboard } from './pages/admin/Dashboard'
 import { Layout } from './components/Layout'
 
 import './assets/styles/index.css'
-import { Cajero } from './pages/Cajero'
+
 import { Moso } from './pages/Moso'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { NavBarAdmin } from './components/NavBarAdmin'
@@ -25,6 +25,7 @@ import { DetallePedido } from './pages/mozo/DetallePedido'
 import { MesasAdm } from './pages/admin/MesasAdm'
 import { MesasProvider } from './context/MesasProvider'
 import { AuthProvider } from './context/AuthProvider'
+import { Cajero } from './pages/caja/Cajero'
 
 
 
@@ -88,7 +89,7 @@ export const App = () => {
 
 
                   {/* caja */}
-                  <Route path='/cajero/inicio' element={<Dashboard />}></Route>
+                  <Route path='/cajero/inicio' element={<Cajero />}></Route>
 
 
 

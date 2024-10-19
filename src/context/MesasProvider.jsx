@@ -27,7 +27,7 @@ export const MesasProvider = ({ children }) => {
     const cambiarEstado = async (idMesa, numeroMesa, estado) => {
         const nuevaMesa = {
             numeroMesa: numeroMesa,
-            capacidad: 40, // Esto puede ser dinámico
+            // capacidad: 40, 
             estado: estado
         };
 

@@ -71,12 +71,12 @@ export const Dashboard = () => {
                         <td>{order.client}</td>
                         <td>{order.table}</td>
                         <td>{order.date} - {order.time}</td>
-                        <td><button className="btn btn-primary">Ver</button></td>
+                        <td><button className="btn  color-primario">Ver</button></td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-                <button className="btn btn-warning">Ver Todos</button>
+                <button className="btn btn-warning color-primario">Ver Todos</button>
               </article>
             </div>
 

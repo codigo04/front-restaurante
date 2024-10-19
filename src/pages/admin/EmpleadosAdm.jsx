@@ -177,7 +177,7 @@ export const EmpleadosAdm = () => {
                             onChange={handleChange}
                             placeholder="Ingrese DNI para buscar"
                         />
-                        <button className="btn btn-primary" onClick={handleSearch}>Buscar</button>
+                        <button className="btn  color-primario" onClick={handleSearch}>Buscar</button>
                     </div>
                 </div>
 
@@ -269,7 +269,7 @@ export const EmpleadosAdm = () => {
                             </div>
                         </div>
 
-                        <button type="submit" className="btn btn-dark">+ Agregar Empleado</button>
+                        <button type="submit" className="btn btn-dark color-primario">+ Agregar Empleado</button>
                     </div>
                 </form>
 
@@ -299,7 +299,7 @@ export const EmpleadosAdm = () => {
                                     <td>{item.enabled ? 'Activo' : 'Inactivo'}</td>
                                     <td>{item.numDoc}</td>
                                     <td>
-                                        <button className="btn btn-danger btn-sm">Editar</button>
+                                        <button className="btn btn-danger btn-sm color-primario">Editar</button>
                                     </td>
                                 </tr>
                             ))}
