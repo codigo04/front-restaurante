@@ -1,4 +1,4 @@
-*{
+* {
     color: rgb(0, 0, 0);
 }
 
@@ -6,27 +6,61 @@
 /******* stylos sidebar****** */
 
 
-.icon-style{
+.icon-style {
     position: absolute;
-    top: 44px; /* Ajusta la posición vertical según sea necesario */
-    transition: left 0.3s ease; /* Suaviza el movimiento del botón */
-    z-index: 1000; /* Asegura que el botón se mantenga visible */
-    background-color: #F56606; /* Color de fondo del botón */
-    border-radius: 100%; /* Cambiamos el estilo del botón para hacerlo más circular */
-    width: 40px; /* Ancho del botón */
-    height: 40px; /* Alto del botón */
-   
+    top: 44px;
+    /* Ajusta la posición vertical según sea necesario */
+    transition: left 0.3s ease;
+    /* Suaviza el movimiento del botón */
+    z-index: 1000;
+    /* Asegura que el botón se mantenga visible */
+    background-color: #F56606;
+    /* Color de fondo del botón */
+    border-radius: 100%;
+    /* Cambiamos el estilo del botón para hacerlo más circular */
+    width: 40px;
+    /* Ancho del botón */
+    height: 40px;
+    /* Alto del botón */
+
 }
 
-.container-sidebar{
+.container-sidebar {
     background-color: rgb(241, 241, 241) !important;
-    min-height: 100vh; 
-    transition: width 0.3s ease; 
+    min-height: 100vh;
+    transition: width 0.3s ease;
     position: relative;
     color: red;
 }
 
 
-.sidebar nav ul li a:hover{
+.sidebar nav ul li a:hover {
     background-color: #F56606 !important;
+}
+
+
+/*
+button{
+    background-color: #F56606 !important;
+    border: solid 1px #F56606 !important;
+} */
+
+.boton-navbar {
+   
+    left: 157px;
+}
+
+/* Estilo para iPhone 12 Pro en modo vertical */
+@media only screen and (max-width: 390px) and (max-height: 844px) {
+
+    /* Estilos específicos para el iPhone 12 Pro */
+    .catainer-responsy {
+        padding-top: 12px;
+    }
+
+    .boton-navbar {
+        top: 45px;
+        left: 113px;
+    }
+
 }

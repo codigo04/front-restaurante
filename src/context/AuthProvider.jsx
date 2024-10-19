@@ -34,6 +34,7 @@ export const AuthProvider = ({ children }) => {
         try {
            
             const {data} = await obtenerEmpledos(tokenUser)
+            
             setUsuarios(data)
             console.log(usuarios)
         } catch (error) {
@@ -52,6 +53,7 @@ export const AuthProvider = ({ children }) => {
             console.log(usuarios)
         } catch (error) {
             console.error('Error obtener los Clientes', error);
+            
         }
     }
 
@@ -117,6 +119,7 @@ export const AuthProvider = ({ children }) => {
                 return token
         } catch (error) {
             console.error('Error al iniciar sesión:', error);
+            // alert("CONEXION A SERVIDOR INAXCESIBLE")
             // setIsLoading(false)
             return null;
         }

@@ -35,16 +35,16 @@ export const Sidebar = () => {
                     padding:'0'
                 }}
             >
-                <div className="container">
+                <div className="container catainer-responsy">
                     <img src={logo} className="card-img-top mb-3" alt="logo" />
 
                     {/* Botón de alternancia cerca del logo */}
                     <a
-                        className='d-flex justify-content-center align-items-center icon-style'
+                        className='d-flex justify-content-center align-items-center icon-style boton-navbar'
                         variant="outline-primary"
                         onClick={toggleSidebar}
                         style={{
-                            left: isOpen ? '148px' : '10px',
+                            left: isOpen ? '157px' : '1px',
                         }}
 
 
@@ -67,12 +67,12 @@ export const Sidebar = () => {
                         {links.filter(link => link.rol === rolUser)
                             .map(link => (
                                 <li  key={link.ruta} className=''>
-                                    <Link to={link.ruta} className="text-black lassName='color-hover">
+                                    <Link to={link.ruta} className="text-black " >
                                         {link.nombre}
                                     </Link>
                                 </li>
                             ))}
-                        <li onClick={cerrarSesionAuth}><Link to="/login" className="text-white">Salir</Link></li>
+                        <li onClick={cerrarSesionAuth} className=''><Link to="/login" className="text-black" style={{color:'black'}}>Salir</Link></li>
                     </ul>
                 </nav>
             </aside >

@@ -36,6 +36,7 @@ export const saveMesa = async (nuevaMesa) => {
         return response.data;
     } catch (error) {
         console.error('Error al agregar la mesa', error);
+        // alert('CONCECTATE A TU SERVIDOR')
         throw error;
     }
 };

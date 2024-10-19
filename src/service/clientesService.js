@@ -20,6 +20,7 @@ export const obtenerClientes = async (tokenUser) => {
 
     } catch (error) {
         console.error('Error al obtener los Clientes', error);
+        // alert('CONCECTATE A TU SERVIDOR')
         throw error;
     }
 };

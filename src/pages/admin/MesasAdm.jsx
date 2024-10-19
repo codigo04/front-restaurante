@@ -1,63 +1,70 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { obtenerMesas, saveMesa } from '../../service/mesasService';
 import { MesasContext } from '../../context/MesasProvider';
+import { useMediaQuery } from '@mui/material';
 
 // { id: 1, numero: 1, capacidad: 4, estado: 'Libre' },
 // { id: 2, numero: 2, capacidad: 2, estado: 'Ocupada' },
 // { id: 3, numero: 3, capacidad: 6, estado: 'Reservada' },
 
 
-export const MesasAdm = () => {
-    
 
+
+export const MesasAdm = () => {
+
+    const isMobile = useMediaQuery('(max-width:600px)');
     const [numeroMesa, setNumeroMesa] = useState('');
     const [capacidadMesa, setCapacidadMesa] = useState('');
     const [error, setError] = useState('');
     const [mensajeExito, setMensajeExito] = useState('');
 
-       const {mesas,setMesas,cambiarEstado} = useContext(MesasContext);
+    const { mesas, setMesas, cambiarEstado } = useContext(MesasContext);
+ 
 
-   
-       console.log(mesas)
-    
+    console.log(mesas)
+
 
 
     const agregarMesa = async (e) => {
         e.preventDefault();
         setError('');
         setMensajeExito('');
-    
+
         // Validación simple
         if (!numeroMesa || !capacidadMesa) {
-          setError('Por favor ingresa todos los datos');
-          return;
+            setError('Por favor ingresa todos los datos');
+            return;
         }
-    
+
         const nuevaMesa = {
             numeroMesa,
             capacidad: parseInt(capacidadMesa),
             estado: 'DISPONIBLE'
         };
-    
+
         try {
-          const response = await saveMesa(nuevaMesa);
-          setMensajeExito(response.message || 'Mesa agregada correctamente.');
-          setError(response.message)
-          // Actualiza la lista de mesas con la nueva mesa.
-          setMesas([...mesas, response.data]); // Agrega la nueva mesa al array de mesas.
-          setNumeroMesa('');
-          setCapacidadMesa('');
+            const response = await saveMesa(nuevaMesa);
+            setMensajeExito(response.message || 'Mesa agregada correctamente.');
+            setError(response.message)
+            // Actualiza la lista de mesas con la nueva mesa.
+            setMesas([...mesas, response.data]); // Agrega la nueva mesa al array de mesas.
+            setNumeroMesa('');
+            setCapacidadMesa('');
         } catch (error) {
-          console.error('Error al agregar la mesa:', error);
-          
-          setError('Ya existe una mesa con el número: '+numeroMesa);
+            console.error('Error al agregar la mesa:', error);
+
+            setError('Ya existe una mesa con el número: ' + numeroMesa);
         }
     };
 
-// (idMesa, numeroMesa, estado)
-    const cambiarEstadoMesa = (id, nuevoEstado,numeroMesa) => {
+    // (idMesa, numeroMesa, estado)
+    const cambiarEstadoMesa = (id, nuevoEstado, numeroMesa) => {
 
-        cambiarEstado(id,numeroMesa,nuevoEstado)
+
+
+
+
+        cambiarEstado(id, numeroMesa, nuevoEstado)
 
         setMesas(prevMesas =>
             prevMesas.map(mesa => (mesa.id === id ? { ...mesa, estado: nuevoEstado } : mesa))
@@ -78,7 +85,7 @@ export const MesasAdm = () => {
         <div className="container mt-4">
             <h1 className="mb-4 text-center">Gestión de Mesas del Restaurante</h1>
 
-            <div className="row">
+            <div className="row" style={{ gap: isMobile ? '15px' : '0' }}>
 
                 <div className="col-md-4">
                     <div className="card">
@@ -119,6 +126,7 @@ export const MesasAdm = () => {
                         </div>
                     </div>
                 </div>
+
                 <div className="col-md-8 container-color">
                     <table className="table table-hover">
                         <thead className="table-dark">
@@ -143,19 +151,19 @@ export const MesasAdm = () => {
                                         <div className="btn-group" role="group">
                                             <button
                                                 className="btn btn-sm btn-outline-success"
-                                                onClick={() => cambiarEstadoMesa(mesa.id, 'DISPONIBLE',mesa.numeroMesa)}
+                                                onClick={() => cambiarEstadoMesa(mesa.id, 'DISPONIBLE', mesa.numeroMesa)}
                                             >
                                                 Libre
                                             </button>
                                             <button
                                                 className="btn btn-sm btn-outline-danger"
-                                                onClick={() => cambiarEstadoMesa(mesa.id, 'OCUPADA',mesa.numeroMesa)}
+                                                onClick={() => cambiarEstadoMesa(mesa.id, 'OCUPADA', mesa.numeroMesa)}
                                             >
                                                 Ocupada
                                             </button>
                                             <button
                                                 className="btn btn-sm btn-outline-warning"
-                                                onClick={() => cambiarEstadoMesa(mesa.id, 'RESERVADA',mesa.numeroMesa)}
+                                                onClick={() => cambiarEstadoMesa(mesa.id, 'RESERVADA', mesa.numeroMesa)}
                                             >
                                                 Reservada
                                             </button>
