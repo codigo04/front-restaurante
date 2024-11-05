@@ -10,6 +10,8 @@ export const ProtectedRoute = ({ children }) => {
 
     if (!userLogin) {
       // Si no hay un usuario autenticado, redirige al login
+
+    
       return <Navigate to="/login" />;
     }
   

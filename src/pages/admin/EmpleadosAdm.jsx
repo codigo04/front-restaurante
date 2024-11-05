@@ -275,36 +275,38 @@ export const EmpleadosAdm = () => {
 
                 <div className="mt-5">
                     <h3>Lista de Empleados</h3>
-                    <table className="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Correo</th>
-                                <th>Roles</th>
-                                <th>Fecha Ingreso</th>
-                                <th>Estado</th>
-                                <th>DNI</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {foodItems.map((item, index) => (
-                                <tr key={index}>
-                                    <td>{item.nombres} {item.apellido}</td>
-                                    <td>{item.correo}</td>
-                                    <td>
-                                        {item.roles.map((rol) => rol.nombreRol).join(', ')}
-                                    </td>
-                                    <td>{item.fechaContratacion}</td>
-                                    <td>{item.enabled ? 'Activo' : 'Inactivo'}</td>
-                                    <td>{item.numDoc}</td>
-                                    <td>
-                                        <button className="btn btn-danger btn-sm color-primario">Editar</button>
-                                    </td>
+                    <div className='table-container'>
+                        <table className="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Correo</th>
+                                    <th>Roles</th>
+                                    <th>Fecha Ingreso</th>
+                                    <th>Estado</th>
+                                    <th>DNI</th>
+                                    <th>Acciones</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {foodItems.map((item, index) => (
+                                    <tr key={index}>
+                                        <td>{item.nombres} {item.apellido}</td>
+                                        <td>{item.correo}</td>
+                                        <td>
+                                            {item.roles.map((rol) => rol.nombreRol).join(', ')}
+                                        </td>
+                                        <td>{item.fechaContratacion}</td>
+                                        <td>{item.enabled ? 'Activo' : 'Inactivo'}</td>
+                                        <td>{item.numDoc}</td>
+                                        <td>
+                                            <button className="btn btn-danger btn-sm color-primario">Editar</button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

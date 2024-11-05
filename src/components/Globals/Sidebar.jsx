@@ -7,6 +7,7 @@ import { AuthContext } from '../../context/AuthProvider'
 export const Sidebar = () => {
 
     const rolUser = localStorage.getItem('rolUser')
+
     const {cerrarSesionAuth}  = useContext(AuthContext);
     const links = [
         { ruta: '/admin/dashboard', nombre: 'Dashboard', rol: 'ADMIN' },
@@ -16,7 +17,9 @@ export const Sidebar = () => {
         { ruta: '/admin/empleados', nombre: 'Empleados', rol: 'ADMIN' },
         { ruta: '/admin/mesas', nombre: 'Mesas', rol: 'ADMIN' },
         { ruta: '/admin/estadisticas', nombre: 'Estadísticas', rol: 'ADMIN' },
-        { ruta: '/mozo/mesas', nombre: 'mesas', rol: 'MOZO' }
+        { ruta: '/mozo/mesas', nombre: 'mesas', rol: 'MOZO' },
+        { ruta: '/mozo/productos', nombre: 'productos', rol: 'MOZO' },
+        { ruta: '/mozo/pedido', nombre: 'pedido', rol: 'MOZO' },
       ];
 
     const [isOpen, setIsOpen] = useState(true);

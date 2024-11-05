@@ -19,7 +19,7 @@ export const MesasAdm = () => {
     const [mensajeExito, setMensajeExito] = useState('');
 
     const { mesas, setMesas, cambiarEstado } = useContext(MesasContext);
- 
+
 
     console.log(mesas)
 
@@ -128,51 +128,53 @@ export const MesasAdm = () => {
                 </div>
 
                 <div className="col-md-8 container-color">
-                    <table className="table table-hover">
-                        <thead className="table-dark">
-                            <tr>
-                                <th>Número de Mesa</th>
-                                <th>Capacidad</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {mesas.map((mesa) => (
-                                <tr key={mesa.id}>
-                                    <td>{mesa.numeroMesa}</td>
-                                    <td>{mesa.capacidad}</td>
-                                    <td>
-                                        <span className={`badge ${getEstadoClase(mesa.estado)}`}>
-                                            {mesa.estado}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div className="btn-group" role="group">
-                                            <button
-                                                className="btn btn-sm btn-outline-success"
-                                                onClick={() => cambiarEstadoMesa(mesa.id, 'DISPONIBLE', mesa.numeroMesa)}
-                                            >
-                                                Libre
-                                            </button>
-                                            <button
-                                                className="btn btn-sm btn-outline-danger"
-                                                onClick={() => cambiarEstadoMesa(mesa.id, 'OCUPADA', mesa.numeroMesa)}
-                                            >
-                                                Ocupada
-                                            </button>
-                                            <button
-                                                className="btn btn-sm btn-outline-warning"
-                                                onClick={() => cambiarEstadoMesa(mesa.id, 'RESERVADA', mesa.numeroMesa)}
-                                            >
-                                                Reservada
-                                            </button>
-                                        </div>
-                                    </td>
+                    <div className='table-container'>
+                        <table className="table table-hover">
+                            <thead >
+                                <tr>
+                                    <th>Número de Mesa</th>
+                                    <th>Capacidad</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {mesas.map((mesa) => (
+                                    <tr key={mesa.id}>
+                                        <td>{mesa.numeroMesa}</td>
+                                        <td>{mesa.capacidad}</td>
+                                        <td>
+                                            <span className={`badge ${getEstadoClase(mesa.estado)}`}>
+                                                {mesa.estado}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div className="btn-group" role="group">
+                                                <button
+                                                    className="btn btn-sm btn-outline-success"
+                                                    onClick={() => cambiarEstadoMesa(mesa.id, 'DISPONIBLE', mesa.numeroMesa)}
+                                                >
+                                                    Libre
+                                                </button>
+                                                <button
+                                                    className="btn btn-sm btn-outline-danger"
+                                                    onClick={() => cambiarEstadoMesa(mesa.id, 'OCUPADA', mesa.numeroMesa)}
+                                                >
+                                                    Ocupada
+                                                </button>
+                                                <button
+                                                    className="btn btn-sm btn-outline-warning"
+                                                    onClick={() => cambiarEstadoMesa(mesa.id, 'RESERVADA', mesa.numeroMesa)}
+                                                >
+                                                    Reservada
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
 

@@ -33,8 +33,8 @@ export const GestionComida = () => {
 
             <div className="row">
                 <div className="col-md-6 container-fluid">
-                    
-                  <TituloDescription titulo={'Gestión de Comidas'} decripcion={'Añade y administra los platillos del menú'}></TituloDescription>
+
+                    <TituloDescription titulo={'Gestión de Comidas'} decripcion={'Añade y administra los platillos del menú'}></TituloDescription>
 
                     <form onSubmit={handleSubmit}>
 
@@ -107,30 +107,32 @@ export const GestionComida = () => {
 
                     <div className="mt-5">
                         <h3>Lista de Comidas</h3>
-                        <table className="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Precio</th>
-                                    <th>Porciones</th>
-                                    <th>Disponible</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {foodItems.map((item, index) => (
-                                    <tr key={index}>
-                                        <td>{item.name}</td>
-                                        <td>{item.price}</td>
-                                        <td>{item.portions}</td>
-                                        <td>✔️</td>
-                                        <td>
-                                            <button className="btn btn-danger btn-sm">Eliminar</button>
-                                        </td>
+                        <div className='table-container'>
+                            <table className="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Precio</th>
+                                        <th>Porciones</th>
+                                        <th>Disponible</th>
+                                        <th>Acciones</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {foodItems.map((item, index) => (
+                                        <tr key={index}>
+                                            <td>{item.name}</td>
+                                            <td>{item.price}</td>
+                                            <td>{item.portions}</td>
+                                            <td>✔️</td>
+                                            <td>
+                                                <button className="btn btn-danger btn-sm">Eliminar</button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                 </div>

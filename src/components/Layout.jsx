@@ -6,7 +6,10 @@ import { Sidebar } from './Globals/Sidebar';
 // import { NavLink } from 'react-router-dom'
 
 
-export const Layout = ({sidebar}) => {
+export const Layout = ({ sidebar }) => {
+
+
+    const username = localStorage.getItem('username');
     return (
         <>
 
@@ -14,10 +17,10 @@ export const Layout = ({sidebar}) => {
 
                 <Sidebar></Sidebar>
 
-                
+
                 <div className="content container-fluid">
-                    <Saludo nombre={'Francisco'}></Saludo>
-                  <Outlet></Outlet>
+                    <Saludo nombre={username}></Saludo>
+                    <Outlet></Outlet>
                 </div>
             </div>
         </>

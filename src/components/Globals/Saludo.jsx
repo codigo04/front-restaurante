@@ -2,6 +2,8 @@ import React from 'react'
 
 export const Saludo = ({ nombre }) => {
 
+       
+
     const today = new Date();
     const formattedDate = today.toLocaleDateString('es-ES', {
       day: 'numeric',

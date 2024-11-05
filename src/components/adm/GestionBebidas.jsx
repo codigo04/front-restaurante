@@ -61,7 +61,7 @@ export const GestionBebidas = () => {
 
         }
 
-        const {data}=  await saveBebidas(tokenUser, producto);
+        const { data } = await saveBebidas(tokenUser, producto);
 
 
     };
@@ -111,6 +111,7 @@ export const GestionBebidas = () => {
                                     <label htmlFor="descripcion" className="form-label">Descripcion</label>
                                     <input
                                         className="form-control"
+                                        type='text'
                                         id="descripcion"
                                         name="descripcion"
                                         value={formData.descripcion}
@@ -124,7 +125,7 @@ export const GestionBebidas = () => {
 
 
 
-                        <div className="container mt-4">
+                        <div className="container mt-2">
 
                             <div className="row">
 
@@ -158,7 +159,7 @@ export const GestionBebidas = () => {
                         </div>
 
 
-                        <div className="container mt-4">
+                        <div className="container mt-2">
 
                             <div className="row">
                                 {/* <div className="col-md-6 mb-3">
@@ -182,35 +183,39 @@ export const GestionBebidas = () => {
                     </form>
 
 
-                    <div className="mt-5">
+                    <div className="mt-3">
                         <h3>Lista de Bebidas</h3>
-                        <table className="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Precio</th>
-                                    <th>Descripcion</th>
-                                    <th>stock</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
 
-
-                            <tbody>
-                                {foodItems.map((item, index) => (
-                                    <tr key={index}>
-                                        <td>{item.nombre}</td>
-                                        <td>{item.precio}</td>
-                                        <td>{item.descripcion}</td>
-                                        <td>{item.stock}</td>
-
-                                        <td>
-                                            <button className="btn btn-danger btn-sm color-primario">Editar</button>
-                                        </td>
+                        <div className='table-container'>
+                            <table className="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Precio</th>
+                                        <th>Descripcion</th>
+                                        <th>stock</th>
+                                        <th>Acciones</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+
+
+                                <tbody>
+                                    {foodItems.map((item, index) => (
+                                        <tr key={index}>
+                                            <td>{item.nombre}</td>
+                                            <td>{item.precio}</td>
+                                            <td>{item.descripcion}</td>
+                                            <td>{item.stock}</td>
+
+                                            <td>
+                                                <button className="btn btn-danger btn-sm color-primario">Editar</button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
 
                 </div>

@@ -32,9 +32,11 @@ export const Login = ({ setUserRole }) => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            // const decoded = JSON.parse(atob(token.split('.')[1])); // Decodificar token
 
-            // const userRole = decoded.roles.find(r => r.authority);
+             //const decoded = JSON.parse(atob(token.split('.')[1])); // Decodificar token
+
+           //  const userRole = decoded.roles.find(r => r.authority);
+
             console.log('isLoading')
              console.log(isLoading)
             if (rolUser) {
@@ -75,6 +77,13 @@ export const Login = ({ setUserRole }) => {
                 const decoded = JSON.parse(atob(authToken.split('.')[1])); // Decodificar token
 
                 const userRole = decoded.roles.find(r => r.authority === role);
+
+               const usuario = decoded.nombre;   //sacamos el usuario del jwt
+               localStorage.setItem('username',usuario); //colocamos la usuario al localStorage
+
+
+
+              console.log(usuario)
 
                 if (userRole) {
 
@@ -119,7 +128,7 @@ export const Login = ({ setUserRole }) => {
                             {errorMessage}
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
+                            <label htmlFor="exampleInputEmail1" className="form-label" style={{color:'white'}}>Email address</label>
                             <input
                                 type="email"
                                 className="form-control"
@@ -131,7 +140,7 @@ export const Login = ({ setUserRole }) => {
                         </div>
 
                         <div className="mb-3">
-                            <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
+                            <label htmlFor="exampleInputPassword1" className="form-label" style={{color:'white'}}>Password</label>
                             <input
                                 type="password"
                                 className="form-control"

@@ -14,7 +14,7 @@ const configToken = {
 export const obtenerMesas = async () => {
    
 
-    try {
+    try { 
        
         const response = await axios.get(`${BASE_URL}/api/v1/admin/mesas/todos`, configToken);
         return response.data;

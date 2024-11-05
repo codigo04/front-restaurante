@@ -1,9 +1,11 @@
 
 
-.container-meza{
-    /* border: solid 1px; */
-    /* border-radius: 5px; */
+.container-mesa{
+    padding: 20px;
+    border: solid 1px;
+    border-radius: 5px;
     text-align: center;
+    width: 280px;
 
 }
 
@@ -11,4 +13,35 @@
 .container-num-mesa{
     display: flex;
     justify-content: space-around;
+}
+
+.container-btns{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border: solid 1px;
+    border-radius: 8px;
+    width: 80px;
+    height: 30px;
+}
+
+
+
+.btn-delete-pro {
+    box-shadow: 0 4px 8px rgba(156, 3, 3, 0.3); 
+    border: 1px solid #f76b1c;
+    border-radius: 50%; 
+    font-size: 12px;
+    padding: 6px; 
+    color: #f76b1c; 
+    
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; 
+}
+
+.btn-delete-pro:hover {
+    background-color: #f76b1c;
+    box-shadow: 0 6px 12px #f76b1c; 
+    color: white;
 }

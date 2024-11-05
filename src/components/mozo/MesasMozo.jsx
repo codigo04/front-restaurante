@@ -20,11 +20,11 @@ export const MesasMozo = ({ numeroMesa, estado, id,  }) => {
 
 
     return (
-        <div className='container-meza container-color'>
-            <h1 className='container-num-mesa'>
+        <div className='container-mesa '>
+            <h3 className='container-num-mesa'>
                 <p>Mesa</p>
-                <h1>{numeroMesa}</h1>
-            </h1>
+                <h3>{numeroMesa}</h3>
+            </h3>
 
             {estado === 'DISPONIBLE' ? (
                 <button
