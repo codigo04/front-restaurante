@@ -17,12 +17,12 @@ export const ProductosMozo = () => {
 
 
 
-  const { productos } = useContext(ProductoContext);
+  const { productos,bebidas } = useContext(ProductoContext);
 
   const { listaPedido, agregarProducto, eliminarProducto } = useContext(PedidoContext)
 
 
-
+ console.log(bebidas)
 
   //Combobox
 
@@ -88,7 +88,19 @@ export const ProductosMozo = () => {
                 <div className='col-12 text-center'>No hay productos disponibles en esta categoría.</div>
               )
             ) : (
-              <div className='col-12 text-center'>Pronto disponible</div>
+              bebidas.map(bebi => (
+                <div className='col mb-3' key={bebi.id}>
+                  <CardProducto
+                    imagen={bebi.imagen}
+                    titulo={bebi.nombre}
+                    descripcion={bebi.descripcion}
+                    precio={bebi.precio}
+                    handleAgregar={() => handleAgregar(bebi)}
+                    handleQuitar={() => handleQuitar(bebi.id)}
+                  />
+                </div>
+              ))
+              
             )}
           </div>
         </div>

@@ -104,6 +104,7 @@ export const AuthProvider = ({ children }) => {
             });
 
             const token = response.data.token;
+            
             setAuth(token);
            
             console.log('etro al login')

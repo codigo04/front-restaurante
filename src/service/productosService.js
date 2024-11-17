@@ -1,20 +1,19 @@
 import axios from "axios";
 
 
-
-const BASE_URL = 'http://localhost:8080';
-
-export const saveBebidas = async (tokenUser, producto) => {
+const BASE_URL = 'http://localhost:8080'; // Reemplaza con la URL real de tu API.
+const token = localStorage.getItem('token')
+const configToken = {
+    headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+    }
+}
+export const saveBebidas = async (producto) => {
     console.log(producto);
-    console.log(tokenUser);
+    console.log(token);
     try {
-        const configToken = {
-            headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${tokenUser}`,
-            },
-        };
-
+        
         // Enviar el token y hacer el POST al endpoint correcto
         const response = await axios.post(`${BASE_URL}/api/v1/admin/productos/crear`,producto,configToken);
 
@@ -27,15 +26,10 @@ export const saveBebidas = async (tokenUser, producto) => {
 };
 
 
-export const geBebidas = async (tokenUser) => {
+export const geBebidas = async () => {
 
     try {
-        const configToken = {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${tokenUser}`,
-            }
-        }
+       
         const response = await axios.get(`${BASE_URL}/api/v1/admin/productos/todos`, configToken);
         // console.log("Empleados recibidos:", response.data);
         return response.data;

@@ -17,9 +17,10 @@ export const Sidebar = () => {
         { ruta: '/admin/empleados', nombre: 'Empleados', rol: 'ADMIN' },
         { ruta: '/admin/mesas', nombre: 'Mesas', rol: 'ADMIN' },
         { ruta: '/admin/estadisticas', nombre: 'Estadísticas', rol: 'ADMIN' },
-        { ruta: '/mozo/mesas', nombre: 'mesas', rol: 'MOZO' },
-        { ruta: '/mozo/productos', nombre: 'productos', rol: 'MOZO' },
-        { ruta: '/mozo/pedido', nombre: 'pedido', rol: 'MOZO' },
+        { ruta: '/mozo/mesas', nombre: 'Mesas', rol: 'MOZO' },
+        { ruta: '/mozo/productos', nombre: 'Productos', rol: 'MOZO' },
+        { ruta: '/mozo/pedido', nombre: 'Pedido', rol: 'MOZO' },
+        { ruta: '/cocina/pedidos', nombre: 'Pedidos', rol: 'COCINERO' },
       ];
 
     const [isOpen, setIsOpen] = useState(true);

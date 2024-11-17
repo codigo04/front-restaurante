@@ -26,6 +26,7 @@ import { MesasAdm } from './pages/admin/MesasAdm'
 import { MesasProvider } from './context/MesasProvider'
 import { AuthProvider } from './context/AuthProvider'
 import { Cajero } from './pages/caja/Cajero'
+import { Pedidos } from './pages/cocina/pedidos'
 
 
 
@@ -57,7 +58,7 @@ export const App = () => {
             <MesasProvider>
               <Routes>
                 <Route path="/" element={<Navigate to="/login" />} />
-                <Route path="/login" element={<Login setUserRole={setUserRole} />} />
+                <Route path="/login" element={<Login />} />
                 <Route
                   path="/"
                   element={
@@ -87,9 +88,12 @@ export const App = () => {
                   <Route path='/mozo/productos' element={<ProductosMozo />}></Route>
                   <Route path='/mozo/pedido' element={<DetallePedido />}></Route>
 
+                  {/* cocina */}
+                  <Route path='/cocina/pedidos' element={<Pedidos />}></Route>
 
                   {/* caja */}
                   <Route path='/cajero/inicio' element={<Cajero />}></Route>
+
 
 
 

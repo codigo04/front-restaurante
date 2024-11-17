@@ -3,7 +3,7 @@ import '../assets/styles/Login.css'
 import logo from '../assets/img/logito.svg';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthProvider';
-export const Login = ({ setUserRole }) => {
+export const Login = () => {
 
 
     const [role, setRole] = useState('');
@@ -11,7 +11,7 @@ export const Login = ({ setUserRole }) => {
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();  // Para redirigir al usuario
-    const { iniciarSession, decodToken, isLoading,setIsLoading, auth, rolUser, setRoluser } = useContext(AuthContext);
+    const { iniciarSession, decodToken, isLoading, setIsLoading, auth, rolUser, setRoluser } = useContext(AuthContext);
 
     const getRuta = (decodedRole) => {
         switch (decodedRole) {
@@ -21,6 +21,8 @@ export const Login = ({ setUserRole }) => {
                 return '/mozo/mesas';
             case 'CAJA':
                 return '/cajero/inicio';
+            case 'COCINERO':
+                return '/cocina/pedidos';
             default:
                 return '/';
         }
@@ -33,20 +35,20 @@ export const Login = ({ setUserRole }) => {
         const token = localStorage.getItem('token');
         if (token) {
 
-             //const decoded = JSON.parse(atob(token.split('.')[1])); // Decodificar token
+            //const decoded = JSON.parse(atob(token.split('.')[1])); // Decodificar token
 
-           //  const userRole = decoded.roles.find(r => r.authority);
+            //  const userRole = decoded.roles.find(r => r.authority);
 
             console.log('isLoading')
-             console.log(isLoading)
+            console.log(isLoading)
             if (rolUser) {
-                setUserRole(rolUser);
+                // setUserRole(rolUser);
                 setRoluser(rolUser)
                 setIsLoading(true)
                 navigate(getRuta(rolUser));
             }
         }
-    }, [navigate, role, setUserRole,setIsLoading]);
+    }, [navigate, role, setIsLoading]);
 
 
 
@@ -59,7 +61,7 @@ export const Login = ({ setUserRole }) => {
     };
 
 
-    const handleLogin = async  (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
 
         if (!validateForm()) return;
@@ -67,10 +69,10 @@ export const Login = ({ setUserRole }) => {
         try {
 
             //Iniciar sesión y obtener el token
-          const authToken = await iniciarSession(username, password);
+            const authToken = await iniciarSession(username, password);
 
             if (authToken) {
-                 console.log('entrio a la segunda vez')
+                console.log('entrio a la segunda vez')
                 // console.log('eltoken' + auth);
                 // console.log('eltoken');
 
@@ -78,12 +80,13 @@ export const Login = ({ setUserRole }) => {
 
                 const userRole = decoded.roles.find(r => r.authority === role);
 
-               const usuario = decoded.nombre;   //sacamos el usuario del jwt
-               localStorage.setItem('username',usuario); //colocamos la usuario al localStorage
+                const usuario = decoded.nombre;   //sacamos el usuario del jwt
+
+                localStorage.setItem('username', usuario); //colocamos la usuario al localStorage
 
 
 
-              console.log(usuario)
+                console.log(usuario)
 
                 if (userRole) {
 
@@ -92,7 +95,7 @@ export const Login = ({ setUserRole }) => {
 
                     setRoluser(userRole.authority)
 
-                    setUserRole(userRole.authority)
+                    // setUserRole(userRole.authority)
 
                     localStorage.setItem('rolUser', userRole.authority);
 
@@ -128,7 +131,7 @@ export const Login = ({ setUserRole }) => {
                             {errorMessage}
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="exampleInputEmail1" className="form-label" style={{color:'white'}}>Email address</label>
+                            <label htmlFor="exampleInputEmail1" className="form-label" style={{ color: 'white' }}>Email address</label>
                             <input
                                 type="email"
                                 className="form-control"
@@ -140,7 +143,7 @@ export const Login = ({ setUserRole }) => {
                         </div>
 
                         <div className="mb-3">
-                            <label htmlFor="exampleInputPassword1" className="form-label" style={{color:'white'}}>Password</label>
+                            <label htmlFor="exampleInputPassword1" className="form-label" style={{ color: 'white' }}>Password</label>
                             <input
                                 type="password"
                                 className="form-control"
@@ -156,6 +159,7 @@ export const Login = ({ setUserRole }) => {
                                 <option value="ADMIN">Administrador</option>
                                 <option value="MOZO">Mozo</option>
                                 <option value="CAJA">Cajero</option>
+                                <option value="COCINERO">Cocinero</option>
                             </select>
                         </div>
 

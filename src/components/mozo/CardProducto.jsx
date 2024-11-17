@@ -17,34 +17,89 @@ export const CardProducto = ({ imagen, titulo, descripcion, precio,handleAgregar
     }
 
     return (
-        <div className='tarjetas ' style={{width:'8rem'}}>
-            <div className='container d-flex flex-column align-items-center'>
-            <img src={imagen}  style={{height:'8rem'}} className="card-img-top" alt={titulo} />
-            <div className="card-body">
-                <h5 className="card-title">Pollo a la braza</h5>
-                <p className="card-text">zzzzzzzz</p>
-                <p className="card-text"><strong>${precio}</strong></p>
-                {
-                    added
-                        ? <button
-                            type="button"
-                            className="btn btn-danger btn-tamaño"
-                            onClick={clickQuitar}
-                        >
-                            Quitar
-                        </button>
-                        : <button
-                            type="button"
-                            className="btn btn-primary  btn-tamaño"
-                            onClick={clickAgregar}
-                        >
-                            Agregar
-                        </button>
-                }
-            </div>
-
+        <div
+        className="card tarjetas shadow-sm"
+        style={{
+            width: '8rem',
+            border: '1px solid #ddd',
+            borderRadius: '12px',
+            overflow: 'hidden',
+        }}
+    >
+        <div className="container d-flex flex-column align-items-center p-2">
+            <img
+                src={imagen}
+                style={{
+                    height: '8rem',
+                    width: '100%',
+                    objectFit: 'cover',
+                    borderBottom: '2px solid #007bff',
+                }}
+                className="card-img-top"
+                alt={titulo}
+            />
+            <div
+                className="card-body text-center"
+                style={{ padding: '0.5rem', backgroundColor: '#f8f9fa' }}
+            >
+                <h5
+                    className="card-title"
+                    style={{
+                        fontSize: '0.9rem',
+                        fontWeight: '600',
+                        color: '#333',
+                        marginBottom: '0.5rem',
+                    }}
+                >
+                    {titulo}
+                </h5>
+                <p
+                    className="card-text text-muted"
+                    style={{
+                        fontSize: '0.8rem',
+                        marginBottom: '0.5rem',
+                    }}
+                >
+                    {descripcion}
+                </p>
+                <p
+                    className="card-text"
+                    style={{
+                        fontWeight: 'bold',
+                        fontSize: '0.9rem',
+                        color: '#28a745',
+                    }}
+                >
+                    s/{precio}
+                </p>
+                {added ? (
+                    <button
+                        type="button"
+                        className="btn btn-danger btn-sm w-100"
+                        onClick={clickQuitar}
+                        style={{
+                            borderRadius: '15px',
+                            fontSize: '0.8rem',
+                        }}
+                    >
+                        Quitar
+                    </button>
+                ) : (
+                    <button
+                        type="button"
+                        className="btn color-primario btn-sm w-100"
+                        onClick={clickAgregar}
+                        style={{
+                            borderRadius: '15px',
+                            fontSize: '0.8rem',
+                        }}
+                    >
+                        Agregar
+                    </button>
+                )}
             </div>
         </div>
+    </div>
     )
 }
 

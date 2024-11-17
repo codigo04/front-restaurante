@@ -20,8 +20,8 @@ export const GestionBebidas = () => {
     const getProductosBebidas = async () => {
 
         try {
-            const tokenUser = localStorage.getItem('token')
-            const { data } = await geBebidas(tokenUser)
+           
+            const { data } = await geBebidas()
 
             console.log(data)
 
@@ -61,7 +61,7 @@ export const GestionBebidas = () => {
 
         }
 
-        const { data } = await saveBebidas(tokenUser, producto);
+        const { data } = await saveBebidas( producto);
 
 
     };

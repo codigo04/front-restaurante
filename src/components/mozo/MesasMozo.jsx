@@ -1,12 +1,13 @@
 import React, { useContext } from 'react'
 import '../../assets/styles/cssMozo/css.css'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { Navigate, NavLink, useNavigate } from 'react-router-dom'
 import { actualizarEstadoMesa } from '../../service/mesasService';
 import { MesasContext } from '../../context/MesasProvider';
 export const MesasMozo = ({ numeroMesa, estado, id,  }) => {
 
     const { cambiarEstado } = useContext(MesasContext);
 
+    const navigate = useNavigate()
 
     const getEstadoClase = (estado) => {
         switch (estado) {
@@ -17,7 +18,9 @@ export const MesasMozo = ({ numeroMesa, estado, id,  }) => {
         }
     };
 
-
+    const handleClick = () => {
+        navigate('/mozo/productos');
+      };
 
     return (
         <div className='container-mesa '>
@@ -28,13 +31,15 @@ export const MesasMozo = ({ numeroMesa, estado, id,  }) => {
 
             {estado === 'DISPONIBLE' ? (
                 <button
-                    onClick={() => cambiarEstado(id,numeroMesa,'OCUPADA')}
+                    // onClick={() => cambiarEstado(id,numeroMesa,'OCUPADA')}
+                    onClick={handleClick}
                     className={`btn btn${getEstadoClase(estado)}`}>
-                    {estado}
+                  {estado}
+                  
                 </button>
             ) : (
-                <button className={`btn btn${getEstadoClase(estado)}`} disabled>
-                    {estado}
+                <button className={`btn btn${getEstadoClase(estado)}`} >
+                    Ver detalles
                 </button>
             )}
         </div>

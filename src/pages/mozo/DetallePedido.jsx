@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { PedidoContext } from '../../context/PedidoProvider';
 import { NavLink } from 'react-router-dom';
+import { consultaDni } from '../../service/empleadosService';
 
 export const DetallePedido = () => {
 
@@ -19,18 +20,51 @@ export const DetallePedido = () => {
 
     }
 
-const handleSubmit = (e) =>{
-    e.preventDefault();
-}
-    
-    const handleSearchCliente = (e) =>{
-        console.log(dni)
+    const handleSubmit = (e) => {
+        e.preventDefault();
+    }
+
+
+    const fetchEmployeeByDNI = async (dni) => {
+        const tokenUser = localStorage.getItem('token');
+
+        if (!tokenUser) {
+            alert("Token no encontrado. Por favor, inicia sesión.");
+            return;
+        }
+
+        try {
+            const data = await consultaDni(tokenUser, dni);
+            // const employeeData = {
+            //     nombres: data.nombres,
+            //     apellidos: data.apellidos,
+            //     numDoc: data.numDoc,
+            // };
+           console.log(data.nombres)
+            if (dni === data.numDoc) {
+               setNombre(data.nombres)
+               setApellido(data.apellidos)
+            } else {
+                alert("Empleado no encontrado");
+            }
+        } catch (error) {
+            console.error("Error al buscar el empleado:", error);
+            alert("Se produjo un error al buscar el empleado. Intenta nuevamente.");
+        }
+    };
+
+ 
+
+    const handleSearchCliente = () => {
+        fetchEmployeeByDNI(dni);
     }
 
     // return listaCompras.reduce((total, item) => total + item.price * item.cantidad, 0).toFixed(2);
     const calcularTotal = () => {
-        return listaPedido.reduce((total, item) => total + item.price * item.cantidad, 0).toFixed(2);
-    }
+        return listaPedido.reduce((total, item) => 
+            total + (item.price ? item.price : item.precio) * item.cantidad, 0
+        ).toFixed(2);
+    };
 
     console.log(calcularTotal())
     return (
@@ -70,14 +104,15 @@ const handleSubmit = (e) =>{
                                                 /> */}
                                             </div>
                                         </td>
-                                        <td>{producto.title}</td>
+                                        <td>{producto.nombre ? producto.nombre : producto.title}</td>
+
                                         <td className='' >
                                             <div className='d-flex flex-column align-items-center'>
                                                 <div className='container-btns'>
 
                                                     <span
                                                         className=" btn-outline-danger "
-                                                        onClick={() => disminuirCantidad(producto.id)}
+                                                        onClick={() => disminuirCantidad(producto.id )}
                                                         style={{ cursor: 'pointer' }}
                                                     >-</span>
 
@@ -97,7 +132,7 @@ const handleSubmit = (e) =>{
                                                 </div>
 
                                                 <div className='container-price'>
-                                                    <span>s/{producto.price}</span>
+                                                    <span>s/{producto.price ? producto.price : producto.precio}</span>
                                                 </div>
                                             </div>
                                         </td>
@@ -143,14 +178,20 @@ const handleSubmit = (e) =>{
                                         onChange={(e) => setDni(e.target.value)}
                                     />
                                 </div>
-                                <button onClick={()=> handleSearchCliente()} className="btn color-primario mb-3">Buscar</button>
+                                <button onClick={() => handleSearchCliente()} className="btn color-primario mb-3">Buscar</button>
                             </div>
 
                             <label htmlFor="nombreCliente" className="form-label">Nombre del Cliente</label>
-                            <input type="text" placeholder="Nombre del Cliente" className="form-control mb-3" id="nombreCliente" />
+                            <input type="text" placeholder="Nombre del Cliente" className="form-control mb-3" id="nombreCliente"
+                              name={nombre}
+                              value={nombre}
+                             
+                            />
 
                             <label htmlFor="nombreApellido" className="form-label">Apellido del Cliente</label>
-                            <input type="text" placeholder="Apellido del Cliente" className="form-control" id="nombreApellido" />
+                            <input type="text" placeholder="Apellido del Cliente" className="form-control" id="nombreApellido" 
+                             value={apellido}
+                            />
                         </form>
 
                         {/* Detalle del Pedido */}
