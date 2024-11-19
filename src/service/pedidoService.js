@@ -1,3 +1,4 @@
+import axios from "axios";
 
 const BASE_URL = 'http://localhost:8080'; // Reemplaza con la URL real de tu API.
 const token = localStorage.getItem('token')
@@ -8,16 +9,15 @@ const configToken = {
     }
 }
 
-const savePedido = async  (pedido) => {
-
+export const savePedido = async (pedido) => {
 
     try {
-        const response = await axios.post(`${BASE_URL}/api/v1/admin/mesas/crear`, pedido,configToken);
+        const response = await axios.post(`${BASE_URL}/api/v1/admin/pedidos/crear`, pedido, configToken);
         return response.data;
     } catch (error) {
         console.error('Error al agregar el pedido', error);
-        // alert('CONCECTATE A TU SERVIDOR')
-        throw error;
+        // alert('CONÉCTATE A TU SERVIDOR')
+        throw error; // Lanzamos el error para que lo maneje quien llame esta función
     }
 
 }

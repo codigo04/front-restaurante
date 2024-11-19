@@ -53,9 +53,10 @@ export const App = () => {
   return (
     <>
       <AuthProvider>
+      <MesasProvider>
         <PedidoProvider>
           <ProductosProvider>
-            <MesasProvider>
+           
               <Routes>
                 <Route path="/" element={<Navigate to="/login" />} />
                 <Route path="/login" element={<Login />} />
@@ -102,9 +103,10 @@ export const App = () => {
 
                 <Route path="*" element={<Navigate to="/login" />} />
               </Routes>
-            </MesasProvider>
+           
           </ProductosProvider>
         </PedidoProvider>
+        </MesasProvider>
       </AuthProvider>
     </>
 

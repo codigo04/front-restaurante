@@ -77,7 +77,7 @@ export const AuthProvider = ({ children }) => {
                 console.log('si hay tokeen')
                 setAuth(token);
 
-                // navigate('/admin/dashboard')
+                //  navigate('/admin/dashboard')
                 setIsLoading(true)
 
                 setCargando(true)

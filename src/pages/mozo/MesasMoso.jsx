@@ -3,12 +3,19 @@ import React, { useContext, useEffect, useState } from 'react'
 import { MesasMozo } from '../../components/mozo/MesasMozo'
 import { obtenerMesas } from '../../service/mesasService';
 import { MesasContext } from '../../context/MesasProvider';
+import { PedidoContext } from '../../context/PedidoProvider';
 
 export const MesasMoso = () => {
 
     // const [mesas, setMesas] = useState([]);
-    const { mesas, setMesas } = useContext(MesasContext);
+    const { setMesaSelect } = useContext(MesasContext);
+    const { mesasPedido } = useContext(PedidoContext);
 
+    const cambiarEstado = () => {
+
+    }
+
+    console.log(mesasPedido)
 
     return (
         <div>
@@ -21,21 +28,28 @@ export const MesasMoso = () => {
                 </div>
 
                 <div className="row">
-                    {mesas.map((itemMesas) => (
+                    {mesasPedido.map((itemMesas) => (
                         <div
                             className="col-12 col-sm-6 col-md-4 col-lg-3 mb-3 d-flex justify-content-center"
-                            key={itemMesas.id}
+                            key={itemMesas.idMesa}
                         >
                             <MesasMozo
                                 numeroMesa={itemMesas.numeroMesa}
                                 estado={itemMesas.estado}
-                                setMesas={setMesas}
-                                id={itemMesas.id}
+
+                                id={itemMesas.idMesa}
                             />
                         </div>
                     ))}
                 </div>
             </div>
+
+
+
+
+
+
+
 
         </div>
     )

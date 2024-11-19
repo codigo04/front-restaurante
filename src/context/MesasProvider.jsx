@@ -7,19 +7,23 @@ export const MesasContext = createContext()
 
 export const MesasProvider = ({ children }) => {
     const [mesas, setMesas] = useState([])
-
+    const [mesaSelect, setMesaSelect,] = useState()
     const navigate = useNavigate();
 
+    const cargarMesas = async () => {
+        try {
+            const response = await obtenerMesas();
+           
+            setMesas(response.data);
+        } catch (error) {
+            console.error('Error al cargar mesas', error);
+        }
+    };
 
     useEffect(() => {
-        const cargarMesas = async () => {
-            try {
-                const response = await obtenerMesas();
-                setMesas(response.data);
-            } catch (error) {
-                console.error('Error al cargar mesas', error);
-            }
-        };
+
+        console.log('cargadno las mesas')
+      
         cargarMesas();
     }, []);
 
@@ -31,7 +35,7 @@ export const MesasProvider = ({ children }) => {
             estado: estado
         };
 
-        if (true) {
+        if (nuevaMesa) {
             try {
                 // Actualiza el estado de la mesa a 'OCUPADA' en la base de datos
                 await actualizarEstadoMesa(nuevaMesa, idMesa);
@@ -58,7 +62,10 @@ export const MesasProvider = ({ children }) => {
             value={{
                 setMesas,
                 mesas,
-                cambiarEstado
+                cambiarEstado,
+                setMesaSelect,
+                mesaSelect
+                
             }}
 
         >

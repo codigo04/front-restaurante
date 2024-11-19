@@ -1,17 +1,21 @@
 import axios from "axios";
 
 
-
 const BASE_URL = 'http://localhost:8080'; // Reemplaza con la URL real de tu API.
-
-
-export const obtenerEmpledos = async (tokenUser) => {
+const token = localStorage.getItem('token')
+const configToken = {
+    headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+    }
+}
+export const obtenerEmpledos = async () => {
 
     try {
         const configToken = {
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${tokenUser}`,
+                Authorization: `Bearer ${token}`,
             }
         }
         const response = await axios.get(`${BASE_URL}/api/v1/autenticacion/todos`, configToken);
@@ -27,18 +31,10 @@ export const obtenerEmpledos = async (tokenUser) => {
 
 
 
-export const consultaDni = async (tokenUser, dni) => {
-    console.log(dni);
-    console.log(tokenUser);
+export const consultaDni = async (dni) => {
+    
     try {
-        const configToken = {
-            headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${tokenUser}`,
-            },
-        };
 
-        // Enviar el token y hacer el POST al endpoint correcto
         const response = await axios.post(`${BASE_URL}/api/v1/admin/empleado/${dni}`, null, configToken);
         console.log(response.data);
         return response.data;
