@@ -1,29 +1,34 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { PedidoContext } from '../../context/PedidoProvider';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { consultaDni } from '../../service/empleadosService';
 import { saveCliente } from '../../service/clientesService';
 import { MesasContext } from '../../context/MesasProvider';
-import { savePedido } from '../../service/pedidoService';
+import { saveDetallePedido, savePedido } from '../../service/pedidoService';
+import { toast } from 'react-toastify';
+import { connectWebSocket } from '../../service/websocket';
 
 export const DetallePedido = () => {
 
     const navigate = useNavigate()
- 
-    const { cambiarEstadoMesa,mostrarProductosMesa, mesasPedido,eliminarProducto, aumentarCantidad, disminuirCantidad } = useContext(PedidoContext)
-    const { mesaSelect,cambiarEstado } = useContext(MesasContext);
+
+    const { cambiarEstadoMesa, mostrarProductosMesa, mesasPedido, eliminarProducto, aumentarCantidad, disminuirCantidad } = useContext(PedidoContext)
+    const { mesaSelect, cambiarEstado } = useContext(MesasContext);
     const [dni, setDni] = useState({
         dni: ''
     })
     const [nombre, setNombre] = useState('')
     const [apellido, setApellido] = useState('')
     const [idCliente, setIdCliente] = useState('')
-
-     
+    const [idPedido, setIdPedido] = useState('')
+    const [mensaje, setMensaje] = useState(null);
+    const [detalleP, setDetalleP] = useState([])
     const mesaSeleccionadaId = mesaSelect; // Cambia por el ID de la mesa que seleccionaste
     // Obtener la mesa seleccionada
     const mesaSeleccionada = mesasPedido.find((mesa) => mesa.idMesa === mesaSeleccionadaId);
     const productosMesa = mesaSeleccionada ? mesaSeleccionada.pedidos : [];
+
+    console.log(productosMesa)
 
     const [pedido, setPedido] = useState({
         fechaPedido: '',
@@ -37,9 +42,9 @@ export const DetallePedido = () => {
 
 
 
-    const deleteProducto = (id,mesaSelect) => {
-       
-        eliminarProducto(mesaSelect,id);
+    const deleteProducto = (id, mesaSelect) => {
+
+        eliminarProducto(mesaSelect, id);
 
     }
 
@@ -90,11 +95,12 @@ export const DetallePedido = () => {
         return { fecha, hora };
     };
 
-    
+
 
     const handleConfirmarPedido = async () => {
         const { fecha, hora } = obtenerFechaHora();
 
+        // Crear el pedido
         const nuevoPedido = {
             ...pedido,
             fechaPedido: fecha,
@@ -106,39 +112,103 @@ export const DetallePedido = () => {
             idMesa: mesaSelect
         };
 
-        handleCambiarEstadoMesa()
+        try {
+            // Guardar el pedido en el backend y obtener el ID generado
+            const pedidoCreate = await savePedido(nuevoPedido);
+            const idPedidoGenerado = pedidoCreate.data.idPedido;
 
-        navigate('/mozo/mesas');
-        // try {
-        //     const pedidoCreate = await savePedido(nuevoPedido);
+            // console.log("Pedido creado con ID:", idPedidoGenerado);
 
-        //     console.log(pedidoCreate);
+            // Preparar la lista de detalles del pedido
+            const detallesPedido = productosMesa.map((producto) => ({
+                cantidad: producto.cantidad,
+                precio: producto.precio,
+                idPedido: idPedidoGenerado,
+                idProducto: producto.id,
+                idCombo: 1
+            }));
 
-        //     navigate('/mozo/mesas');
-        // } catch (error) {
-        //     console.error(error);
-        // }
+            setDetalleP(detallesPedido)
+            console.log("los detalles")
+            console.log(detallesPedido);
 
+            // Guardar los detalles del pedido en el backend
+            const detallePedidoCreate = await saveDetallePedido(detallesPedido);
+
+            console.log("Detalles del pedido creados:", detallePedidoCreate);
+            toast.success("Pedido Creado Correctamente", {
+                position: "top-right",
+            });
+            // Cambiar el estado de la mesa
+            handleCambiarEstadoMesa();
+
+            // Redirigir a la vista de mesas
+            navigate('/mozo/mesas');
+        } catch (error) {
+            console.error("Error al confirmar el pedido:", error);
+            alert("Hubo un error al confirmar el pedido. Intenta nuevamente.");
+        }
     };
 
-    const handleCambiarEstadoMesa=  () => {
-        cambiarEstadoMesa(mesaSelect,"OCUPADA")
-     }
+    const handleCambiarEstadoMesa = () => {
+        cambiarEstadoMesa(mesaSelect, "OCUPADA")
+    }
 
+
+    const handleCancelarPedido = () => {
+        toast.success("Pedido Creado Correctamente", {
+            position: "top-right",
+        });
+    }
     // return listaCompras.reduce((total, item) => total + item.price * item.cantidad, 0).toFixed(2);
     const calcularTotal = () => {
 
         const totalPrecioMesa = productosMesa.reduce(
             (total, producto) => total + (producto.precio || 0) * (producto.cantidad || 1),
             0
-          );
-         return totalPrecioMesa;
+        );
+        return totalPrecioMesa;
     };
 
-    
+
+    // sockets
+
+
+    useEffect(() => {
+        const onMessageReceived = (message) => {
+            setMensaje(message); // Cuando llega un mensaje, lo almacenamos en el estado
+        };
+
+        const detaP = {
+            idDetallePedido: 2,
+            cantidad: 7,            // Cantidad aleatoria entre 1 y 10
+            precio: 30,   // Precio aleatorio entre 10 y 100
+            idPedido: 9,                       // ID del pedido (lo pasamos como parámetro)
+            idProducto:1,         // ID del producto aleatorio entre 1 y 100
+            idCombo:1   
+        }
+           
+
+        // Establecemos la conexión WebSocket y pasamos la función onMessageReceived
+        const stompCliente = connectWebSocket(onMessageReceived, detaP);
+
+        // Limpiar la conexión WebSocket cuando el componente se desmonte
+        return () => {
+            stompCliente.deactivate(); // Desactivamos la conexión WebSocket
+        };
+    }, [detalleP]); // Dependencia: ejecutamos cada vez que cambie detallePedido
+
+
+
+
+
     return (
         <>
 
+            <div>
+                <h1>Mensaje desde WebSocket</h1>
+                <p>{mensaje ? `Mensaje recibido: ${JSON.stringify(mensaje)}` : 'Esperando mensaje...'}</p>
+            </div>
             <div className='container-fluid container-color  p-3'>
 
 
@@ -155,7 +225,7 @@ export const DetallePedido = () => {
                         <tbody>
                             {
 
-                              
+
                                 productosMesa.map(producto => (
                                     <tr>
 
@@ -183,7 +253,7 @@ export const DetallePedido = () => {
 
                                                     <span
                                                         className=" btn-outline-danger "
-                                                        onClick={() => disminuirCantidad(mesaSelect,producto.id)}
+                                                        onClick={() => disminuirCantidad(mesaSelect, producto.id)}
                                                         style={{ cursor: 'pointer' }}
                                                     >-</span>
 
@@ -193,7 +263,7 @@ export const DetallePedido = () => {
 
                                                     <span
                                                         className=" btn-outline-danger "
-                                                        onClick={() => aumentarCantidad(mesaSelect,producto.id)}
+                                                        onClick={() => aumentarCantidad(mesaSelect, producto.id)}
                                                         style={{ cursor: 'pointer' }}
                                                     >+</span>
 
@@ -210,7 +280,7 @@ export const DetallePedido = () => {
                                         <td >
 
                                             <div className='d-flex flex-column align-items-center container-btn-delete-pro' style={{ cursor: 'pointer' }}>
-                                                <span onClick={() => deleteProducto(producto.id,mesaSelect)} className='btn-delete-pro'
+                                                <span onClick={() => deleteProducto(producto.id, mesaSelect)} className='btn-delete-pro'
 
                                                 > X</span>
                                             </div>
@@ -280,7 +350,7 @@ export const DetallePedido = () => {
                                     {/* <NavLink to="/mozo/mesas" >Confirmar Pedido</NavLink> */}
                                     Confirmar Pedido
                                 </button>
-                                <button className="btn btn-success color-primario" onClick={handleConfirmarPedido}>
+                                <button className="btn btn-success color-primario" onClick={handleCancelarPedido}>
                                     {/* <NavLink to="/mozo/mesas" className="btn btn-danger color-primario">Cancelar</NavLink> */}
                                     Cancelar
                                 </button>

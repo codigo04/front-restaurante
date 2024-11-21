@@ -3,6 +3,7 @@ import '../assets/styles/Login.css'
 import logo from '../assets/img/logito.svg';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthProvider';
+import { toast } from 'react-toastify';
 export const Login = () => {
 
 
@@ -54,6 +55,11 @@ export const Login = () => {
 
     const validateForm = () => {
         if (!username || !password || role === 'Elige tu tipo de usuario') {
+
+            toast.error("Por favor completa todos los campos", {
+                position: "top-center",
+            });
+
             setErrorMessage('Por favor completa todos los campos');
             return false;
         }

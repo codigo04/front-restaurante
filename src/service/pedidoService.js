@@ -21,3 +21,18 @@ export const savePedido = async (pedido) => {
     }
 
 }
+
+
+
+export const saveDetallePedido = async (detallePedido) => {
+
+    try {
+        const response = await axios.post(`${BASE_URL}/api/v1/admin/detalle-pedidos/saveAll`, detallePedido, configToken);
+        return response.data;
+    } catch (error) {
+        console.error('Error al agregar el detaller pedido', error);
+        // alert('CONÉCTATE A TU SERVIDOR')
+        throw error; // Lanzamos el error para que lo maneje quien llame esta función
+    }
+
+}

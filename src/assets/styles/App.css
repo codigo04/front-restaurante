@@ -1,0 +1,5 @@
+.Toastify__toast--success {
+    background-color: red; /* Verde para éxito */
+    color: #ffffff;           /* Texto blanco */
+    border-radius: 8px;       /* Bordes redondeados */
+}
