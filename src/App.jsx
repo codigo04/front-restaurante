@@ -1,35 +1,34 @@
-import React, { useState } from 'react'
-import { Login } from './pages/Login'
-import { Navigate, Route, Routes } from 'react-router-dom'
-import { Dashboard } from './pages/admin/Dashboard'
-import { Layout } from './components/Layout'
+import React, { useState } from "react";
+import { Login } from "./pages/Login";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { Dashboard } from "./pages/admin/Dashboard";
+import { Layout } from "./components/Layout";
 
-import './assets/styles/index.css'
+import "./assets/styles/index.css";
 
-import { Moso } from './pages/Moso'
-import { ProtectedRoute } from './components/ProtectedRoute'
-import { NavBarAdmin } from './components/NavBarAdmin'
-import { NavBarMoso } from './components/NavBarMoso'
-import { NavBarCaja } from './components/NavBarCaja'
-import { ProdutosAdm } from './pages/admin/ProdutosAdm'
-import { OrdenesAdm } from './pages/admin/OrdenesAdm'
-import { ClientesAdm } from './pages/admin/ClientesAdm'
-import { IngresosAdm } from './pages/admin/IngresosAdm'
-import { EstadisticasAdm } from './pages/admin/EstadisticasAdm'
-import { EmpleadosAdm } from './pages/admin/EmpleadosAdm'
-import { MesasMoso } from './pages/mozo/MesasMoso'
-import { ProductosMozo } from './pages/mozo/ProductosMozo'
-import { ProductosProvider } from './context/ProductosProvider'
-import { PedidoProvider } from './context/PedidoProvider'
-import { DetallePedido } from './pages/mozo/DetallePedido'
-import { MesasAdm } from './pages/admin/MesasAdm'
-import { MesasProvider } from './context/MesasProvider'
-import { AuthProvider } from './context/AuthProvider'
-import { Cajero } from './pages/caja/Cajero'
-import { Pedidos } from './pages/cocina/pedidos'
-
-
-
+import { Moso } from "./pages/Moso";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import { NavBarAdmin } from "./components/NavBarAdmin";
+import { NavBarMoso } from "./components/NavBarMoso";
+import { NavBarCaja } from "./components/NavBarCaja";
+import { ProdutosAdm } from "./pages/admin/ProdutosAdm";
+import { OrdenesAdm } from "./pages/admin/OrdenesAdm";
+import { ClientesAdm } from "./pages/admin/ClientesAdm";
+import { IngresosAdm } from "./pages/admin/IngresosAdm";
+import { EstadisticasAdm } from "./pages/admin/EstadisticasAdm";
+import { EmpleadosAdm } from "./pages/admin/EmpleadosAdm";
+import { MesasMoso } from "./pages/mozo/MesasMoso";
+import { ProductosMozo } from "./pages/mozo/ProductosMozo";
+import { ProductosProvider } from "./context/ProductosProvider";
+import { PedidoProvider } from "./context/PedidoProvider";
+import { DetallePedido } from "./pages/mozo/DetallePedido";
+import { MesasAdm } from "./pages/admin/MesasAdm";
+import { MesasProvider } from "./context/MesasProvider";
+import { AuthProvider } from "./context/AuthProvider";
+import { Cajero } from "./pages/caja/Cajero";
+import { Pedidos } from "./pages/cocina/pedidos";
+import CerrarCaja from "./pages/caja/CerrarCaja";
+import HistorialCierres from "./pages/caja/HistorialCierres";
 
 export const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -38,17 +37,16 @@ export const App = () => {
   const getSidebar = () => {
     // userRole
     switch (userRole) {
-      case 'ADMIN':
+      case "ADMIN":
         return <NavBarAdmin></NavBarAdmin>;
-      case 'MOZO':
+      case "MOZO":
         return <NavBarMoso></NavBarMoso>;
-      case 'CAJA':
+      case "CAJA":
         return <NavBarCaja></NavBarCaja>;
       default:
         return null;
     }
   };
-
 
   return (
     <>
@@ -67,38 +65,55 @@ export const App = () => {
                     </ProtectedRoute>
                   }
                 >
-
                   {/* Rutas protegidas */}
 
-                  <Route path='/cajero' element={<Cajero />} />
-                  <Route path='/moso' element={<Moso />} />
+                  <Route path="/cajero" element={<Cajero />} />
+                  <Route path="/moso" element={<Moso />} />
 
                   {/* Rutas del admin */}
-                  <Route path='/admin/dashboard' element={<Dashboard />} />
-                  <Route path='/admin/productos' element={<ProdutosAdm />} />
-                  <Route path='/admin/ordenes' element={<OrdenesAdm />} />
-                  <Route path='/admin/clientes' element={<ClientesAdm />}></Route>
-                  <Route path='/admin/empleados' element={<EmpleadosAdm />}></Route>
-                  <Route path='/admin/mesas' element={<MesasAdm />}></Route>
-                  <Route path='/admin/estadisticas' element={<EstadisticasAdm />}></Route>
-
+                  <Route path="/admin/dashboard" element={<Dashboard />} />
+                  <Route path="/admin/productos" element={<ProdutosAdm />} />
+                  <Route path="/admin/ordenes" element={<OrdenesAdm />} />
+                  <Route
+                    path="/admin/clientes"
+                    element={<ClientesAdm />}
+                  ></Route>
+                  <Route
+                    path="/admin/empleados"
+                    element={<EmpleadosAdm />}
+                  ></Route>
+                  <Route path="/admin/mesas" element={<MesasAdm />}></Route>
+                  <Route
+                    path="/admin/estadisticas"
+                    element={<EstadisticasAdm />}
+                  ></Route>
 
                   {/* mozo /mozo/pedido */}
-                  <Route path='/mozo/mesas' element={<MesasMoso />}></Route>
-                  <Route path='/mozo/productos' element={<ProductosMozo />}></Route>
-                  <Route path='/mozo/pedido' element={<DetallePedido />}></Route>
+                  <Route path="/mozo/mesas" element={<MesasMoso />}></Route>
+                  <Route
+                    path="/mozo/productos"
+                    element={<ProductosMozo />}
+                  ></Route>
+                  <Route
+                    path="/mozo/pedido"
+                    element={<DetallePedido />}
+                  ></Route>
 
                   {/* cocina */}
-                  <Route path='/cocina/pedidos' element={<Pedidos />}></Route>
+                  <Route path="/cocina/pedidos" element={<Pedidos />}></Route>
+                  <Route path="/cocina/pedidos" element={<Pedidos />}></Route>
 
                   {/* caja */}
-                  <Route path='/cajero/inicio' element={<Cajero />}></Route>
-
-
-
-
+                  <Route path="/cajero/inicio" element={<Cajero />}></Route>
+                  <Route
+                    path="/cajero/cerrar-caja"
+                    element={<CerrarCaja />}
+                  ></Route>
+                  <Route
+                    path="/cajero/historial-cierres-caja"
+                    element={<HistorialCierres />}
+                  ></Route>
                 </Route>
-
 
                 <Route path="*" element={<Navigate to="/login" />} />
               </Routes>
@@ -107,7 +122,5 @@ export const App = () => {
         </PedidoProvider>
       </AuthProvider>
     </>
-
-  )
-}
-
+  );
+};
