@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+body {
+  background-color: #f1f1f1;
+  font-family: "Poppins", sans-serif;
+  font-weight: semibold;
+}
+
+:root {
+    --bg-primary: #F1F1F1; /* Fondo principal */
+    --bg-secondary: #FFFFFF; /* Fondo secundario */
+  
+    --color-title: #000000; /* Color para títulos */
+    --color-subtitle: #6E6D6D; /* Color para subtítulos */
+  
+    --color-card: #FF6F1A; /* Color para tarjetas */
+  
+    --color-button: #F50606; /* Color para botones y círculos de mesa */
+    --color-quantity: #149200; /* Color para el círculo de cantidad */
+
+    --color-icon: #FF6F1A; /* Color para los iconos */
+  }
+  
+  p{
+      margin: 0;
+  }
+
+.bg-principal{
+    background-color: var(--bg-primary);
+}
+
+.bg-card{
+    background-color: var(--color-card);
+}
+
+.subtitulo{
+    color: var(--color-subtitle);
+}
+
+.card-header * {
+  color: white !important;
+}
+
+.circle-mesa {
+  width: 50px;
+  height: 50px;
+  background-color: var(--color-button);
+}
+
+.circle-detail {
+  width: 30px;
+  height: 30px;
+  background-color: var(--color-quantity);
+}
+
+.btn-danger{
+    background-color: var(--color-button);
+}
+
+.flex-center-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.color-icon{
+    color: var(--color-icon);
+}
