@@ -1,7 +1,6 @@
-import { South } from '@mui/icons-material';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
-import React, { createContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { obtenerEmpledos } from '../service/empleadosService';
 import { obtenerClientes } from '../service/clientesService';
@@ -107,7 +106,7 @@ export const AuthProvider = ({ children }) => {
             
             setAuth(token);
            
-            console.log('etro al login')
+            console.log('entro al login')
             // Guarda el token en localStorage
             localStorage.setItem('token', token);
             
