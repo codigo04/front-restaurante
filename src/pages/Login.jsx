@@ -109,9 +109,16 @@ export const Login = () => {
 
                 } else {
                     setErrorMessage('El rol seleccionado no coincide con el usuario');
+
+                    toast.error(errorMessage, {
+                        position: "top-center",
+                    });
                 }
             } else {
                 setErrorMessage('Credenciales incorrectas');
+                toast.error(errorMessage, {
+                    position: "top-center",
+                });
             }
 
         } catch (error) {

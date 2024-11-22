@@ -7,6 +7,8 @@ const BASE_URL = 'http://localhost:8080'; // Reemplaza con la URL real de tu API
 
 export const obtenerMesas = async () => {
     const token = localStorage.getItem('token')
+
+    console.log("token extraiodo  "+token)
     const configToken = {
         headers: {
             "Content-Type": "application/json",
