@@ -20,8 +20,9 @@ export const connectWebSocket = (onMessageReceived, detallePedido) => {
                 const message = JSON.parse(messageOutput.body);
 
 
-                onMessageReceived(message);
-                console.log('Nuevo mensaje: ', message);
+                onMessageReceived(message.body);
+
+                console.log('Nuevo mensaje: ', message.body);
 
 
             });

@@ -80,6 +80,16 @@ const pedidoReducer = (state, action) => {
           }
           : mesa
       );
+
+      case '[mesa] vaciar mesa':
+      return state.map((mesa) =>
+        mesa.idMesa === action.payload.idMesa
+          ? {
+            ...mesa,
+            estado: action.payload.estado,
+          }
+          : mesa
+      );
     default:
 
       return state;
@@ -131,6 +141,13 @@ export const PedidoProvider = ({ children }) => {
     dispatch(action);
   };
 
+  const vaciarMesa = (idMesa)  => {
+    const action = {
+      type : '[mesa] vaciar mesa',
+      payload: idMesa
+    }
+  }
+
   const aumentarCantidad = (idMesa, idProducto) => {
     const action = {
       type: '[pedido] aumentar producto',
@@ -164,7 +181,8 @@ export const PedidoProvider = ({ children }) => {
         aumentarCantidad,
         disminuirCantidad,
         mostrarProductosMesa,
-        cambiarEstadoMesa
+        cambiarEstadoMesa,
+        vaciarMesa
       }}
     >
       {children}

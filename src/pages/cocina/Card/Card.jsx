@@ -19,10 +19,10 @@ export const Card = ({pedido}) => {
         className="card text-white bg-card rounded-4 my-3 "
         style={{ maxWidth: "18rem" }}
       >
-        <CardHeader numeroMesa={pedido.numeroMesa} horaPedido={pedido.hora}/>
+        <CardHeader numeroMesa={pedido.mesa} horaPedido={pedido.hora}/>
         <CardMain
-          imagenUrl={pedido.imagenUrl}
-          platos={pedido.platos}
+          // imagenUrl={pedido.imagenUrl}
+          platos={pedido.productos}
           estado={estado}
           cambiarEstado={cambiarEstado}
         />

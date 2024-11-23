@@ -1,12 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { PedidoContext } from '../../context/PedidoProvider';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { consultaDni } from '../../service/empleadosService';
 import { saveCliente } from '../../service/clientesService';
 import { MesasContext } from '../../context/MesasProvider';
-import { saveDetallePedido, savePedido } from '../../service/pedidoService';
+import { obtenerPedido, saveDetallePedido, savePedido } from '../../service/pedidoService';
 import { toast } from 'react-toastify';
 import { connectWebSocket } from '../../service/websocket';
+import { WebSocketContext } from '../../context/WebSocketProvider ';
 
 export const DetallePedido = () => {
 
@@ -14,6 +15,7 @@ export const DetallePedido = () => {
 
     const { cambiarEstadoMesa, mostrarProductosMesa, mesasPedido, eliminarProducto, aumentarCantidad, disminuirCantidad } = useContext(PedidoContext)
     const { mesaSelect, cambiarEstado } = useContext(MesasContext);
+    const { messages, setDetallePedido } = useContext(WebSocketContext);
     const [dni, setDni] = useState({
         dni: ''
     })
@@ -114,8 +116,8 @@ export const DetallePedido = () => {
 
         try {
             // Guardar el pedido en el backend y obtener el ID generado
-            const pedidoCreate = await savePedido(nuevoPedido);
-            const idPedidoGenerado = pedidoCreate.data.idPedido;
+        
+            const { data: { idPedidoGenerado } } = await savePedido(nuevoPedido);
 
             // console.log("Pedido creado con ID:", idPedidoGenerado);
 
@@ -140,6 +142,7 @@ export const DetallePedido = () => {
                 position: "top-right",
             });
             // Cambiar el estado de la mesa
+            mandarMozo()
             handleCambiarEstadoMesa();
 
             // Redirigir a la vista de mesas
@@ -150,9 +153,9 @@ export const DetallePedido = () => {
         }
     };
 
-    const handleCambiarEstadoMesa = () => {
-        cambiarEstadoMesa(mesaSelect, "OCUPADA")
-    }
+    const handleCambiarEstadoMesa = useCallback(() => {
+        cambiarEstadoMesa(mesaSelect, "OCUPADA");
+    }, [mesaSelect, cambiarEstadoMesa]);
 
 
     const handleCancelarPedido = () => {
@@ -171,35 +174,66 @@ export const DetallePedido = () => {
     };
 
 
+    const mandarMozo = () => {
+        const detallePedido = obtenerPedido()
+
+
+
+
+
+        setDetallePedido(detallePedido)
+    }
+
+    const handleSocket = () => {
+
+        const detallePedido = obtenerPedido()
+
+
+
+
+        console.log(detallePedido)
+        toast.success("Pedido Creado Correctamente", {
+            position: "top-right",
+        });
+        // const detallePedido = {
+        //     "pedidoId": "123",
+        //     "mesa": mesaSelect,
+        //     "hora": "2024-11-22T15:30:00",
+        //     "productos": [
+        //         {
+        //             "nombre": "Hamburguesa con queso",
+        //             "stock": 2,
+        //             "observaciones": "Sin tomate"
+        //         },
+        //         {
+        //             "nombre": "Papas fritas",
+        //             "cantidad": 1
+        //         },
+        //         {
+        //             "nombre": "Coca-Cola",
+        //             "cantidad": 3
+        //         }
+        //     ],
+        //     "estado": "Enviado a cocina",
+        //     "observaciones": "Mesa junto a la ventana"
+        // }
+
+
+
+        setDetallePedido(detallePedido)
+    }
     // sockets
 
+    //    useEffect(() => {
 
-    useEffect(() => {
-        const onMessageReceived = (message) => {
-            setMensaje(message); // Cuando llega un mensaje, lo almacenamos en el estado
-        };
 
-        const detaP = {
-            idDetallePedido: 2,
-            cantidad: 7,            // Cantidad aleatoria entre 1 y 10
-            precio: 30,   // Precio aleatorio entre 10 y 100
-            idPedido: 9,                       // ID del pedido (lo pasamos como parámetro)
-            idProducto:1,         // ID del producto aleatorio entre 1 y 100
-            idCombo:1   
-        }
-           
-
-        // Establecemos la conexión WebSocket y pasamos la función onMessageReceived
-        const stompCliente = connectWebSocket(onMessageReceived, detaP);
-
-        // Limpiar la conexión WebSocket cuando el componente se desmonte
-        return () => {
-            stompCliente.deactivate(); // Desactivamos la conexión WebSocket
-        };
-    }, [detalleP]); // Dependencia: ejecutamos cada vez que cambie detallePedido
+    //      }, []); 
 
 
 
+
+
+    console.log(messages)
 
 
     return (
@@ -207,7 +241,13 @@ export const DetallePedido = () => {
 
             <div>
                 <h1>Mensaje desde WebSocket</h1>
-                <p>{mensaje ? `Mensaje recibido: ${JSON.stringify(mensaje)}` : 'Esperando mensaje...'}</p>
+
+                {
+                    messages.map(mesgg => (
+                        <p>{mesgg.estado}</p>
+                    ))
+                }
+
             </div>
             <div className='container-fluid container-color  p-3'>
 
@@ -350,7 +390,7 @@ export const DetallePedido = () => {
                                     {/* <NavLink to="/mozo/mesas" >Confirmar Pedido</NavLink> */}
                                     Confirmar Pedido
                                 </button>
-                                <button className="btn btn-success color-primario" onClick={handleCancelarPedido}>
+                                <button className="btn btn-success color-primario" onClick={handleSocket}>
                                     {/* <NavLink to="/mozo/mesas" className="btn btn-danger color-primario">Cancelar</NavLink> */}
                                     Cancelar
                                 </button>
