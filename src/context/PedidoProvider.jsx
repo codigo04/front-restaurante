@@ -1,12 +1,14 @@
-import React, { createContext, useReducer, useEffect, useContext } from 'react';
+import React, { createContext, useReducer, useEffect, useContext, useState } from 'react';
 import axios from 'axios';
 import { MesasContext } from './MesasProvider';
+import { getPedidos } from '../service/pedidoService';
 
 export const PedidoContext = createContext();
 
 const initialState = []; // Aquí se guardarán las mesas con sus pedidos
 
 const pedidoReducer = (state, action) => {
+    
   switch (action.type) {
     case '[mesas] cargar mesas':
       return action.payload.map((mesa) => ({
@@ -81,7 +83,7 @@ const pedidoReducer = (state, action) => {
           : mesa
       );
 
-      case '[mesa] vaciar mesa':
+    case '[mesa] vaciar mesa':
       return state.map((mesa) =>
         mesa.idMesa === action.payload.idMesa
           ? {
@@ -100,7 +102,7 @@ export const PedidoProvider = ({ children }) => {
   const [mesasPedido, dispatch] = useReducer(pedidoReducer, initialState);
 
   const { mesas, setMesas } = useContext(MesasContext);
-
+  const [pedidosAll, setPedidoAll] = useState([])
   // Función para cargar las mesas desde la API
   const cargarMesas = () => {
     dispatch({
@@ -141,9 +143,9 @@ export const PedidoProvider = ({ children }) => {
     dispatch(action);
   };
 
-  const vaciarMesa = (idMesa)  => {
+  const vaciarMesa = (idMesa) => {
     const action = {
-      type : '[mesa] vaciar mesa',
+      type: '[mesa] vaciar mesa',
       payload: idMesa
     }
   }
@@ -172,6 +174,25 @@ export const PedidoProvider = ({ children }) => {
     dispatch(action);
   }
 
+
+  const getPedidosAll = async () => {
+    try {
+     const {data}  = await getPedidos();
+     setPedidoAll(data);
+     console.log("todos los pedidpos")
+     console.log(data)
+    } catch (error) {
+
+    }
+  }
+
+
+  useEffect(() => {
+    getPedidosAll()
+
+
+  }, [mesas]);
+
   return (
     <PedidoContext.Provider
       value={{
@@ -182,7 +203,8 @@ export const PedidoProvider = ({ children }) => {
         disminuirCantidad,
         mostrarProductosMesa,
         cambiarEstadoMesa,
-        vaciarMesa
+        vaciarMesa,
+        pedidosAll
       }}
     >
       {children}

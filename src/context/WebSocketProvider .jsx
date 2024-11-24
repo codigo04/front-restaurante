@@ -6,7 +6,9 @@ export const WebSocketContext = createContext();
 
 
 export const WebSocketProvider  = ({ children }) => {
+
     const [messages, setMessages] = useState([]); 
+
     const [detallePedido, setDetallePedido] =useState([]);
 
     
@@ -15,7 +17,7 @@ export const WebSocketProvider  = ({ children }) => {
 
         const onMessageReceived = (message) => {
             
-            setMessages((prevMessages) => [...prevMessages, message]); // Cuando llega un mensaje, lo almacenamos en el estado
+            setMessages([message]);  // Cuando llega un mensaje, lo almacenamos en el estado
         };
 
 

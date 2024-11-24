@@ -5,6 +5,7 @@ import { Progress } from '../../components/adm/Progress';
 import pollo from '../../assets/img/adm/pollo.jpg';
 import { AuthContext } from '../../context/AuthProvider';
 import { useMediaQuery } from '@mui/material';
+import { PedidoContext } from '../../context/PedidoProvider';
 
 const orders = [
   { client: 'Cliente 1', table: 5, date: '14/08/2001', time: '10:00' },
@@ -47,15 +48,16 @@ const meses = [
 export const Dashboard = () => {
 
   const { usuarios } = useContext(AuthContext);
-
-  const [selectOrder, setSelectedOrde] = useState(null);
+  const { pedidosAll } = useContext(PedidoContext)
+  const [selectPedido, setSelectedPedido] = useState(null);
   const [selectMes, setSelectMes] = useState('')
   const isMobile = useMediaQuery('(max-width:600px)')
 
-  const handleView = (orders) => {
-    setSelectedOrde(orders)
+  const handleView = (pedido) => {
+    setSelectedPedido(pedido)
 
-    console.log(selectOrder)
+    console.log("pedidos pasados")
+    console.log("Pedido seleccionado:", pedido);
   }
 
   const handleChange = (e) => {
@@ -75,8 +77,8 @@ export const Dashboard = () => {
 
           <div className="col-md-4">
             <div className="card-gradient">
-              <h2>20</h2>
-              <p>Total Órdenes</p>
+              <h2>{pedidosAll.length}</h2>
+              <p>Total Pedidos</p>
             </div>
           </div>
           <div className="col-md-4">
@@ -111,13 +113,13 @@ export const Dashboard = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {orders.map((order, index) => (
+                      {pedidosAll.map((pedido, index) => (
                         <tr key={index}>
-                          <td>{order.client}</td>
-                          <td>{order.table}</td>
-                          <td>{order.date} - {order.time}</td>
+                          <td>{pedido.client}</td>
+                          <td>{pedido.idMesa}</td>
+                          <td>{pedido.horaPedido}</td>
                           <td>
-                            <button onClick={() => handleView(order)} className="btn color-primario">
+                            <button onClick={() => handleView(pedido)} className="btn color-primario">
                               Ver
                             </button>
                           </td>
@@ -194,42 +196,42 @@ export const Dashboard = () => {
         </div>
 
         {
-          selectOrder && (
+          selectPedido && (
             <div className="order-details-overlay">
               <div className="order-details">
                 <div className='d-flex justify-content-between'>
                   <h3>Detalles de la Orden</h3>
 
-                  <button onClick={() => setSelectedOrde(null)} className="btn btn-secondary color-primario">
+                  <button onClick={() => setSelectedPedido(null)} className="btn btn-secondary color-primario">
                     <i class="bi bi-x" style={{ color: 'white' }} ></i>
                   </button>
                 </div>
                 <div>
-                  <p>Cliente: {selectOrder.client}</p>
-                  <p>Mesa: {selectOrder.table}</p>
-                  <p>Fecha: {selectOrder.date}</p>
-                  <p>Hora: {selectOrder.time}</p>
+                  <p>Cliente: promto disponible</p>
+                  <p>Mesa: {selectPedido.mesa.numeroMesa}</p>
+                  <p>Fecha: {selectPedido.fechaPedido}</p>
+                  <p>Hora: {selectPedido.fechaPedido}</p>
                 </div>
-                <div>
+                <div className='table-container'>
                   <table className="table table-striped">
                     <thead>
                       <tr>
-                        <th>Cliente</th>
-                        <th>Mesa</th>
-                        <th>Fecha - Hora</th>
-                        <th>Acción</th>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        {/* <th>Acción</th> */}
                       </tr>
-                    </thead>
-                    {/* <tbody>
-                      {orders.map((order, index) => (
+                    </thead> 
+                    { <tbody>
+                      {selectPedido.detallePedidos.map((pedido, index) => (
                         <tr key={index}>
-                          <td>{order.client}</td>
-                          <td>{order.table}</td>
-                          <td>{order.date} - {order.time}</td>
-                          <td><button onClick={() => handleView(order)} className="btn  color-primario">Ver</button></td>
+                          <td>Pronto Dis</td>
+                          <td>{pedido.cantidad}</td>
+                          <td>S/{pedido.precio}</td>
+                          {/* <td><button onClick={() => handleView(order)} className="btn  color-primario">Ver</button></td> */}
                         </tr>
                       ))}
-                    </tbody> */}
+                    </tbody> }
                   </table>
                 </div>
               </div>

@@ -55,6 +55,16 @@ export const saveMesa = async (nuevaMesa) => {
 // /actualizar/{id}
 export const actualizarEstadoMesa = async (nuevaMesa, idMesa) => {
 
+    const token = localStorage.getItem('token')
+
+    console.log("token extraiodo  "+token)
+    const configToken = {
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        }
+    }
+
     try {
         const response = await axios.put(`${BASE_URL}/api/v1/admin/mesas/actualizar/${idMesa}`, nuevaMesa, configToken);
         return response.data; // Retorna la respuesta para que puedas usarla donde llames a la función

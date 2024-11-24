@@ -1,13 +1,18 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { WebSocketContext } from "../../context/WebSocketProvider ";
 import { Card } from "./Card/Card";
 import pedidos from "./Card/pedidos";
 import "./style-cocina.css";
 import { toast } from "react-toastify";
+import { PedidoContext } from "../../context/PedidoProvider";
 
 export const MainCocina = () => {
 
 	const { messages } = useContext(WebSocketContext);
+
+	const [pedidoAll, setPedidoAll] = useState([])
+
+	const { pedidosAll } = useContext(PedidoContext);
 
 	useEffect(() => {
         if (messages.length > 0) {
@@ -15,7 +20,19 @@ export const MainCocina = () => {
                 position: "top-right",
             });
         }
+
+		setPedidoAll((prevPedidoAll) => [...prevPedidoAll, ...messages]);
     }, [messages]);
+
+
+	useEffect(() => {
+		if (pedidosAll.length > 0) {
+			setPedidoAll(pedidosAll);
+		}
+    }, [pedidosAll]);
+
+    console.log("pedidos cocina")
+	console.log(pedidoAll)
 	
 	return (
 		<>
@@ -27,7 +44,7 @@ export const MainCocina = () => {
 
 				<section className="col-12">
 					<div className="d-flex justify-content-between flex-wrap">
-						{messages.map((pedido) => (
+						{pedidoAll.map((pedido) => (
 							<Card key={pedido.pedidoId} pedido={pedido} />
 						))}
 					</div>

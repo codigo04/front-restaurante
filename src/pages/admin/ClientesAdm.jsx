@@ -79,7 +79,7 @@ export const ClientesAdm = () => {
                           className="btn btn-danger btn-sm"
                           onClick={() => handleDelete(user.idCliente)}
                         >
-                          Eliminar
+                          Ver
                         </button>
                       </td>
                     </tr>

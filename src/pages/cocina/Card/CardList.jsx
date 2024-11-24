@@ -1,11 +1,28 @@
 import { CardItem } from './CardItem'
 
+
+
+
+
+
+
+
 export const CardList = ({ platos }) => {
   return (
     <div className="card-body px-2">
-        {platos.map((plato, index)=>(
-            <CardItem key={index} nombrePlato={plato.nombre} cantidad={plato.stock}/>
+
+      <div className='table-container'>
+        {platos.map((plato, index) => (
+          <CardItem key={index} nombrePlato={plato.precio} cantidad={plato.cantidad} />
         ))}
-  </div>
+      </div>
+
+
+      {/* <div className='table-container'>
+        {platos.map((plato, index) => (
+          <CardItem key={index} nombrePlato={plato.precio} cantidad={plato.cantidad} />
+        ))}
+      </div> */}
+    </div>
   )
 }
