@@ -1,7 +1,7 @@
 import React from "react";
 
-function HistorialCierres() {
+export const  HistorialCierres = () =>{
   return <div>HistorialCierres</div>;
 }
 
-export default HistorialCierres;
+

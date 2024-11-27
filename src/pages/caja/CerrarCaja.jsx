@@ -1,7 +1,7 @@
 import React from "react";
 
-function CerrarCaja() {
+export const  CerrarCaja = () => {
   return <div>CerrarCaja</div>;
 }
 
-export default CerrarCaja;
+

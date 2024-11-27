@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import React, { useState } from 'react'
 import { Login } from './pages/Login'
 import { Navigate, Route, Routes } from 'react-router-dom'
@@ -7,11 +7,9 @@ import { Layout } from './components/Layout'
 
 import './assets/styles/index.css'
 
-import { Moso } from './pages/Moso'
+
 import { ProtectedRoute } from './components/ProtectedRoute'
-import { NavBarAdmin } from './components/NavBarAdmin'
-import { NavBarMoso } from './components/NavBarMoso'
-import { NavBarCaja } from './components/NavBarCaja'
+
 import { ProdutosAdm } from './pages/admin/ProdutosAdm'
 import { OrdenesAdm } from './pages/admin/OrdenesAdm'
 import { ClientesAdm } from './pages/admin/ClientesAdm'
@@ -31,58 +29,20 @@ import { Pedidos } from './pages/cocina/pedidos'
 import { WebSocketProvider } from './context/WebSocketProvider '
 import { PedidoProvider } from './context/PedidoProvider'
 
-=======
-import React, { useState } from "react";
-import { Login } from "./pages/Login";
-import { Navigate, Route, Routes } from "react-router-dom";
-import { Dashboard } from "./pages/admin/Dashboard";
-import { Layout } from "./components/Layout";
->>>>>>> jhonatan
+
 
 import "./assets/styles/index.css";
 
 import { Moso } from "./pages/Moso";
-import { ProtectedRoute } from "./components/ProtectedRoute";
-import { NavBarAdmin } from "./components/NavBarAdmin";
-import { NavBarMoso } from "./components/NavBarMoso";
-import { NavBarCaja } from "./components/NavBarCaja";
-import { ProdutosAdm } from "./pages/admin/ProdutosAdm";
-import { OrdenesAdm } from "./pages/admin/OrdenesAdm";
-import { ClientesAdm } from "./pages/admin/ClientesAdm";
-import { IngresosAdm } from "./pages/admin/IngresosAdm";
-import { EstadisticasAdm } from "./pages/admin/EstadisticasAdm";
-import { EmpleadosAdm } from "./pages/admin/EmpleadosAdm";
-import { MesasMoso } from "./pages/mozo/MesasMoso";
-import { ProductosMozo } from "./pages/mozo/ProductosMozo";
-import { ProductosProvider } from "./context/ProductosProvider";
-import { PedidoProvider } from "./context/PedidoProvider";
-import { DetallePedido } from "./pages/mozo/DetallePedido";
-import { MesasAdm } from "./pages/admin/MesasAdm";
-import { MesasProvider } from "./context/MesasProvider";
-import { AuthProvider } from "./context/AuthProvider";
-import { Cajero } from "./pages/caja/Cajero";
-import { Pedidos } from "./pages/cocina/pedidos";
-import CerrarCaja from "./pages/caja/CerrarCaja";
-import HistorialCierres from "./pages/caja/HistorialCierres";
+import { CerrarCaja } from './pages/caja/CerrarCaja'
+import { HistorialCierres } from './pages/caja/HistorialCierres'
+
+
+
+
+
 
 export const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-  const [userRole, setUserRole] = useState(null);
-
-  const getSidebar = () => {
-    // userRole
-    switch (userRole) {
-      case "ADMIN":
-        return <NavBarAdmin></NavBarAdmin>;
-      case "MOZO":
-        return <NavBarMoso></NavBarMoso>;
-      case "CAJA":
-        return <NavBarCaja></NavBarCaja>;
-      default:
-        return null;
-    }
-  };
-
   return (
     <>
       <AuthProvider>
@@ -99,7 +59,7 @@ export const App = () => {
                       path="/"
                       element={
                         <ProtectedRoute>
-                          <Layout sidebar={getSidebar()} />
+                          <Layout  />
                         </ProtectedRoute>
                       }
                     >

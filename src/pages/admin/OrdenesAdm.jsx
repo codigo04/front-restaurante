@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import { TituloDescription } from '../../components/Globals/TituloDescription';
 import { CuerpoModal } from '../../components/modals/CuerpoModal';
 import { MesaPedidoContext } from '../../context/MesaPedidoProvider';
+import { Button } from '@mui/material';
 
 export const OrdenesAdm = () => {
 
@@ -50,7 +51,7 @@ export const OrdenesAdm = () => {
   const handleEstadoChange = (e) => {
     setSelectedEstado(e.target.value);
   };
-  
+
   return (
     <>
       <section className='container-fluid container-color'>
@@ -113,9 +114,15 @@ export const OrdenesAdm = () => {
                       {/* <td>{pedido.cliente?.nombre}</td> */}
 
                       <td>
-                        <button onClick={() => handleView(pedido)} className="btn color-primario">
+                        <Button
+
+                          variant="contained"
+                          sx={{ mt: 2, backgroundColor: "#ff6600", color: "#fff" }}
+                          onClick={() => handleView(pedido)}
+                        >
                           Ver detalles
-                        </button>
+                        </Button>
+
                       </td>
                     </tr>
                   ))}
@@ -131,11 +138,21 @@ export const OrdenesAdm = () => {
       {isModalOpen && (
         <CuerpoModal titulo="Detalles del Pedido" onClose={() => setIsModalOpen(false)}>
           <div>
-            <p>Cliente: {selectPedido.cliente?.nombre}</p>
-            <p>Mesa: {selectPedido.mesa.numeroMesa}</p>
-            <p>Fecha: {selectPedido.fechaPedido}</p>
-            <p>Hora: {selectPedido.horaPedido}</p>
-            <p>Total Venta: S/{calcularTotal(selectPedido.detallePedidos)}</p>
+            <p style={{ fontSize: "16px", margin: "8px 0", color: "#555" }}>
+              <strong>Cliente:</strong> {selectPedido.cliente?.nombre}
+            </p>
+            <p style={{ fontSize: "16px", margin: "8px 0", color: "#555" }}>
+              <strong>Mesa:</strong> {selectPedido.mesa.numeroMesa}
+            </p>
+            <p style={{ fontSize: "16px", margin: "8px 0", color: "#555" }}>
+              <strong>Fecha:</strong> {selectPedido.fechaPedido}
+            </p>
+            <p style={{ fontSize: "16px", margin: "8px 0", color: "#555" }}>
+              <strong>Hora:</strong> {selectPedido.horaPedido}
+            </p>
+            <p style={{ fontSize: "16px", margin: "8px 0", fontWeight: "bold", color: "#ff6600" }}>
+              Total Venta: S/{calcularTotal(selectPedido.detallePedidos)}
+            </p>
           </div>
           <div className='table-container'>
             <table className="table table-striped">

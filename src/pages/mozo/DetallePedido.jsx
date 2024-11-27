@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import { connectWebSocket } from '../../service/websocket';
 import { WebSocketContext } from '../../context/WebSocketProvider ';
 import { MesaPedidoContext } from '../../context/MesaPedidoProvider';
+import { Button } from '@mui/material';
 
 export const DetallePedido = () => {
 
@@ -190,10 +191,10 @@ export const DetallePedido = () => {
         if (!idPedido || idPedido <= 0) {
             console.error("ID de pedido inválido:", idPedido);
             toast.error("ID del pedido no es válido. Por favor verifica.", {
-              position: "top-right",
+                position: "top-right",
             });
             return;
-          }
+        }
 
         console.log("Pedido enviado al backend:", idPedido);
 
@@ -202,7 +203,7 @@ export const DetallePedido = () => {
             const detallePedido = await obtenerPedido(idPedido);
             console.log("Detalle del pedido recibido:", detallePedido);
 
-            
+
 
             // Actualiza el estado con los detalles del pedido
             setDetallePedido(detallePedido);
@@ -355,7 +356,17 @@ export const DetallePedido = () => {
                                         })}
                                     />
                                 </div>
-                                <button onClick={() => handleSearchCliente()} className="btn color-primario mb-3">Buscar</button>
+                                
+
+                                <Button
+                                   className='mb-3'
+                                    variant="contained"
+                                    sx={{ backgroundColor: "#ff6600", color: "#fff" }}
+                                    onClick={() => handleSearchCliente()} 
+                                >
+                                    {/* <NavLink to="/mozo/mesas" >Confirmar Pedido</NavLink> */}
+                                    Buscar
+                                </Button>
                             </div>
 
                             <label htmlFor="nombreCliente" className="form-label">Nombre del Cliente</label>
@@ -379,14 +390,29 @@ export const DetallePedido = () => {
                             </div>
 
                             <div className="d-grid gap-3 w-100">
-                                <button className="btn btn-success color-primario" onClick={handleConfirmarPedido}>
+                                <Button
+
+                                    variant="contained"
+                                    sx={{ backgroundColor: "#ff6600", color: "#fff" }}
+                                    onClick={handleConfirmarPedido}
+                                >
                                     {/* <NavLink to="/mozo/mesas" >Confirmar Pedido</NavLink> */}
                                     Confirmar Pedido
-                                </button>
-                                <button className="btn btn-success color-primario">
+                                </Button>
+
+
+
+
+                                <Button
+
+                                    variant="contained"
+                                    sx={{ backgroundColor: "#ff6600", color: "#fff" }}
+
+                                >
                                     {/* <NavLink to="/mozo/mesas" className="btn btn-danger color-primario">Cancelar</NavLink> */}
                                     Cancelar
-                                </button>
+                                </Button>
+
 
 
                             </div>

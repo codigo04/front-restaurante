@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { TituloDescription } from '../../components/Globals/TituloDescription';
 import { AuthContext } from '../../context/AuthProvider';
+import { Button } from '@mui/material';
 
 
 export const ClientesAdm = () => {
@@ -75,12 +76,16 @@ export const ClientesAdm = () => {
 
 
                       <td>
-                        <button
-                          className="btn btn-danger btn-sm"
+
+                        <Button
+
+                          variant="contained"
+                          sx={{  backgroundColor: "#ff6600", color: "#fff" }}
                           onClick={() => handleDelete(user.idCliente)}
                         >
-                          Ver
-                        </button>
+                          Ver 
+                        </Button>
+                        
                       </td>
                     </tr>
                   ))}

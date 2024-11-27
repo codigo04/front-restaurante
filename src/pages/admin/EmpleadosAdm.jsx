@@ -4,6 +4,7 @@ import { AuthContext } from '../../context/AuthProvider';
 import { actualizarEmpleado, consultaDni, saveAdmin, saveCajero, saveCocinero, saveMoso } from '../../service/empleadosService';
 import { CuerpoModal } from '../../components/modals/CuerpoModal';
 import { toast } from 'react-toastify';
+import { Box, Button } from '@mui/material';
 
 export const EmpleadosAdm = () => {
     const { usuarios } = useContext(AuthContext);
@@ -208,7 +209,7 @@ export const EmpleadosAdm = () => {
             switch (role) {
                 case 'Admin':
                     const empleadoAdm = {
-                        id:formData.id,
+                        id: formData.id,
                         nombres: formData.nombres,
                         apellidos: formData.apellidos,
                         email: formData.correo,
@@ -231,19 +232,19 @@ export const EmpleadosAdm = () => {
 
                 case 'MOZO':
                     const empleadoMozo = {
-                        id:formDataEdit.id,
+                        id: formDataEdit.id,
                         nombres: formDataEdit.nombres,
-                        estado:formDataEdit.estado==='1'?true:false,
+                        estado: formDataEdit.estado === '1' ? true : false,
                         apellidos: formDataEdit.apellidos,
                         email: formDataEdit.correo,
                         password: formDataEdit.password,
                         numDoc: formDataEdit.numDoc,
                     };
-                         actualizarEmpleado(empleadoMozo);
-                         toast.success("Empleado actualizado Correctamente", {
-                            position: "top-center",
-                          });
-                         setIsModalOpen(false)
+                    actualizarEmpleado(empleadoMozo);
+                    toast.success("Empleado actualizado Correctamente", {
+                        position: "top-center",
+                    });
+                    setIsModalOpen(false)
                     break;
 
                 case 'Cocinero':
@@ -328,7 +329,16 @@ export const EmpleadosAdm = () => {
                             onChange={handleChangeSave}
                             placeholder="Ingrese DNI para buscar"
                         />
-                        <button className="btn  color-primario" onClick={handleSearch}>Buscar</button>
+
+                        <Button
+                            type='submit'
+                            variant="contained"
+                            sx={{ backgroundColor: "#ff6600", color: "#fff" }}
+                            onClick={handleSearch}
+                        >
+                            Buscar
+                        </Button>
+                        
                     </div>
                 </div>
 
@@ -419,8 +429,15 @@ export const EmpleadosAdm = () => {
                                 />
                             </div>
                         </div>
+                        <Button
+                            type='submit'
+                            variant="contained"
+                            sx={{ backgroundColor: "#ff6600", color: "#fff" }}
 
-                        <button type="submit" className="btn btn-dark color-primario">+ Agregar Empleado</button>
+                        >
+                            + Agregar Empleado
+                        </Button>
+
                     </div>
                 </form>
 
@@ -453,7 +470,15 @@ export const EmpleadosAdm = () => {
                                         <td>{empl.enabled ? 'Activo' : 'Inactivo'}</td>
                                         <td>{empl.numDoc}</td>
                                         <td>
-                                            <button className="btn btn-danger btn-sm color-primario" onClick={() => handleViewEmpleado(empl)}>Editar</button>
+                                            <Button
+                                                type='submit'
+                                                variant="contained"
+                                                sx={{ backgroundColor: "#ff6600", color: "#fff" }}
+                                                onClick={() => handleViewEmpleado(empl)}
+                                            >
+                                                Editar
+                                            </Button>
+
                                         </td>
                                     </tr>
                                 ))}

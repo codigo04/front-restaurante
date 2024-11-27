@@ -4,7 +4,7 @@ import '../../assets/styles/cssAdmin/css.css'
 import { Progress } from '../../components/adm/Progress';
 import pollo from '../../assets/img/adm/pollo.jpg';
 import { AuthContext } from '../../context/AuthProvider';
-import { useMediaQuery } from '@mui/material';
+import { Button, Typography, useMediaQuery } from '@mui/material';
 
 import { Navigate, useNavigate } from 'react-router-dom';
 import { MesaPedidoContext } from '../../context/MesaPedidoProvider';
@@ -41,7 +41,7 @@ const calcularTotalPorFecha = (pedidos) => {
   });
 
 
-  
+
 
   // Calcular el total de ingresos de los pedidos de hoy
   const totalIngresos = pedidosDeHoy.reduce((acumulador, pedido) => {
@@ -131,8 +131,10 @@ export const Dashboard = () => {
             {/* Pedidos Recientes Solicitados */}
             <div className="col-md-6 container-color">
               <article className="">
+                <Typography variant="h5" fontWeight="bold">
+                  Pedidos Recientes Solicitados
+                </Typography>
 
-                <h3>Pedidos Recientes Solicitados</h3>
                 <div className='table-container'>
                   <table className="table table-striped">
                     <thead>
@@ -150,23 +152,44 @@ export const Dashboard = () => {
                           <td>{pedido.mesa.numeroMesa}</td>
                           <td>{pedido.fechaPedido}</td>
                           <td>
-                            <button onClick={() => handleView(pedido)} className="btn color-primario">
+
+                            <Button
+
+                              variant="contained"
+                              sx={{  backgroundColor: "#ff6600", color: "#fff" }}
+                              onClick={() => handleView(pedido)}
+                            >
                               Ver
-                            </button>
+                            </Button>
+
                           </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
-                <button className="btn btn-warning color-primario" onClick={() => navigate("/admin/ordenes")} >Ver Todos</button>
+
+
+                <Button
+
+                  variant="contained"
+                  sx={{ mt: 2, backgroundColor: "#ff6600", color: "#fff" }}
+                  onClick={() => navigate("/admin/ordenes")}
+                >
+                  Ver todos
+                </Button>
+
+
               </article>
             </div>
 
             {/* Ganancia Mensual */}
             <div className="col-md-6" style={{ paddingRight: '0' }}>
               <div className="monthly-earnings container-color">
-                <h3>Ganancia Mensual</h3>
+                <Typography variant="h5" fontWeight="bold">
+                  Ganancia Mensual
+                </Typography>
+
                 <div className="form-group mb-3">
                   <select
                     id="mesSelect"
@@ -238,11 +261,24 @@ export const Dashboard = () => {
                   </button>
                 </div>
                 <div>
-                  <p>Cliente: {selectPedido.cliente?.nombre}</p>
-                  <p>Mesa: {selectPedido.mesa.numeroMesa}</p>
-                  <p>Fecha: {selectPedido.fechaPedido}</p>
-                  <p>Hora: {selectPedido.horaPedido}</p>
-                  <p>Total Venta: S/{calcularTotal(selectPedido.detallePedidos)}</p>
+
+
+                  <p style={{ fontSize: "16px", margin: "8px 0", color: "#555" }}>
+                    <strong>Cliente:</strong> {selectPedido.cliente?.nombre}
+                  </p>
+                  <p style={{ fontSize: "16px", margin: "8px 0", color: "#555" }}>
+                    <strong>Mesa:</strong> {selectPedido.mesa.numeroMesa}
+                  </p>
+                  <p style={{ fontSize: "16px", margin: "8px 0", color: "#555" }}>
+                    <strong>Fecha:</strong> {selectPedido.fechaPedido}
+                  </p>
+                  <p style={{ fontSize: "16px", margin: "8px 0", color: "#555" }}>
+                    <strong>Hora:</strong> {selectPedido.horaPedido}
+                  </p>
+                  <p style={{ fontSize: "16px", margin: "8px 0", fontWeight: "bold", color: "#ff6600" }}>
+                    Total Venta: S/{calcularTotal(selectPedido.detallePedidos)}
+                  </p>
+
                 </div>
                 <div className='table-container'>
                   <table className="table table-striped">

@@ -7,7 +7,7 @@ import { AuthContext } from '../context/AuthProvider';
 // import { NavLink } from 'react-router-dom'
 
 
-export const Layout = ({ sidebar }) => {
+export const Layout = () => {
 
     const { isLoading} = useContext(AuthContext); 
     const username = localStorage.getItem('username');
