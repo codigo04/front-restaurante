@@ -6,8 +6,9 @@ import { TituloDescription } from '../../components/Globals/TituloDescription';
 import { NavLink } from 'react-router-dom';
 import { Badge } from '@mui/material'
 import { ShoppingCart } from '@mui/icons-material'
-import { PedidoContext } from '../../context/PedidoProvider';
+
 import { MesasContext } from '../../context/MesasProvider';
+import { MesaPedidoContext } from '../../context/MesaPedidoProvider';
 
 
 
@@ -16,9 +17,9 @@ export const ProductosMozo = () => {
 
   const { productos, bebidas } = useContext(ProductoContext);
 
-  const { listaPedido, agregarProducto, eliminarProducto } = useContext(PedidoContext)
+  const { listaPedido, agregarProducto, eliminarProducto } = useContext(MesaPedidoContext)
 
-  const { mesasPedido } = useContext(PedidoContext);
+  const { mesasPedido } = useContext(MesaPedidoContext);
 
   const { mesaSelect } = useContext(MesasContext);
 

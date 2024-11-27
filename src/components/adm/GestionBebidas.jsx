@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react'
 import GestionComidaimg from '../../assets/img/adm/gestionComida.jpg';
 import { TituloDescription } from '../Globals/TituloDescription';
 import { geBebidas, saveBebidas } from '../../service/productosService';
+import { CuerpoModal } from '../modals/CuerpoModal';
 
 
 export const GestionBebidas = () => {
 
 
     const [foodItems, setFoodItems] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [formData, setFormData] = useState({
         nombre: '',
         precio: 0,
@@ -20,7 +22,7 @@ export const GestionBebidas = () => {
     const getProductosBebidas = async () => {
 
         try {
-           
+
             const { data } = await geBebidas()
 
             console.log(data)
@@ -61,7 +63,7 @@ export const GestionBebidas = () => {
 
         }
 
-        const { data } = await saveBebidas( producto);
+        const { data } = await saveBebidas(producto);
 
 
     };
@@ -208,7 +210,7 @@ export const GestionBebidas = () => {
                                             <td>{item.stock}</td>
 
                                             <td>
-                                                <button className="btn btn-danger btn-sm color-primario">Editar</button>
+                                                <button className="btn btn-danger btn-sm color-primario" onClick={() => setIsModalOpen(true)}>Editar</button>
                                             </td>
                                         </tr>
                                     ))}
@@ -226,6 +228,15 @@ export const GestionBebidas = () => {
             </div>
 
 
+
+
+
+            {isModalOpen && (
+                <CuerpoModal titulo="Editar Bebida" onClose={() => setIsModalOpen(false)}>
+                    <br />
+                    
+                </CuerpoModal>
+            )}
 
         </>
     )

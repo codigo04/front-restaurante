@@ -144,6 +144,30 @@ export const saveCocinero = async (tokenUser, empleado) => {
 };
 
 
+// /actualizar/{id}
+export const actualizarEmpleado =  (nuevoEmpleado) => {
+
+    const token = localStorage.getItem('token')
+
+    console.log('nuevos datos')
+    console.log(nuevoEmpleado)
+
+    console.log("token extraiodo  "+token)
+    const configToken = {
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        }
+    }
+
+    // try {
+    //     const response = await axios.put(`${BASE_URL}/api/v1/admin/mesas/actualizar/${idMesa}`, nuevaMesa, configToken);
+    //     return response.data; // Retorna la respuesta para que puedas usarla donde llames a la función
+    // } catch (error) {
+    //     console.error('Error al actualizar la mesa', error);
+    //     throw error; // Lanzar el error para manejarlo en el lugar donde se llame a la función
+    // }
+}
 
 
 

@@ -1,33 +1,14 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import { Saludo } from '../../components/Globals/Saludo'
 import '../../assets/styles/cssAdmin/css.css'
 import { Progress } from '../../components/adm/Progress';
 import pollo from '../../assets/img/adm/pollo.jpg';
 import { AuthContext } from '../../context/AuthProvider';
 import { useMediaQuery } from '@mui/material';
+
+import { Navigate, useNavigate } from 'react-router-dom';
+import { MesaPedidoContext } from '../../context/MesaPedidoProvider';
 import { PedidoContext } from '../../context/PedidoProvider';
-
-const orders = [
-  { client: 'Cliente 1', table: 5, date: '14/08/2001', time: '10:00' },
-  { client: 'Cliente 2', table: 5, date: '14/08/2001', time: '10:00' },
-  { client: 'Cliente 3', table: 5, date: '14/08/2001', time: '10:00' },
-  { client: 'Cliente 3', table: 5, date: '14/08/2001', time: '10:00' },
-  { client: 'Cliente 3', table: 5, date: '14/08/2001', time: '10:00' },
-  { client: 'Cliente 3', table: 5, date: '14/08/2001', time: '10:00' },
-  { client: 'Cliente 3', table: 5, date: '14/08/2001', time: '10:00' },
-  { client: 'Cliente 3', table: 5, date: '14/08/2001', time: '10:00' },
-  { client: 'Cliente 3', table: 5, date: '14/08/2001', time: '10:00' },
-  { client: 'Cliente 3', table: 5, date: '14/08/2001', time: '10:00' },
-  { client: 'Cliente 3', table: 5, date: '14/08/2001', time: '10:00' },
-  { client: 'Cliente 3', table: 5, date: '14/08/2001', time: '10:00' },
-  { client: 'Cliente 3', table: 5, date: '14/08/2001', time: '10:00' },
-  { client: 'Cliente 3', table: 5, date: '14/08/2001', time: '10:00' },
-  { client: 'Cliente 3', table: 5, date: '14/08/2001', time: '10:00' },
-  { client: 'Cliente 3', table: 5, date: '14/08/2001', time: '10:00' },
-  { client: 'Cliente 3', table: 5, date: '14/08/2001', time: '10:00' }
-
-];
-
 
 const meses = [
   'Enero',
@@ -44,18 +25,53 @@ const meses = [
   'Diciembre',
 ];
 
+// Función para obtener la fecha actual en formato YYYY-MM-DD
+const getCurrentDate = () => {
+  const today = new Date();
+  return today.toISOString().split("T")[0]; // Formato 'YYYY-MM-DD'
+};
+
+const calcularTotalPorFecha = (pedidos) => {
+  const currentDate = getCurrentDate(); // Obtener la fecha actual en formato 'YYYY-MM-DD'
+
+  // Filtrar los pedidos que coincidan con la fecha actual
+  const pedidosDeHoy = pedidos.filter((pedido) => {
+    console.log("Analizando pedido:", pedido);
+    return pedido.fechaPedido === currentDate;
+  });
+
+
+  
+
+  // Calcular el total de ingresos de los pedidos de hoy
+  const totalIngresos = pedidosDeHoy.reduce((acumulador, pedido) => {
+    const totalPedido = pedido.detallePedidos.reduce(
+      (subtotal, detalle) => subtotal + detalle.cantidad * detalle.precio,
+      0
+    );
+    console.log(`Total del pedido ID ${pedido.idPedido}:`, totalPedido);
+    return acumulador + totalPedido;
+  }, 0);
+
+  console.log("Total ingresos de hoy:", totalIngresos);
+
+  return totalIngresos;
+};
 
 export const Dashboard = () => {
 
   const { usuarios } = useContext(AuthContext);
-  const { pedidosAll } = useContext(PedidoContext)
+  // const { pedidosAll } = useContext(MesaPedidoContext)
+  const { pedidoAll } = useContext(PedidoContext)
   const [selectPedido, setSelectedPedido] = useState(null);
   const [selectMes, setSelectMes] = useState('')
   const isMobile = useMediaQuery('(max-width:600px)')
+  const navigate = useNavigate();
+
+  console.log(pedidoAll)
 
   const handleView = (pedido) => {
     setSelectedPedido(pedido)
-
     console.log("pedidos pasados")
     console.log("Pedido seleccionado:", pedido);
   }
@@ -66,6 +82,21 @@ export const Dashboard = () => {
     console.log(e.target.value)
   }
 
+
+  const calcularTotal = (detallePedido) => {
+
+    console.log(detallePedido)
+
+    return detallePedido.reduce((total, item) => total + (item.producto.precio * item.cantidad), 0);
+  }
+
+  const calcularTotalIngresos = () => {
+    pedidoAll.map((total, item) => (
+      pedido.reduce
+    ))
+  }
+
+  const totalDeHoy = calcularTotalPorFecha(pedidoAll);
   return (
     <>
 
@@ -77,13 +108,13 @@ export const Dashboard = () => {
 
           <div className="col-md-4">
             <div className="card-gradient">
-              <h2>{pedidosAll.length}</h2>
+              <h2>{pedidoAll.length}</h2>
               <p>Total Pedidos</p>
             </div>
           </div>
           <div className="col-md-4">
             <div className="card-gradient">
-              <h2>s/ 499.00</h2>
+              <h2>s/ {totalDeHoy.toFixed(2)}</h2>
               <p>Total Ingresos</p>
             </div>
           </div>
@@ -113,11 +144,11 @@ export const Dashboard = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {pedidosAll.map((pedido, index) => (
+                      {pedidoAll.slice(0, 3).map((pedido, index) => (
                         <tr key={index}>
-                          <td>{pedido.client}</td>
-                          <td>{pedido.idMesa}</td>
-                          <td>{pedido.horaPedido}</td>
+                          <td>{pedido.cliente?.nombre}</td>
+                          <td>{pedido.mesa.numeroMesa}</td>
+                          <td>{pedido.fechaPedido}</td>
                           <td>
                             <button onClick={() => handleView(pedido)} className="btn color-primario">
                               Ver
@@ -128,7 +159,7 @@ export const Dashboard = () => {
                     </tbody>
                   </table>
                 </div>
-                <button className="btn btn-warning color-primario">Ver Todos</button>
+                <button className="btn btn-warning color-primario" onClick={() => navigate("/admin/ordenes")} >Ver Todos</button>
               </article>
             </div>
 
@@ -207,10 +238,11 @@ export const Dashboard = () => {
                   </button>
                 </div>
                 <div>
-                  <p>Cliente: promto disponible</p>
+                  <p>Cliente: {selectPedido.cliente?.nombre}</p>
                   <p>Mesa: {selectPedido.mesa.numeroMesa}</p>
                   <p>Fecha: {selectPedido.fechaPedido}</p>
-                  <p>Hora: {selectPedido.fechaPedido}</p>
+                  <p>Hora: {selectPedido.horaPedido}</p>
+                  <p>Total Venta: S/{calcularTotal(selectPedido.detallePedidos)}</p>
                 </div>
                 <div className='table-container'>
                   <table className="table table-striped">
@@ -221,17 +253,17 @@ export const Dashboard = () => {
                         <th>Precio</th>
                         {/* <th>Acción</th> */}
                       </tr>
-                    </thead> 
-                    { <tbody>
+                    </thead>
+                    {<tbody>
                       {selectPedido.detallePedidos.map((pedido, index) => (
                         <tr key={index}>
-                          <td>Pronto Dis</td>
+                          <td>{pedido.producto.nombre}</td>
                           <td>{pedido.cantidad}</td>
-                          <td>S/{pedido.precio}</td>
+                          <td>S/{pedido.producto.precio}</td>
                           {/* <td><button onClick={() => handleView(order)} className="btn  color-primario">Ver</button></td> */}
                         </tr>
                       ))}
-                    </tbody> }
+                    </tbody>}
                   </table>
                 </div>
               </div>

@@ -20,7 +20,7 @@ import { EmpleadosAdm } from './pages/admin/EmpleadosAdm'
 import { MesasMoso } from './pages/mozo/MesasMoso'
 import { ProductosMozo } from './pages/mozo/ProductosMozo'
 import { ProductosProvider } from './context/ProductosProvider'
-import { PedidoProvider } from './context/PedidoProvider'
+import { MesaPedidoProvider } from './context/MesaPedidoProvider'
 import { DetallePedido } from './pages/mozo/DetallePedido'
 import { MesasAdm } from './pages/admin/MesasAdm'
 import { MesasProvider } from './context/MesasProvider'
@@ -28,6 +28,7 @@ import { AuthProvider } from './context/AuthProvider'
 import { Cajero } from './pages/caja/Cajero'
 import { Pedidos } from './pages/cocina/pedidos'
 import { WebSocketProvider } from './context/WebSocketProvider '
+import { PedidoProvider } from './context/PedidoProvider'
 
 
 
@@ -55,60 +56,62 @@ export const App = () => {
     <>
       <AuthProvider>
         <WebSocketProvider>
-          <MesasProvider>
-            <PedidoProvider>
-              <ProductosProvider>
+          <PedidoProvider>
+            <MesasProvider>
+              <MesaPedidoProvider>
+                <ProductosProvider>
 
-                <Routes>
-                  <Route path="/" element={<Navigate to="/login" />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route
-                    path="/"
-                    element={
-                      <ProtectedRoute>
-                        <Layout sidebar={getSidebar()} />
-                      </ProtectedRoute>
-                    }
-                  >
+                  <Routes>
+                    <Route path="/" element={<Navigate to="/login" />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route
+                      path="/"
+                      element={
+                        <ProtectedRoute>
+                          <Layout sidebar={getSidebar()} />
+                        </ProtectedRoute>
+                      }
+                    >
 
-                    {/* Rutas protegidas */}
+                      {/* Rutas protegidas */}
 
-                    <Route path='/cajero' element={<Cajero />} />
-                    <Route path='/moso' element={<Moso />} />
+                      <Route path='/cajero' element={<Cajero />} />
+                      <Route path='/moso' element={<Moso />} />
 
-                    {/* Rutas del admin */}
-                    <Route path='/admin/dashboard' element={<Dashboard />} />
-                    <Route path='/admin/productos' element={<ProdutosAdm />} />
-                    <Route path='/admin/ordenes' element={<OrdenesAdm />} />
-                    <Route path='/admin/clientes' element={<ClientesAdm />}></Route>
-                    <Route path='/admin/empleados' element={<EmpleadosAdm />}></Route>
-                    <Route path='/admin/mesas' element={<MesasAdm />}></Route>
-                    <Route path='/admin/estadisticas' element={<EstadisticasAdm />}></Route>
-
-
-                    {/* mozo /mozo/pedido */}
-                    <Route path='/mozo/mesas' element={<MesasMoso />}></Route>
-                    <Route path='/mozo/productos' element={<ProductosMozo />}></Route>
-                    <Route path='/mozo/pedido' element={<DetallePedido />}></Route>
-
-                    {/* cocina */}
-                    <Route path='/cocina/pedidos' element={<Pedidos />}></Route>
-
-                    {/* caja */}
-                    <Route path='/cajero/inicio' element={<Cajero />}></Route>
+                      {/* Rutas del admin */}
+                      <Route path='/admin/dashboard' element={<Dashboard />} />
+                      <Route path='/admin/productos' element={<ProdutosAdm />} />
+                      <Route path='/admin/ordenes' element={<OrdenesAdm />} />
+                      <Route path='/admin/clientes' element={<ClientesAdm />}></Route>
+                      <Route path='/admin/empleados' element={<EmpleadosAdm />}></Route>
+                      <Route path='/admin/mesas' element={<MesasAdm />}></Route>
+                      <Route path='/admin/estadisticas' element={<EstadisticasAdm />}></Route>
 
 
+                      {/* mozo /mozo/pedido */}
+                      <Route path='/mozo/mesas' element={<MesasMoso />}></Route>
+                      <Route path='/mozo/productos' element={<ProductosMozo />}></Route>
+                      <Route path='/mozo/pedido' element={<DetallePedido />}></Route>
+
+                      {/* cocina */}
+                      <Route path='/cocina/pedidos' element={<Pedidos />}></Route>
+
+                      {/* caja */}
+                      <Route path='/cajero/inicio' element={<Cajero />}></Route>
 
 
-                  </Route>
 
 
-                  <Route path="*" element={<Navigate to="/login" />} />
-                </Routes>
+                    </Route>
 
-              </ProductosProvider>
-            </PedidoProvider>
-          </MesasProvider>
+
+                    <Route path="*" element={<Navigate to="/login" />} />
+                  </Routes>
+
+                </ProductosProvider>
+              </MesaPedidoProvider>
+            </MesasProvider>
+          </PedidoProvider>
         </WebSocketProvider>
       </AuthProvider>
     </>

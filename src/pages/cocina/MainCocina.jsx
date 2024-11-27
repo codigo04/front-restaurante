@@ -4,7 +4,8 @@ import { Card } from "./Card/Card";
 import pedidos from "./Card/pedidos";
 import "./style-cocina.css";
 import { toast } from "react-toastify";
-import { PedidoContext } from "../../context/PedidoProvider";
+import { MesaPedidoContext } from "../../context/MesaPedidoProvider";
+
 
 export const MainCocina = () => {
 
@@ -12,7 +13,7 @@ export const MainCocina = () => {
 
 	const [pedidoAll, setPedidoAll] = useState([])
 
-	const { pedidosAll } = useContext(PedidoContext);
+	const { pedidosAll } = useContext(MesaPedidoContext);
 
 	useEffect(() => {
         if (messages.length > 0) {

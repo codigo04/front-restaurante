@@ -3,13 +3,14 @@ import React, { useContext, useEffect, useState } from 'react'
 import { MesasMozo } from '../../components/mozo/MesasMozo'
 import { obtenerMesas } from '../../service/mesasService';
 import { MesasContext } from '../../context/MesasProvider';
-import { PedidoContext } from '../../context/PedidoProvider';
+import { MesaPedidoContext } from '../../context/MesaPedidoProvider';
+
 
 export const MesasMoso = () => {
 
     // const [mesas, setMesas] = useState([]);
     const { setMesaSelect } = useContext(MesasContext);
-    const { mesasPedido } = useContext(PedidoContext);
+    const { mesasPedido } = useContext(MesaPedidoContext);
 
     const cambiarEstado = () => {
 

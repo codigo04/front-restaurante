@@ -9,8 +9,8 @@ export const ClientesAdm = () => {
 
   // Función para eliminar un cliente
   const handleDelete = (idCliente) => {
-    const updatedClientes = filteredClientes.filter((cliente) => cliente.idCliente !== idCliente);
-    setFilteredClientes(updatedClientes); // Actualizamos la lista filtrada
+    //const updatedClientes = filteredClientes.filter((cliente) => cliente.idCliente !== idCliente);
+    //setFilteredClientes(updatedClientes); // Actualizamos la lista filtrada
   };
 
 

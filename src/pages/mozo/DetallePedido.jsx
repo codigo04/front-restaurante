@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { PedidoContext } from '../../context/PedidoProvider';
+
 import { NavLink, useNavigate } from 'react-router-dom';
 import { consultaDni } from '../../service/empleadosService';
 import { saveCliente } from '../../service/clientesService';
@@ -8,12 +8,13 @@ import { obtenerPedido, saveDetallePedido, savePedido } from '../../service/pedi
 import { toast } from 'react-toastify';
 import { connectWebSocket } from '../../service/websocket';
 import { WebSocketContext } from '../../context/WebSocketProvider ';
+import { MesaPedidoContext } from '../../context/MesaPedidoProvider';
 
 export const DetallePedido = () => {
 
     const navigate = useNavigate()
 
-    const { cambiarEstadoMesa, mostrarProductosMesa, mesasPedido, eliminarProducto, aumentarCantidad, disminuirCantidad } = useContext(PedidoContext)
+    const { cambiarEstadoMesa, mostrarProductosMesa, mesasPedido, eliminarProducto, aumentarCantidad, disminuirCantidad } = useContext(MesaPedidoContext)
     const { mesaSelect, cambiarEstado } = useContext(MesasContext);
     const { messages, setDetallePedido } = useContext(WebSocketContext);
     const [dni, setDni] = useState({
@@ -116,10 +117,11 @@ export const DetallePedido = () => {
 
         try {
             // Guardar el pedido en el backend y obtener el ID generado
-        
-            const { data: { idPedidoGenerado } } = await savePedido(nuevoPedido);
 
-            // console.log("Pedido creado con ID:", idPedidoGenerado);
+            const pedidoCreate = await savePedido(nuevoPedido);
+            const idPedidoGenerado = pedidoCreate.data.idPedido;
+            setIdPedido(idPedidoGenerado)
+            console.log("Pedido creado con ID:", idPedidoGenerado);
 
             // Preparar la lista de detalles del pedido
             const detallesPedido = productosMesa.map((producto) => ({
@@ -131,6 +133,7 @@ export const DetallePedido = () => {
             }));
 
             setDetalleP(detallesPedido)
+
             console.log("los detalles")
             console.log(detallesPedido);
 
@@ -145,6 +148,8 @@ export const DetallePedido = () => {
             mandarMozo()
             handleCambiarEstadoMesa();
 
+
+            handleSocket(idPedidoGenerado)
             // Redirigir a la vista de mesas
             navigate('/mozo/mesas');
         } catch (error) {
@@ -177,50 +182,38 @@ export const DetallePedido = () => {
     const mandarMozo = () => {
         const detallePedido = obtenerPedido()
 
-
-
-
-
         setDetallePedido(detallePedido)
     }
 
-    const handleSocket = () => {
+    const handleSocket = async (idPedido) => {
 
-        const detallePedido = obtenerPedido()
+        if (!idPedido || idPedido <= 0) {
+            console.error("ID de pedido inválido:", idPedido);
+            toast.error("ID del pedido no es válido. Por favor verifica.", {
+              position: "top-right",
+            });
+            return;
+          }
 
+        console.log("Pedido enviado al backend:", idPedido);
 
+        try {
+            // Llama a la función para obtener los detalles del pedido
+            const detallePedido = await obtenerPedido(idPedido);
+            console.log("Detalle del pedido recibido:", detallePedido);
 
+            
 
-        console.log(detallePedido)
-        toast.success("Pedido Creado Correctamente", {
-            position: "top-right",
-        });
-        // const detallePedido = {
-        //     "pedidoId": "123",
-        //     "mesa": mesaSelect,
-        //     "hora": "2024-11-22T15:30:00",
-        //     "productos": [
-        //         {
-        //             "nombre": "Hamburguesa con queso",
-        //             "stock": 2,
-        //             "observaciones": "Sin tomate"
-        //         },
-        //         {
-        //             "nombre": "Papas fritas",
-        //             "cantidad": 1
-        //         },
-        //         {
-        //             "nombre": "Coca-Cola",
-        //             "cantidad": 3
-        //         }
-        //     ],
-        //     "estado": "Enviado a cocina",
-        //     "observaciones": "Mesa junto a la ventana"
-        // }
+            // Actualiza el estado con los detalles del pedido
+            setDetallePedido(detallePedido);
+        } catch (error) {
+            // Maneja errores y muestra una notificación
+            console.error("Error al obtener el detalle del pedido:", error.message);
+            toast.error("Hubo un problema al obtener el pedido. Inténtalo de nuevo.", {
+                position: "top-right",
+            });
+        }
 
-
-
-        setDetallePedido(detallePedido)
     }
     // sockets
 
@@ -390,7 +383,7 @@ export const DetallePedido = () => {
                                     {/* <NavLink to="/mozo/mesas" >Confirmar Pedido</NavLink> */}
                                     Confirmar Pedido
                                 </button>
-                                <button className="btn btn-success color-primario" onClick={handleSocket}>
+                                <button className="btn btn-success color-primario">
                                     {/* <NavLink to="/mozo/mesas" className="btn btn-danger color-primario">Cancelar</NavLink> */}
                                     Cancelar
                                 </button>

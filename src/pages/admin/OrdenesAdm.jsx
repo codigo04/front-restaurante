@@ -1,27 +1,56 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { TituloDescription } from '../../components/Globals/TituloDescription';
+import { CuerpoModal } from '../../components/modals/CuerpoModal';
+import { MesaPedidoContext } from '../../context/MesaPedidoProvider';
 
 export const OrdenesAdm = () => {
-  const [users, setUsers] = useState([
-    { name: "Juan", surname: "Pérez", dni: "12345678", phone: "987654321", registrationDate: "2024-08-31", orders: 5 },
-    { name: "María", surname: "Gómez", dni: "87654321", phone: "987123456", registrationDate: "2024-07-15", orders: 3 },
-    { name: "Carlos", surname: "López", dni: "12348765", phone: "987321654", registrationDate: "2024-06-22", orders: 7 },
-    { name: "Carlos", surname: "López", dni: "12348765", phone: "987321654", registrationDate: "2024-06-22", orders: 7 },
-    { name: "Carlos", surname: "López", dni: "12348765", phone: "987321654", registrationDate: "2024-06-22", orders: 7 }
-  ]);
 
-  const handleDelete = (index) => {
-    const updatedUsers = users.filter((user, i) => i !== index);
-    setUsers(updatedUsers);
-  };
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectPedido, setSelectedPedido] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedEstado, setSelectedEstado] = useState("");
+
+  const { pedidosAll } = useContext(MesaPedidoContext)
+
+  const calcularTotal = (detallePedido) => {
+    console.log(detallePedido)
+    return detallePedido.reduce((total, item) => total + (item.producto.precio * item.cantidad), 0);
+  }
+
+  console.log(pedidosAll)
+
+  const filteredPedidos = pedidosAll.filter((pedido) => {
+    const query = searchQuery.toLowerCase();
+    const matchesSearch =
+      pedido.cliente?.nombre.toLowerCase().includes(query) ||
+      pedido.mesa.numeroMesa.toString().includes(query) ||
+      pedido.estado.toLowerCase().includes(query) ||
+      pedido.idPedido.toString().includes(query);
+
+    const matchesEstado = selectedEstado === "" || pedido.estado === selectedEstado;
+
+    return matchesSearch && matchesEstado;
+  });
+
+
+  const handleView = (pedido) => {
+    setSelectedPedido(pedido)
+    setIsModalOpen(true)
+    console.log("pedidos pasados")
+    console.log("Pedido seleccionado:", pedido);
+  }
+
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
     // Puedes filtrar los resultados basados en la búsqueda
     console.log("Buscando:", e.target.value);
   };
+
+  const handleEstadoChange = (e) => {
+    setSelectedEstado(e.target.value);
+  };
+  
   return (
     <>
       <section className='container-fluid container-color'>
@@ -45,35 +74,47 @@ export const OrdenesAdm = () => {
           </div>
 
           <div className="mt-5">
-            <h3>Listado de Ordenes</h3>
+            <div className="d-flex justify-content-between align-items-center flex-wrap mb-3">
+              <h3 className="mb-0">Listado de Ordenes</h3>
+              <select
+                id="mesSelect"
+                className="form-select w-auto"
+                aria-label="Filtrar por estado"
+                onChange={handleEstadoChange}
+              >
+                <option value="">Todos</option>
+                <option value="PENDIENTE">PENDIENTE</option>
+                <option value="COMPLETADO">COMPLETADO</option>
+              </select>
+            </div>
             <div className='table-container'>
               <table className="table table-striped">
                 <thead>
                   <tr>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>DNI</th>
-                    <th>Teléfono</th>
-                    <th>Fecha Registro</th>
-                    <th>Órdenes</th>
+                    <th>Id</th>
+                    <th>Cliente</th>
+                    <th>Mesa</th>
+                    <th>Estado</th>
+                    <th>Total</th>
+                    <th>Hora </th>
                     <th>Acción</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map((user, index) => (
+                  {filteredPedidos.map((pedido, index) => (
+
                     <tr key={index}>
-                      <td>{user.name}</td>
-                      <td>{user.surname}</td>
-                      <td>{user.dni}</td>
-                      <td>{user.phone}</td>
-                      <td>{user.registrationDate}</td>
-                      <td>{user.orders}</td>
+                      <td>{pedido.idPedido}</td>
+                      <td>{pedido.cliente?.nombre}</td>
+                      <td>{pedido.mesa.numeroMesa}</td>
+                      <td>{pedido.estado}</td>
+                      <td>S/{calcularTotal(pedido.detallePedidos)}</td>
+                      <td>{pedido.horaPedido}</td>
+                      {/* <td>{pedido.cliente?.nombre}</td> */}
+
                       <td>
-                        <button
-                          className="btn btn-danger btn-sm color-primario"
-                          onClick={() => handleDelete(index)}
-                        >
-                          Eliminar
+                        <button onClick={() => handleView(pedido)} className="btn color-primario">
+                          Ver detalles
                         </button>
                       </td>
                     </tr>
@@ -86,6 +127,45 @@ export const OrdenesAdm = () => {
         </div>
       </section>
 
+
+      {isModalOpen && (
+        <CuerpoModal titulo="Detalles del Pedido" onClose={() => setIsModalOpen(false)}>
+          <div>
+            <p>Cliente: {selectPedido.cliente?.nombre}</p>
+            <p>Mesa: {selectPedido.mesa.numeroMesa}</p>
+            <p>Fecha: {selectPedido.fechaPedido}</p>
+            <p>Hora: {selectPedido.horaPedido}</p>
+            <p>Total Venta: S/{calcularTotal(selectPedido.detallePedidos)}</p>
+          </div>
+          <div className='table-container'>
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th>selectPedido</th>
+                  <th>Cantidad</th>
+                  <th>Precio</th>
+                  {/* <th>Acción</th> */}
+                </tr>
+              </thead>
+              <tbody>
+
+                {
+
+                  selectPedido.detallePedidos.map((pedido, index) => (
+                    <tr key={index}>
+                      <td>{pedido.producto.nombre}</td>
+                      <td>{pedido.cantidad}</td>
+                      <td>S/{pedido.producto.precio}</td>
+                      {/* <td><button onClick={() => handleView(order)} className="btn  color-primario">Ver</button></td> */}
+                    </tr>
+                  ))
+
+                }
+              </tbody>
+            </table>
+          </div>
+        </CuerpoModal>
+      )}
     </>
   )
 }

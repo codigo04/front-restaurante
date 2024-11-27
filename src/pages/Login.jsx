@@ -116,7 +116,7 @@ export const Login = () => {
                 }
             } else {
                 setErrorMessage('Credenciales incorrectas');
-                toast.error(errorMessage, {
+                toast.error('Credenciales incorrectas', {
                     position: "top-center",
                 });
             }
