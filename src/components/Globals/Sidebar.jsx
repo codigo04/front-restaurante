@@ -80,7 +80,7 @@ export const Sidebar = () => {
             {links
               .filter((link) => link.rol === rolUser)
               .map((link) => (
-                <li  className="">
+                <li key={link.ruta} className="">
                   <Link to={link.ruta} className="text-black ">
                     {link.nombre}
                   </Link>

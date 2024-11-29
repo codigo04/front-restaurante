@@ -5,7 +5,7 @@ import { actualizarEstadoMesa } from '../../service/mesasService';
 import { MesasContext } from '../../context/MesasProvider';
 export const MesasMozo = ({ numeroMesa, estado, id }) => {
 
-    const { cambiarEstado, setMesaSelect,mesaSelect } = useContext(MesasContext);
+    const { cambiarEstado, setMesaSelect, mesaSelect } = useContext(MesasContext);
 
     const navigate = useNavigate()
 
@@ -33,11 +33,11 @@ export const MesasMozo = ({ numeroMesa, estado, id }) => {
         // idMesa, numeroMesa, estado
         if (estado === "DISPONIBLE") {
             navigate('/mozo/productos');
-        }if (estado === "OCUPADA") {
-           
+        } if (estado === "OCUPADA") {
+
             navigate('/mozo/pedido');
-        } 
-       
+        }
+
     };
 
 

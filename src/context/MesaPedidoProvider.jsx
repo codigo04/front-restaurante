@@ -195,8 +195,6 @@ export const MesaPedidoProvider = ({ children }) => {
 
   useEffect(() => {
     getPedidosAll()
-
-
   }, [mesas]);
 
   return (
