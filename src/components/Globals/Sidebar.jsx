@@ -18,6 +18,7 @@ export const Sidebar = () => {
     { ruta: "/mozo/mesas", nombre: "Mesas", rol: "MOZO" },
     { ruta: "/mozo/productos", nombre: "Productos", rol: "MOZO" },
     { ruta: "/mozo/pedido", nombre: "Pedido", rol: "MOZO" },
+    { ruta: "/mozo/pedido/listos", nombre: "Pedidos listos", rol: "MOZO" },
     { ruta: "/cocina/pedidos", nombre: "Pedidos", rol: "COCINERO" },
     { ruta: "/cajero/inicio", nombre: "Cobrar", rol: "CAJA" },
     { ruta: "/cajero/cerrar-caja", nombre: "Cerrar Caja", rol: "CAJA" },
@@ -79,7 +80,7 @@ export const Sidebar = () => {
             {links
               .filter((link) => link.rol === rolUser)
               .map((link) => (
-                <li key={link.ruta} className="">
+                <li  className="">
                   <Link to={link.ruta} className="text-black ">
                     {link.nombre}
                   </Link>

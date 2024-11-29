@@ -17,7 +17,7 @@ export const DetallePedido = () => {
 
     const { cambiarEstadoMesa, mostrarProductosMesa, mesasPedido, eliminarProducto, aumentarCantidad, disminuirCantidad } = useContext(MesaPedidoContext)
     const { mesaSelect, cambiarEstado } = useContext(MesasContext);
-    const { messages, setDetallePedido } = useContext(WebSocketContext);
+    const { messagesCocina, setDetallePedido,sendMessageToBackend} = useContext(WebSocketContext);
     const [dni, setDni] = useState({
         dni: ''
     })
@@ -109,7 +109,7 @@ export const DetallePedido = () => {
             ...pedido,
             fechaPedido: fecha,
             horaPedido: hora,
-            estado: 'PENDIENTE',
+            estado: 'EN_PREPARACION',
             observaciones: 'Sin gluten, mesa cerca de la ventana.',
             idCliente: idCliente,
             idEmpleado: 1,
@@ -204,9 +204,11 @@ export const DetallePedido = () => {
             console.log("Detalle del pedido recibido:", detallePedido);
 
 
-
+              
             // Actualiza el estado con los detalles del pedido
             setDetallePedido(detallePedido);
+            sendMessageToBackend('/app/mozo/cocina',detallePedido);
+
         } catch (error) {
             // Maneja errores y muestra una notificación
             console.error("Error al obtener el detalle del pedido:", error.message);
@@ -227,22 +229,12 @@ export const DetallePedido = () => {
 
 
 
-    console.log(messages)
+    
 
 
     return (
         <>
 
-            <div>
-                <h1>Mensaje desde WebSocket</h1>
-
-                {
-                    messages.map(mesgg => (
-                        <p>{mesgg.estado}</p>
-                    ))
-                }
-
-            </div>
             <div className='container-fluid container-color  p-3'>
 
 
@@ -404,10 +396,8 @@ export const DetallePedido = () => {
 
 
                                 <Button
-
                                     variant="contained"
                                     sx={{ backgroundColor: "#ff6600", color: "#fff" }}
-
                                 >
                                     {/* <NavLink to="/mozo/mesas" className="btn btn-danger color-primario">Cancelar</NavLink> */}
                                     Cancelar

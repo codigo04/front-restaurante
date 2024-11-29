@@ -128,3 +128,31 @@ export const getPedidos = async () => {
   }
 
 }
+
+
+
+export const actualizarEstadoPedido = async (pedidoId,estado) => {
+
+  console.log(pedidoId)
+  const newEstado = {
+    "estado": estado
+  }
+
+
+  try {
+    const response = await axios.put(`${BASE_URL}/api/v1/admin/pedidos/actualizar/estado/${pedidoId}`, newEstado,configToken);
+
+     console.log("datos del back actualizado")
+
+    console.log(response.data)
+
+    console.log(response.data.data)
+    return response.data;
+
+  } catch (error) {
+    console.error('Error al actualizar el pedido', error);
+    // alert('CONÉCTATE A TU SERVIDOR')
+    throw error; // Lanzamos el error para que lo maneje quien llame esta función
+  }
+
+}

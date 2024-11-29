@@ -62,13 +62,15 @@ export const Dashboard = () => {
 
   const { usuarios } = useContext(AuthContext);
   // const { pedidosAll } = useContext(MesaPedidoContext)
-  const { pedidoAll } = useContext(PedidoContext)
+  const { todos } = useContext(PedidoContext)
   const [selectPedido, setSelectedPedido] = useState(null);
   const [selectMes, setSelectMes] = useState('')
   const isMobile = useMediaQuery('(max-width:600px)')
   const navigate = useNavigate();
 
-  console.log(pedidoAll)
+
+  console.log('pedidos en el dasboard')
+  console.log(todos)
 
   const handleView = (pedido) => {
     setSelectedPedido(pedido)
@@ -91,12 +93,12 @@ export const Dashboard = () => {
   }
 
   const calcularTotalIngresos = () => {
-    pedidoAll.map((total, item) => (
+    getPedidoAll.map((total, item) => (
       pedido.reduce
     ))
   }
 
-  const totalDeHoy = calcularTotalPorFecha(pedidoAll);
+  const totalDeHoy = calcularTotalPorFecha(todos);
   return (
     <>
 
@@ -108,7 +110,7 @@ export const Dashboard = () => {
 
           <div className="col-md-4">
             <div className="card-gradient">
-              <h2>{pedidoAll.length}</h2>
+              <h2>{todos.length}</h2>
               <p>Total Pedidos</p>
             </div>
           </div>
@@ -146,7 +148,7 @@ export const Dashboard = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {pedidoAll.slice(0, 3).map((pedido, index) => (
+                      {todos.slice(0, 3).map((pedido, index) => (
                         <tr key={index}>
                           <td>{pedido.cliente?.nombre}</td>
                           <td>{pedido.mesa.numeroMesa}</td>

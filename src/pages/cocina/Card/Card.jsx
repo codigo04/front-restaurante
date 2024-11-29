@@ -3,7 +3,7 @@ import { CardFooter } from "./CardFooter";
 import { CardHeader } from "./CardHeader";
 import { CardMain } from "./CardMain";
 
-export const Card = ({pedido}) => {
+export const Card = ({pedido,handlePedido}) => {
 
   const [estado, setEstado] = useState(pedido.estado)
 
@@ -26,7 +26,7 @@ export const Card = ({pedido}) => {
           estado={estado}
           cambiarEstado={cambiarEstado}
         />
-        <CardFooter estado={estado} onCompletar={cambiarEstado}/>
+        <CardFooter estado={estado} onCompletar={pedido}   handlePedido={handlePedido}/>
       </div>
     </>
   );

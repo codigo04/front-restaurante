@@ -2,14 +2,25 @@ import React, { createContext, useEffect, useReducer } from 'react'
 import { getPedidos } from '../service/pedidoService';
 export const PedidoContext = createContext()
 
-const initialState = []
+const initialState = {
+  todos: [], // Todos los pedidos
+  filtrados: [], // Pedidos filtrados por estado
+};
+
 
 const pedidoReducer = (state, action) => {
 
   switch (action.type) {
     case "[pedido] cargar pedidos":
 
-      return action.payload
+      return { ...state, todos: action.payload, filtrados: action.payload }; // Cargar todos los pedidos
+
+    case "[pedido] cargar pedidos estado":
+
+      return {
+        ...state,
+        filtrados: state.todos.filter((pedido) => pedido.estado === action.payload),
+      };
 
     default:
       return state;
@@ -21,9 +32,7 @@ const pedidoReducer = (state, action) => {
 
 export const PedidoProvider = ({ children }) => {
 
-  const [pedidoAll, dispatch] = useReducer(pedidoReducer, initialState);
-
-
+  const [state, dispatch] = useReducer(pedidoReducer, initialState);
 
   const getPedidoAll = async () => {
     try {
@@ -43,6 +52,18 @@ export const PedidoProvider = ({ children }) => {
     }
   }
 
+  const getPedidoAllEstado = async (estado) => {
+    
+      const action = {
+        type: '[pedido] cargar pedidos estado',
+        payload: estado,
+      };
+
+      dispatch(action);
+
+   
+  }
+
 
   useEffect(() => {
     getPedidoAll()
@@ -50,14 +71,16 @@ export const PedidoProvider = ({ children }) => {
 
   return (
     <PedidoContext.Provider
-    
-    value={{
 
-      pedidoAll,
-      getPedidoAll 
+      value={{
 
-    }}
-    
+        todos: state.todos,
+        filtrados: state.filtrados,
+        getPedidoAll,
+        getPedidoAllEstado,
+
+      }}
+
     >
 
       {children}

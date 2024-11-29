@@ -36,6 +36,7 @@ import "./assets/styles/index.css";
 import { Moso } from "./pages/Moso";
 import { CerrarCaja } from './pages/caja/CerrarCaja'
 import { HistorialCierres } from './pages/caja/HistorialCierres'
+import { PedidosListos } from './pages/mozo/PedidosListos'
 
 
 
@@ -78,11 +79,12 @@ export const App = () => {
                       <Route path='/admin/mesas' element={<MesasAdm />}></Route>
                       <Route path='/admin/estadisticas' element={<EstadisticasAdm />}></Route>
 
-
+                      
                       {/* mozo /mozo/pedido */}
                       <Route path='/mozo/mesas' element={<MesasMoso />}></Route>
                       <Route path='/mozo/productos' element={<ProductosMozo />}></Route>
                       <Route path='/mozo/pedido' element={<DetallePedido />}></Route>
+                      <Route path='/mozo/pedido/listos' element={<PedidosListos />}></Route>
 
                       {/* cocina */}
                       <Route path='/cocina/pedidos' element={<Pedidos />}></Route>

@@ -1,41 +1,79 @@
 import React, { createContext, useEffect, useState } from 'react'
-import { connectWebSocket } from '../service/websocket';
+import { connectWebSocket, sendMessage } from '../service/websocket';
 
 
 export const WebSocketContext = createContext();
 
 
-export const WebSocketProvider  = ({ children }) => {
+export const WebSocketProvider = ({ children }) => {
 
-    const [messages, setMessages] = useState([]); 
+  const [messagesCocina, setMessagesCocina] = useState([]);
+  const [messagesMozo, setMessagesMozo] = useState([]);
+  const [messagesCaja, setMessagesCaja] = useState([]);
 
-    const [detallePedido, setDetallePedido] =useState([]);
+  const [detallePedido, setDetallePedido] = useState([]);
 
-    
+  const [isConnected, setIsConnected] = useState(false);
 
-    useEffect(() => {
+  // /app/mozo/cocina
 
-        const onMessageReceived = (message) => {
-            
-            setMessages([message]);  // Cuando llega un mensaje, lo almacenamos en el estado
-        };
+  let stompCliente = null;
 
 
-        // Establecemos la conexión WebSocket y pasamos la función onMessageReceived
-        const stompCliente = connectWebSocket(onMessageReceived, detallePedido);
+  const handleMessagesMozo = (message) => {
+    setMessagesMozo([message]);
+  };
 
-        // Limpiar la conexión WebSocket cuando el componente se desmonte
-        return () => {
-             stompCliente.deactivate(); // Desactivamos la conexión WebSocket
-        };
-    }, [detallePedido]);
+  const handleMessagesCocina = (message) => {
+    setMessagesCocina([message]);
+  };
+
+  const handleMessagesCaja = (message) => {
+    setMessagesCaja( [message]);
+  };
+  
+
+  useEffect(() => {
+
+  
+    stompCliente = connectWebSocket(
+      handleMessagesMozo,
+      handleMessagesCocina,
+      handleMessagesCaja,
+      () => {
+        setIsConnected(true);
+        console.log('Conexión WebSocket exitosa. isConnected:', true);
+    }
+    );
+
+    // Limpiar la conexión WebSocket cuando el componente se desmonte
+    return () => {
+      if (stompCliente) {
+        stompCliente.deactivate(); // Desactiva la conexión
+        console.log('Conexión WebSocket desactivada.');
+      }
+    };
+  }, [detallePedido]);
+
+
+
+  const sendMessageToBackend = (destination, payload) => {
+    if (isConnected && stompCliente) {
+      sendMessage(stompCliente, destination, payload);
+    } else {
+      console.error('WebSocket no está conectado. Intenta más tarde.');
+    }
+  };
 
   return (
-    <WebSocketContext.Provider  value={{
-        messages,
-        setDetallePedido
-        }}>
-        {children}
+    <WebSocketContext.Provider value={{
+      messagesCocina,
+      messagesMozo,
+      messagesCaja,
+      setDetallePedido,
+      sendMessageToBackend
+    }}>
+      {children}
     </WebSocketContext.Provider>
   )
 }

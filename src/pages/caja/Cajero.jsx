@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -7,8 +7,54 @@ import {
   Grid,
   Box,
 } from "@mui/material";
+import { PedidoContext } from "../../context/PedidoProvider";
+import { toast } from "react-toastify";
+import { WebSocketContext } from "../../context/WebSocketProvider ";
 
 export const Cajero = () => {
+
+
+  const { messagesCaja } = useContext(WebSocketContext);
+
+  const [pedidosAll, setPedidoAll] = useState([])
+
+  const { filtrados, getPedidoAllEstado,getPedidoAll } = useContext(PedidoContext);
+
+
+  useEffect(() => {
+    
+    getPedidoAllEstado("PENDIENTE"); // Filtrar pedidos por estado
+  }, []);
+
+
+  useEffect(() => {
+    if (filtrados.length > 0) {
+      setPedidoAll(filtrados);
+    }
+  }, [filtrados]);
+
+
+  useEffect(() => {
+    
+    if (messagesCaja.length > 0) {
+      toast.success("Nuevo Pedido Recivido de mozo", {
+        position: "top-right",
+      });
+    }
+
+
+    setPedidoAll((prevPedidoAll) => [...prevPedidoAll, ...messagesCaja]);
+  }, [messagesCaja]);
+
+
+
+
+  console.log("pedidos cocina")
+  console.log(filtrados)
+
+
+
+
   return (
     <div className="container mt-5">
       <Grid container spacing={4}>
@@ -17,9 +63,9 @@ export const Cajero = () => {
           <Typography variant="h5" gutterBottom>
             Lista de Mesas por cobrar:
           </Typography>
-          {[10, 9, 6].map((mesa) => (
+          {pedidosAll.map((pedido, index) => (
             <Card
-              key={mesa}
+              key={index}
               sx={{
                 mb: 2,
                 borderRadius: 2,
@@ -32,10 +78,10 @@ export const Cajero = () => {
             >
               <Box>
                 <Typography variant="subtitle1" fontWeight="bold">
-                  NUMERO DE MESA: {mesa}
+                  NUMERO DE MESA: {pedido.mesa.numeroMesa}
                 </Typography>
                 <Typography variant="body2">
-                  Orden por Cliente {mesa}
+                  Nombre del Cliente : {pedido.cliente.nombre}
                 </Typography>
               </Box>
               <Button
