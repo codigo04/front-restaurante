@@ -81,7 +81,7 @@ export const Cajero = () => {
                   NUMERO DE MESA: {pedido.mesa.numeroMesa}
                 </Typography>
                 <Typography variant="body2">
-                  Nombre del Cliente : {pedido.cliente.nombre}
+                  Nombre del Cliente : {pedido.cliente?.nombre}
                 </Typography>
               </Box>
               <Button
