@@ -50,6 +50,7 @@ export const WebSocketProvider = ({ children }) => {
     return () => {
       if (stompCliente) {
         stompCliente.deactivate(); // Desactiva la conexión
+        
         console.log('Conexión WebSocket desactivada.');
       }
     };
@@ -62,6 +63,7 @@ export const WebSocketProvider = ({ children }) => {
       sendMessage(stompCliente, destination, payload);
     } else {
       console.error('WebSocket no está conectado. Intenta más tarde.');
+      
     }
   };
 
@@ -74,6 +76,7 @@ export const WebSocketProvider = ({ children }) => {
       sendMessageToBackend
     }}>
       {children}
+
     </WebSocketContext.Provider>
   )
 }

@@ -16,24 +16,17 @@ export const AuthProvider = ({ children }) => {
 
     const [decodToken, SetDecodToken] = useState([]); //almacena el token decodificado
 
-    const [isLoading, setIsLoading] = useState(false); //almacena si hay usuario autenticado o existe
+    const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate()
 
-    const decodificarToken = (token) => {
-        const decodeToken = jwtDecode(token)
-        SetDecodToken(decodeToken);
 
-        console.log(decodeToken)
-    } 
-   
     const getEmpleados = async (tokenUser) => {
-        
-      
+
         try {
-           
-            const {data} = await obtenerEmpledos(tokenUser)
-            
+
+            const { data } = await obtenerEmpledos(tokenUser)
+
             setUsuarios(data)
             console.log(usuarios)
         } catch (error) {
@@ -43,16 +36,16 @@ export const AuthProvider = ({ children }) => {
 
 
     const getClientes = async (tokenUser) => {
-        
-      
+
+
         try {
-           
-            const {data} = await obtenerClientes(tokenUser)
+
+            const { data } = await obtenerClientes(tokenUser)
             setClientes(data.data)
             console.log(usuarios)
         } catch (error) {
             console.error('Error obtener los Clientes', error);
-            
+
         }
     }
 
@@ -68,26 +61,27 @@ export const AuthProvider = ({ children }) => {
 
 
     useEffect(() => {
+
         const autenticarUser = () => {
             const token = localStorage.getItem('token');
             setRoluser(localStorage.getItem('rolUser'))
 
             if (token) {
-                console.log('si hay tokeen')
+
                 setAuth(token);
+                // setIsLoading(false)
 
-                //  navigate('/admin/dashboard')
-                setIsLoading(true)
 
-                setCargando(true)
+
                 return;
             }
 
-            setCargando(true)
+
 
         }
 
         autenticarUser()
+        setIsLoading(false);
     }, []);
 
 
@@ -103,24 +97,21 @@ export const AuthProvider = ({ children }) => {
             });
 
             const token = response.data.token;
-            
+
             setAuth(token);
-           
+
             console.log('entro al login')
             // Guarda el token en localStorage
             localStorage.setItem('token', token);
-            
-            
+
+            setIsLoading(false)
 
 
-            setIsLoading(true)
-            // Retorna el token
-            
-                return token
+            return token
         } catch (error) {
             console.error('Error al iniciar sesión:', error);
-            // alert("CONEXION A SERVIDOR INAXCESIBLE")
-            // setIsLoading(false)
+
+            setIsLoading(false)
             return null;
         }
     };
@@ -134,7 +125,7 @@ export const AuthProvider = ({ children }) => {
     }
 
 
-  
+
 
     return (
         <AuthContext.Provider

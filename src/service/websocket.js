@@ -50,7 +50,9 @@ export const connectWebSocket = (onMessageReceivedMozo,onMessageReceivedCosina,o
         },
 
         onWebSocketError: (error) => {
+          
             console.error('Error de WebSocket:', error);
+           
         },
 
     })
@@ -70,5 +72,6 @@ export const sendMessage = (stompCliente, destination, payload) => {
         console.log(`Mensaje enviado a ${destination}:`, payload);
     } else {
         console.error('El cliente WebSocket no está activo.');
+        
     }
 };

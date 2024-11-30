@@ -37,6 +37,9 @@ import { Moso } from "./pages/Moso";
 import { CerrarCaja } from './pages/caja/CerrarCaja'
 import { HistorialCierres } from './pages/caja/HistorialCierres'
 import { PedidosListos } from './pages/mozo/PedidosListos'
+import { NieveComponente } from './components/Globals/NieveComponente'
+
+
 
 
 
@@ -46,7 +49,10 @@ import { PedidosListos } from './pages/mozo/PedidosListos'
 export const App = () => {
   return (
     <>
+
+
       <AuthProvider>
+
         <WebSocketProvider>
           <PedidoProvider>
             <MesasProvider>
@@ -55,12 +61,18 @@ export const App = () => {
 
                   <Routes>
                     <Route path="/" element={<Navigate to="/login" />} />
-                    <Route path="/login" element={<Login />} />
+
+                    <Route path="/login" element={
+                      <NieveComponente >
+                        <Login />
+                      </NieveComponente>}
+                       />
+
                     <Route
                       path="/"
                       element={
                         <ProtectedRoute>
-                          <Layout  />
+                          <Layout />
                         </ProtectedRoute>
                       }
                     >
@@ -79,7 +91,7 @@ export const App = () => {
                       <Route path='/admin/mesas' element={<MesasAdm />}></Route>
                       <Route path='/admin/estadisticas' element={<EstadisticasAdm />}></Route>
 
-                      
+
                       {/* mozo /mozo/pedido */}
                       <Route path='/mozo/mesas' element={<MesasMoso />}></Route>
                       <Route path='/mozo/productos' element={<ProductosMozo />}></Route>
@@ -92,13 +104,13 @@ export const App = () => {
                       {/* caja */}
                       <Route path='/cajero/inicio' element={<Cajero />}></Route>
                       <Route
-                    path="/cajero/cerrar-caja"
-                    element={<CerrarCaja />}
-                  ></Route>
-                  <Route
-                    path="/cajero/historial-cierres-caja"
-                    element={<HistorialCierres />}
-                  ></Route>
+                        path="/cajero/cerrar-caja"
+                        element={<CerrarCaja />}
+                      ></Route>
+                      <Route
+                        path="/cajero/historial-cierres-caja"
+                        element={<HistorialCierres />}
+                      ></Route>
 
 
                     </Route>
