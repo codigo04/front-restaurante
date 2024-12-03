@@ -34,19 +34,19 @@ export const Login = () => {
 
 
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
+    // useEffect(() => {
+    //     const token = localStorage.getItem('token');
+    //     if (token) {
 
         
-            console.log('isLoading')
-            console.log(isLoading)
-            if (rolUser) {  
-                setRoluser(rolUser)
-                // setIsLoading(true)
-            }
-        }
-    }, []);
+    //         console.log('isLoading')
+    //         console.log(isLoading)
+    //         if (rolUser) {  
+    //             setRoluser(rolUser)
+    //             // setIsLoading(true)
+    //         }
+    //     }
+    // }, []);
 
 
 

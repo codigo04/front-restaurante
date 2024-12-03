@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { WebSocketContext } from "../../context/WebSocketProvider ";
+import { WebSocketContext } from "../../context/WebSocketProvider";
 import { Card } from "./Card/Card";
 import pedidos from "./Card/pedidos";
 import "./style-cocina.css";
@@ -67,7 +67,7 @@ export const MainCocina = () => {
 				prevPedidos.filter(p => p.idPedido !== pedido.idPedido)
 			);
 
-			setDetallePedido(pedidoActualizado);
+			
 			sendMessageToBackend('/app/cocina/mozo', pedidoActualizado);
 		} catch (error) {
 			console.error(error)

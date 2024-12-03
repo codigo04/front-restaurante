@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { PedidoContext } from "../../context/PedidoProvider";
 import { toast } from "react-toastify";
-import { WebSocketContext } from "../../context/WebSocketProvider ";
+import { WebSocketContext } from "../../context/WebSocketProvider";
 
 export const Cajero = () => {
 

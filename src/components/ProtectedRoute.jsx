@@ -30,7 +30,7 @@ export const ProtectedRoute = ({ children }) => {
   }
 
   // Si no hay token en el contexto ni en localStorage, redirige al login
-  if (!auth && !token) {
+  if (!auth) {
     return <Navigate to="/login" />;
   }
 

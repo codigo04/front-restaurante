@@ -71,11 +71,11 @@ export const NieveEffect  = ({canvasRef}) => {
     };
   
     const init = () => {
-      for (let i = 0; i < 400; i++) {
+      for (let i = 0; i < 600; i++) {
         let x = Math.floor(Math.random() * window.innerWidth);
         let y = Math.floor(Math.random() * window.innerHeight);
-        let size = (Math.random() * 3) + 2;
-        let speed = (Math.random() * 10) + 0.5;
+        let size = (Math.random() * 10) + 2;
+        let speed = (Math.random() *5) + 0.5;
         let opacity = (Math.random() * 0.5) + 0.3;
   
         flakes.push({

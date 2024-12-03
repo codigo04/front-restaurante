@@ -7,7 +7,7 @@ import { MesasContext } from '../../context/MesasProvider';
 import { obtenerPedido, saveDetallePedido, savePedido } from '../../service/pedidoService';
 import { toast } from 'react-toastify';
 import { connectWebSocket } from '../../service/websocket';
-import { WebSocketContext } from '../../context/WebSocketProvider ';
+import { WebSocketContext } from '../../context/WebSocketProvider';
 import { MesaPedidoContext } from '../../context/MesaPedidoProvider';
 import { Button } from '@mui/material';
 

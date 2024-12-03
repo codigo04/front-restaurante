@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { WebSocketContext } from '../../context/WebSocketProvider ';
+import { WebSocketContext } from '../../context/WebSocketProvider';
 import { PedidoContext } from '../../context/PedidoProvider';
 import { Box, Button, Card, CardContent, Grid, Typography } from '@mui/material';
 import { toast } from 'react-toastify';

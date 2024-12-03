@@ -73,3 +73,26 @@ export const actualizarEstadoMesa = async (nuevaMesa, idMesa) => {
         throw error; // Lanzar el error para manejarlo en el lugar donde se llame a la función
     }
 }
+
+
+// /actualizar/{id}
+export const upadateEstadoMesa = async (nuevoEstado, idMesa) => {
+
+    const token = localStorage.getItem('token')
+
+    console.log("token extraiodo  "+token)
+    const configToken = {
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        }
+    }
+
+    try {
+        const response = await axios.put(`${BASE_URL}/api/v1/admin/mesas/actualizar/${idMesa}/estado`, nuevoEstado, configToken);
+        return response.data; // Retorna la respuesta para que puedas usarla donde llames a la función
+    } catch (error) {
+        console.error('Error al actualizar la mesa', error);
+        throw error; // Lanzar el error para manejarlo en el lugar donde se llame a la función
+    }
+}
