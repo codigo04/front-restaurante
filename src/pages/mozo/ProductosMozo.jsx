@@ -16,7 +16,7 @@ import { getPedidos } from '../../service/pedidoService';
 export const ProductosMozo = () => {
   const [selectedOption, setSelectedOption] = useState('2');
 
-  const { productos, bebidas } = useContext(ProductoContext);
+  const { platos, bebidas } = useContext(ProductoContext);
 
   const { listaPedido, agregarProducto, eliminarProducto } = useContext(MesaPedidoContext)
 
@@ -142,14 +142,14 @@ export const ProductosMozo = () => {
           <br />
           <div className='contenedor-productos row '>
             {selectedOption === '1' ? (
-              productos.length > 0 ? (
-                productos.map(pro => (
+              platos.length > 0 ? (
+                platos.map(pro => (
                   <div className='col mb-3' key={pro.id}>
                     <CardProducto
-                      imagen={pro.image}
-                      titulo={pro.title}
-                      descripcion={pro.description}
-                      precio={pro.price}
+                      imagen={pro.imagen}
+                      titulo={pro.nombre}
+                      // descripcion={pro.descripcion}
+                      precio={pro.precio}
                       handleAgregar={() => handleAgregar(pro)}
                       handleQuitar={() => handleQuitar(pro.id)}
                     />
