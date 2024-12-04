@@ -185,7 +185,6 @@ export const EmpleadosAdm = () => {
         // Verificar si el empleado ya existe
         const empleadoExistente = empleados.find(empleado => empleado.id === formDataEdit?.id);
 
-
         console.log("exist")
         console.log(empleadoExistente)
 
@@ -589,7 +588,7 @@ export const EmpleadosAdm = () => {
 
                         <div className="row">
                             <div className="col-12">
-                                <button className="btn color-primario w-100" >Guardar Cambios</button>
+                                <button type='submit' className="btn color-primario w-100" >Guardar Cambios</button>
                             </div>
                         </div>
                     </form>

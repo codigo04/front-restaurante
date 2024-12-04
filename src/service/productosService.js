@@ -13,9 +13,9 @@ export const saveBebidas = async (producto) => {
     console.log(producto);
     console.log(token);
     try {
-        
+
         // Enviar el token y hacer el POST al endpoint correcto
-        const response = await axios.post(`${BASE_URL}/api/v1/admin/productos/crear`,producto,configToken);
+        const response = await axios.post(`${BASE_URL}/api/v1/admin/productos/crear`, producto, configToken);
 
         console.log(response.data);
         return response.data;
@@ -29,11 +29,26 @@ export const saveBebidas = async (producto) => {
 export const geBebidas = async () => {
 
     try {
-       
+
         const response = await axios.get(`${BASE_URL}/api/v1/admin/productos/todos`, configToken);
         // console.log("Empleados recibidos:", response.data);
         return response.data;
 
+    } catch (error) {
+        console.error('Error al obtener ', error);
+        throw error;
+    }
+};
+
+
+
+export const updateProductoService = async (idProducto,producto) => {
+
+    try {
+
+        const response = await axios.put(`${BASE_URL}/api/v1/admin/productos/actualizar/${idProducto}`, producto, configToken);
+        return response.data;
+    
     } catch (error) {
         console.error('Error al obtener ', error);
         throw error;

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { PedidoContext } from "../../context/PedidoProvider";
 import { toast } from "react-toastify";
-import { WebSocketContext } from "../../context/WebSocketProvider ";
+import { WebSocketContext } from "../../context/WebSocketProvider";
 import { obtenerPedioPDF } from "../../service/reportes";
 import { actualizarEstadoPedido } from "../../service/pedidoService";
 
