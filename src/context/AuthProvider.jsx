@@ -64,19 +64,34 @@ export const AuthProvider = ({ children }) => {
 
         const autenticarUser = () => {
             const token = localStorage.getItem('token');
-            setRoluser(localStorage.getItem('rolUser'))
+            const rol = localStorage.getItem('rolUser');
+
+            // setRoluser(localStorage.getItem('rolUser'))
 
             if (token) {
 
-                setAuth(token);
-                // setIsLoading(false)
+                try {
+                    // Decodificar el token
+                    const decodedToken = jwtDecode(token);
 
+                    // Verificar si el token ha expirado
+                    const currentTime = Date.now() / 1000; // Obtener tiempo actual en segundos
+                    if (decodedToken.exp < currentTime) {
+                        console.warn('El token ha expirado. Eliminando datos y redirigiendo...');
+                        cerrarSesionAuth()
 
+                        return;
+                    }
 
-                return;
+                    // Si no ha expirado, configurar autenticación y rol
+                    setAuth(token);
+                    setRoluser(rol);
+                } catch (error) {
+                    console.error('Error al decodificar el token:', error);
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('rolUser');
+                }
             }
-
-
 
         }
 

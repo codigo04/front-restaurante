@@ -26,7 +26,7 @@ import { MesasProvider } from './context/MesasProvider'
 import { AuthProvider } from './context/AuthProvider'
 import { Cajero } from './pages/caja/Cajero'
 import { Pedidos } from './pages/cocina/pedidos'
-import { WebSocketProvider } from './context/WebSocketProvider '
+import { WebSocketProvider } from './context/WebSocketProvider'
 import { PedidoProvider } from './context/PedidoProvider'
 
 
@@ -38,12 +38,6 @@ import { CerrarCaja } from './pages/caja/CerrarCaja'
 import { HistorialCierres } from './pages/caja/HistorialCierres'
 import { PedidosListos } from './pages/mozo/PedidosListos'
 import { NieveComponente } from './components/Globals/NieveComponente'
-
-
-
-
-
-
 
 
 export const App = () => {

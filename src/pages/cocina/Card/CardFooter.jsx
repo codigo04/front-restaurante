@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { WebSocketContext } from "../../../context/WebSocketProvider ";
+import { WebSocketContext } from "../../../context/WebSocketProvider";
 
 export const CardFooter = ({ estado, onCompletar,handlePedido }) => {
 
