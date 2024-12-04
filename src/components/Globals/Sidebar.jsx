@@ -19,7 +19,11 @@ export const Sidebar = () => {
 		{ ruta: "/mozo/mesas", nombre: "Mesas", rol: "MOZO" },
 		{ ruta: "/mozo/productos", nombre: "Productos", rol: "MOZO" },
 		{ ruta: "/mozo/pedido", nombre: "Pedido", rol: "MOZO" },
+		{ ruta: "/mozo/pedido/listos", nombre: "Pedidos listos", rol: "MOZO" },
 		{ ruta: "/cocina/pedidos", nombre: "Pedidos", rol: "COCINERO" },
+		{ ruta: "/cajero/inicio", nombre: "Cobrar", rol: "CAJA" },
+		{ ruta: "/cajero/cerrar-caja", nombre: "Cerrar Caja", rol: "CAJA" },
+		{ ruta: "/cajero/historial-cierres-caja", nombre: "Historial de cierres", rol: "CAJA" },
 	];
 
 	const [isOpen, setIsOpen] = useState(true);
@@ -45,14 +49,14 @@ export const Sidebar = () => {
 					{/* Botón de alternancia cerca del logo */}
 					<a
 						className="d-flex justify-content-center align-items-center icon-style boton-navbar"
+						variant="outline-primary"
 						onClick={toggleSidebar}
 						style={{
-                            top: "5px",
+							top: "5px",
 							left: isOpen ? "157px" : "5px",
 						}}
 					>
 						<HamburgerButton />
-						{/* {isOpen ? <i style={{ fontSize: '20px' }} className="bi bi-chevron-left"></i> : <i style={{ fontSize: '20px' }} className="bi bi-chevron-right"></i>} */}
 					</a>
 				</div>
 

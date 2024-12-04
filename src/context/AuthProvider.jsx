@@ -16,24 +16,17 @@ export const AuthProvider = ({ children }) => {
 
     const [decodToken, SetDecodToken] = useState([]); //almacena el token decodificado
 
-    const [isLoading, setIsLoading] = useState(false); //almacena si hay usuario autenticado o existe
+    const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate()
 
-    const decodificarToken = (token) => {
-        const decodeToken = jwtDecode(token)
-        SetDecodToken(decodeToken);
 
-        console.log(decodeToken)
-    } 
-   
     const getEmpleados = async (tokenUser) => {
-        
-      
+
         try {
-           
-            const {data} = await obtenerEmpledos(tokenUser)
-            
+
+            const { data } = await obtenerEmpledos(tokenUser)
+
             setUsuarios(data)
             console.log(usuarios)
         } catch (error) {
@@ -43,16 +36,16 @@ export const AuthProvider = ({ children }) => {
 
 
     const getClientes = async (tokenUser) => {
-        
-      
+
+
         try {
-           
-            const {data} = await obtenerClientes(tokenUser)
+
+            const { data } = await obtenerClientes(tokenUser)
             setClientes(data.data)
             console.log(usuarios)
         } catch (error) {
             console.error('Error obtener los Clientes', error);
-            
+
         }
     }
 
@@ -68,26 +61,42 @@ export const AuthProvider = ({ children }) => {
 
 
     useEffect(() => {
+
         const autenticarUser = () => {
             const token = localStorage.getItem('token');
-            setRoluser(localStorage.getItem('rolUser'))
+            const rol = localStorage.getItem('rolUser');
+
+            // setRoluser(localStorage.getItem('rolUser'))
 
             if (token) {
-                console.log('si hay tokeen')
-                setAuth(token);
 
-                // navigate('/admin/dashboard')
-                setIsLoading(true)
+                try {
+                    // Decodificar el token
+                    const decodedToken = jwtDecode(token);
 
-                setCargando(true)
-                return;
+                    // Verificar si el token ha expirado
+                    const currentTime = Date.now() / 1000; // Obtener tiempo actual en segundos
+                    if (decodedToken.exp < currentTime) {
+                        console.warn('El token ha expirado. Eliminando datos y redirigiendo...');
+                        cerrarSesionAuth()
+
+                        return;
+                    }
+
+                    // Si no ha expirado, configurar autenticación y rol
+                    setAuth(token);
+                    setRoluser(rol);
+                } catch (error) {
+                    console.error('Error al decodificar el token:', error);
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('rolUser');
+                }
             }
-
-            setCargando(true)
 
         }
 
         autenticarUser()
+        setIsLoading(false);
     }, []);
 
 
@@ -103,24 +112,21 @@ export const AuthProvider = ({ children }) => {
             });
 
             const token = response.data.token;
-            
+
             setAuth(token);
-           
+
             console.log('entro al login')
             // Guarda el token en localStorage
             localStorage.setItem('token', token);
-            
-            
+
+            setIsLoading(false)
 
 
-            setIsLoading(true)
-            // Retorna el token
-            
-                return token
+            return token
         } catch (error) {
             console.error('Error al iniciar sesión:', error);
-            // alert("CONEXION A SERVIDOR INAXCESIBLE")
-            // setIsLoading(false)
+
+            setIsLoading(false)
             return null;
         }
     };
@@ -134,7 +140,7 @@ export const AuthProvider = ({ children }) => {
     }
 
 
-  
+
 
     return (
         <AuthContext.Provider

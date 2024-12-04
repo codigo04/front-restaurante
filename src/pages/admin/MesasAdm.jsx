@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { obtenerMesas, saveMesa } from '../../service/mesasService';
 import { MesasContext } from '../../context/MesasProvider';
-import { useMediaQuery } from '@mui/material';
+import { Button, Typography, useMediaQuery } from '@mui/material';
 
 // { id: 1, numero: 1, capacidad: 4, estado: 'Libre' },
 // { id: 2, numero: 2, capacidad: 2, estado: 'Ocupada' },
@@ -83,20 +83,33 @@ export const MesasAdm = () => {
 
     return (
         <div className="container mt-4">
-            <h1 className="mb-4 text-center">Gestión de Mesas del Restaurante</h1>
+
+            {/* <h1 className="mb-4 text-center">Gestión de Mesas del Restaurante</h1> */}
+            <Typography className="mb-4 text-center" variant="h3" fontWeight="bold">
+                Gestión de Mesas del Restaurante
+            </Typography>
 
             <div className="row" style={{ gap: isMobile ? '15px' : '0' }}>
 
                 <div className="col-md-4">
                     <div className="card">
                         <div className="card-body">
-                            <h2 className="card-title">Agregar Nueva Mesa</h2>
+                            <Typography variant="h5" fontWeight="bold">
+                                Agregar Nueva Mesa
+                            </Typography>
+
                             {error && <div className="alert alert-danger">{error}</div>}
                             <form onSubmit={agregarMesa}>
                                 <div className="mb-3">
-                                    <label htmlFor="numeroMesa" className="form-label">
-                                        Número de Mesa
+
+                                    <br />
+                                    <label htmlFor="numeroMesa">
+                                        <Typography variant="subtitle1" fontWeight="bold">
+                                            Número de Mesa
+                                        </Typography>
                                     </label>
+
+
                                     <input
                                         type="number"
                                         className="form-control"
@@ -107,9 +120,12 @@ export const MesasAdm = () => {
                                     />
                                 </div>
                                 <div className="mb-3">
-                                    <label htmlFor="capacidadMesa" className="form-label">
-                                        Capacidad
+                                    <label htmlFor="capacidadMesa">
+                                        <Typography variant="subtitle1" fontWeight="bold">
+                                            Capacidad
+                                        </Typography>
                                     </label>
+
                                     <input
                                         type="number"
                                         className="form-control"
@@ -119,9 +135,18 @@ export const MesasAdm = () => {
                                         required
                                     />
                                 </div>
-                                <button type="submit" className="btn btn-primary w-100 color-primario">
-                                    Agregar Mesa
-                                </button>
+
+                                <Button
+                                    fullWidth
+                                    type='submit'
+                                    variant="contained"
+                                    sx={{ mt: 2, backgroundColor: "#ff6600", color: "#fff" }}
+
+                                >
+                                    + Agregar Mesa
+                                </Button>
+
+
                             </form>
                         </div>
                     </div>

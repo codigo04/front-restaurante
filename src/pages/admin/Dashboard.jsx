@@ -1,4 +1,5 @@
-import { useContext, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
+import { Saludo } from "../../components/Globals/Saludo";
 import SavingsIcon from "@mui/icons-material/Savings";
 import FastfoodIcon from "@mui/icons-material/Fastfood";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
@@ -6,41 +7,57 @@ import "../../assets/styles/cssAdmin/css.css";
 import { Progress } from "../../components/adm/Progress";
 import pollo from "../../assets/img/adm/pollo.jpg";
 import { AuthContext } from "../../context/AuthProvider";
-import { useMediaQuery } from "@mui/material";
+import { Button, Typography, useMediaQuery } from "@mui/material";
 
-const orders = [
-	{ client: "Cliente 1", table: 5, date: "14/08/2001", time: "10:00" },
-	{ client: "Cliente 2", table: 5, date: "14/08/2001", time: "10:00" },
-	{ client: "Cliente 3", table: 5, date: "14/08/2001", time: "10:00" },
-	{ client: "Cliente 3", table: 5, date: "14/08/2001", time: "10:00" },
-	{ client: "Cliente 3", table: 5, date: "14/08/2001", time: "10:00" },
-	{ client: "Cliente 3", table: 5, date: "14/08/2001", time: "10:00" },
-	{ client: "Cliente 3", table: 5, date: "14/08/2001", time: "10:00" },
-	{ client: "Cliente 3", table: 5, date: "14/08/2001", time: "10:00" },
-	{ client: "Cliente 3", table: 5, date: "14/08/2001", time: "10:00" },
-	{ client: "Cliente 3", table: 5, date: "14/08/2001", time: "10:00" },
-	{ client: "Cliente 3", table: 5, date: "14/08/2001", time: "10:00" },
-	{ client: "Cliente 3", table: 5, date: "14/08/2001", time: "10:00" },
-	{ client: "Cliente 3", table: 5, date: "14/08/2001", time: "10:00" },
-	{ client: "Cliente 3", table: 5, date: "14/08/2001", time: "10:00" },
-	{ client: "Cliente 3", table: 5, date: "14/08/2001", time: "10:00" },
-	{ client: "Cliente 3", table: 5, date: "14/08/2001", time: "10:00" },
-	{ client: "Cliente 3", table: 5, date: "14/08/2001", time: "10:00" },
-];
+import { Navigate, useNavigate } from "react-router-dom";
+import { MesaPedidoContext } from "../../context/MesaPedidoProvider";
+import { PedidoContext } from "../../context/PedidoProvider";
 
 const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Nobiembre", "Diciembre"];
 
+// Función para obtener la fecha actual en formato YYYY-MM-DD
+const getCurrentDate = () => {
+	const today = new Date();
+	return today.toISOString().split("T")[0]; // Formato 'YYYY-MM-DD'
+};
+
+const calcularTotalPorFecha = (pedidos) => {
+	const currentDate = getCurrentDate(); // Obtener la fecha actual en formato 'YYYY-MM-DD'
+
+	// Filtrar los pedidos que coincidan con la fecha actual
+	const pedidosDeHoy = pedidos.filter((pedido) => {
+		console.log("Analizando pedido:", pedido);
+		return pedido.fechaPedido === currentDate;
+	});
+
+	// Calcular el total de ingresos de los pedidos de hoy
+	const totalIngresos = pedidosDeHoy.reduce((acumulador, pedido) => {
+		const totalPedido = pedido.detallePedidos.reduce((subtotal, detalle) => subtotal + detalle.cantidad * detalle.precio, 0);
+		console.log(`Total del pedido ID ${pedido.idPedido}:`, totalPedido);
+		return acumulador + totalPedido;
+	}, 0);
+
+	console.log("Total ingresos de hoy:", totalIngresos);
+
+	return totalIngresos;
+};
+
 export const Dashboard = () => {
 	const { usuarios } = useContext(AuthContext);
-
-	const [selectOrder, setSelectedOrde] = useState(null);
+	// const { pedidosAll } = useContext(MesaPedidoContext)
+	const { todos } = useContext(PedidoContext);
+	const [selectPedido, setSelectedPedido] = useState(null);
 	const [selectMes, setSelectMes] = useState("");
 	const isMobile = useMediaQuery("(max-width:600px)");
+	const navigate = useNavigate();
 
-	const handleView = (orders) => {
-		setSelectedOrde(orders);
+	console.log("pedidos en el dasboard");
+	console.log(todos);
 
-		console.log(selectOrder);
+	const handleView = (pedido) => {
+		setSelectedPedido(pedido);
+		console.log("pedidos pasados");
+		console.log("Pedido seleccionado:", pedido);
 	};
 
 	const handleChange = (e) => {
@@ -49,6 +66,17 @@ export const Dashboard = () => {
 		console.log(e.target.value);
 	};
 
+	const calcularTotal = (detallePedido) => {
+		console.log(detallePedido);
+
+		return detallePedido.reduce((total, item) => total + item.producto.precio * item.cantidad, 0);
+	};
+
+	const calcularTotalIngresos = () => {
+		getPedidoAll.map((total, item) => pedido.reduce);
+	};
+
+	const totalDeHoy = calcularTotalPorFecha(todos);
 	return (
 		<>
 			<section className="container-fluid">
@@ -56,8 +84,8 @@ export const Dashboard = () => {
 					<div className="col-md-4">
 						<div className="card-gradient">
 							<div className="text-card">
-								<p>20</p>
-								<h2>Total Órdenes</h2>
+								<p>{todos.length}</p>
+								<h2>Total Pedidos</h2>
 							</div>
 							<div className="icon-card">
 								<FastfoodIcon style={{ width: "3em", height: "3em", fill: "#EF8822" }} />
@@ -68,7 +96,7 @@ export const Dashboard = () => {
 						<div className="card-gradient">
 							<div className="text-card">
 								<p>s/ 499.00</p>
-								<h2>Total Ingresos</h2>
+								<h2>s/ {totalDeHoy.toFixed(2)}</h2>
 							</div>
 							<div className="icon-card">
 								<SavingsIcon sx={{ width: "3em", height: "3em", fill: "#EF8822" }} />
@@ -77,13 +105,8 @@ export const Dashboard = () => {
 					</div>
 					<div className="col-md-4">
 						<div className="card-gradient">
-							<div className="text-card">
-								<p>{usuarios.length}</p>
-								<h2>Total Empleados</h2>
-							</div>
-							<div className="icon-card">
-								<PeopleAltIcon style={{ width: "3em", height: "3em", fill: "#EF8822" }} />
-							</div>
+							<h2>{usuarios.length}</h2>
+							<p>Total Empleados</p>
 						</div>
 					</div>
 				</div>
@@ -93,7 +116,10 @@ export const Dashboard = () => {
 						{/* Pedidos Recientes Solicitados */}
 						<div className="col-md-6 container-color">
 							<article className="">
-								<h3>Pedidos Recientes Solicitados</h3>
+								<Typography variant="h5" fontWeight="bold">
+									Pedidos Recientes Solicitados
+								</Typography>
+
 								<div className="table-container">
 									<table className="table table-striped">
 										<thead>
@@ -105,31 +131,35 @@ export const Dashboard = () => {
 											</tr>
 										</thead>
 										<tbody>
-											{orders.map((order, index) => (
+											{todos.slice(0, 3).map((pedido, index) => (
 												<tr key={index}>
-													<td>{order.client}</td>
-													<td>{order.table}</td>
+													<td>{pedido.cliente?.nombre}</td>
+													<td>{pedido.mesa.numeroMesa}</td>
+													<td>{pedido.fechaPedido}</td>
 													<td>
-														{order.date} - {order.time}
-													</td>
-													<td>
-														<button onClick={() => handleView(order)} className="btn color-primario">
+														<Button variant="contained" sx={{ backgroundColor: "#ff6600", color: "#fff" }} onClick={() => handleView(pedido)}>
 															Ver
-														</button>
+														</Button>
 													</td>
 												</tr>
 											))}
 										</tbody>
 									</table>
 								</div>
-								<button className="btn btn-warning color-primario">Ver Todos</button>
+
+								<Button variant="contained" sx={{ mt: 2, backgroundColor: "#ff6600", color: "#fff" }} onClick={() => navigate("/admin/ordenes")}>
+									Ver todos
+								</Button>
 							</article>
 						</div>
 
 						{/* Ganancia Mensual */}
 						<div className="col-md-6" style={{ paddingRight: "0" }}>
 							<div className="monthly-earnings container-color">
-								<h3>Ganancia Mensual</h3>
+								<Typography variant="h5" fontWeight="bold">
+									Ganancia Mensual
+								</Typography>
+
 								<div className="form-group mb-3">
 									<select
 										id="mesSelect"
@@ -185,42 +215,53 @@ export const Dashboard = () => {
 					</div>
 				</div>
 
-				{selectOrder && (
+				{selectPedido && (
 					<div className="order-details-overlay">
 						<div className="order-details">
 							<div className="d-flex justify-content-between">
 								<h3>Detalles de la Orden</h3>
 
-								<button onClick={() => setSelectedOrde(null)} className="btn btn-secondary color-primario">
-									<i className="bi bi-x" style={{ color: "white" }}></i>
+								<button onClick={() => setSelectedPedido(null)} className="btn btn-secondary color-primario">
+									<i class="bi bi-x" style={{ color: "white" }}></i>
 								</button>
 							</div>
 							<div>
-								<p>Cliente: {selectOrder.client}</p>
-								<p>Mesa: {selectOrder.table}</p>
-								<p>Fecha: {selectOrder.date}</p>
-								<p>Hora: {selectOrder.time}</p>
+								<p style={{ fontSize: "16px", margin: "8px 0", color: "#555" }}>
+									<strong>Cliente:</strong> {selectPedido.cliente?.nombre}
+								</p>
+								<p style={{ fontSize: "16px", margin: "8px 0", color: "#555" }}>
+									<strong>Mesa:</strong> {selectPedido.mesa.numeroMesa}
+								</p>
+								<p style={{ fontSize: "16px", margin: "8px 0", color: "#555" }}>
+									<strong>Fecha:</strong> {selectPedido.fechaPedido}
+								</p>
+								<p style={{ fontSize: "16px", margin: "8px 0", color: "#555" }}>
+									<strong>Hora:</strong> {selectPedido.horaPedido}
+								</p>
+								<p style={{ fontSize: "16px", margin: "8px 0", fontWeight: "bold", color: "#ff6600" }}>Total Venta: S/{calcularTotal(selectPedido.detallePedidos)}</p>
 							</div>
-							<div>
+							<div className="table-container">
 								<table className="table table-striped">
 									<thead>
 										<tr>
-											<th>Cliente</th>
-											<th>Mesa</th>
-											<th>Fecha - Hora</th>
-											<th>Acción</th>
+											<th>Producto</th>
+											<th>Cantidad</th>
+											<th>Precio</th>
+											{/* <th>Acción</th> */}
 										</tr>
 									</thead>
-									{/* <tbody>
-                      {orders.map((order, index) => (
-                        <tr key={index}>
-                          <td>{order.client}</td>
-                          <td>{order.table}</td>
-                          <td>{order.date} - {order.time}</td>
-                          <td><button onClick={() => handleView(order)} className="btn  color-primario">Ver</button></td>
-                        </tr>
-                      ))}
-                    </tbody> */}
+									{
+										<tbody>
+											{selectPedido.detallePedidos.map((pedido, index) => (
+												<tr key={index}>
+													<td>{pedido.producto.nombre}</td>
+													<td>{pedido.cantidad}</td>
+													<td>S/{pedido.producto.precio}</td>
+													{/* <td><button onClick={() => handleView(order)} className="btn  color-primario">Ver</button></td> */}
+												</tr>
+											))}
+										</tbody>
+									}
 								</table>
 							</div>
 						</div>

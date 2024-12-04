@@ -3,7 +3,7 @@ import { CardFooter } from "./CardFooter";
 import { CardHeader } from "./CardHeader";
 import { CardMain } from "./CardMain";
 
-export const Card = ({pedido}) => {
+export const Card = ({pedido,handlePedido}) => {
 
   const [estado, setEstado] = useState(pedido.estado)
 
@@ -19,14 +19,14 @@ export const Card = ({pedido}) => {
         className="card text-white bg-card rounded-4 my-3 "
         style={{ maxWidth: "18rem" }}
       >
-        <CardHeader numeroMesa={pedido.numeroMesa} horaPedido={pedido.hora}/>
+        <CardHeader numeroMesa={pedido.mesa?.numeroMesa} horaPedido={pedido.horaPedido}/>
         <CardMain
-          imagenUrl={pedido.imagenUrl}
-          platos={pedido.platos}
+          // imagenUrl={pedido.imagenUrl}
+          platos={pedido.detallePedidos}
           estado={estado}
           cambiarEstado={cambiarEstado}
         />
-        <CardFooter estado={estado} onCompletar={cambiarEstado}/>
+        <CardFooter estado={estado} onCompletar={pedido}   handlePedido={handlePedido}/>
       </div>
     </>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { Combobox } from '../../components/Globals/Combobox'
 import { CardProducto } from '../../components/mozo/CardProducto';
 import { ProductoContext } from '../../context/ProductosProvider';
@@ -6,33 +6,97 @@ import { TituloDescription } from '../../components/Globals/TituloDescription';
 import { NavLink } from 'react-router-dom';
 import { Badge } from '@mui/material'
 import { ShoppingCart } from '@mui/icons-material'
-import { PedidoContext } from '../../context/PedidoProvider';
+
+import { MesasContext } from '../../context/MesasProvider';
+import { MesaPedidoContext } from '../../context/MesaPedidoProvider';
+import { getPedidos } from '../../service/pedidoService';
 
 
 
 export const ProductosMozo = () => {
   const [selectedOption, setSelectedOption] = useState('2');
 
+  const { platos, bebidas } = useContext(ProductoContext);
+
+  const { listaPedido, agregarProducto, eliminarProducto } = useContext(MesaPedidoContext)
+
+  const { mesasPedido } = useContext(MesaPedidoContext);
+
+  const { mesaSelect } = useContext(MesasContext);
 
 
-
-
-  const { productos,bebidas } = useContext(ProductoContext);
-
-  const { listaPedido, agregarProducto, eliminarProducto } = useContext(PedidoContext)
-
-
- console.log(bebidas)
+  const mesaSeleccionadaId = mesaSelect; // Cambia por el ID de la mesa que seleccionaste
+  // Obtener la mesa seleccionada
+  const mesaSeleccionada = mesasPedido.find((mesa) => mesa.idMesa === mesaSeleccionadaId);
+  const productosMesa = mesaSeleccionada ? mesaSeleccionada.pedidos : [];
+  console.log('mesas')
+  console.log(mesaSelect)
 
   //Combobox
 
 
   const handleAgregar = (compra) => {
+    console.log("asi llega el prpoducto")
+    console.log(compra)
 
-    agregarProducto(compra);
+    agregarProducto(mesaSelect, compra);
   }
 
+
+  const cargarProductos = async () => {
+    try {
+
+      const { data } = await getPedidos();
+
+      console.log("Data")
+      console.log(data)
+
+      const pedidosPendientes = data.filter(pedido => pedido.estado === "EN_PREPARACION");
+
+      console.log("detallePedidos filtrado")
+      console.log(pedidosPendientes)
+
+      pedidosPendientes.forEach(pedido => {
+        if (pedido.detallePedidos) {
+          pedido.detallePedidos.forEach(detalle => {
+            const cargar = {
+              cantidad: detalle.cantidad,
+              cliente:pedido?.cliente,
+              descripcion: detalle.producto?.descripcion || "Sin descripción",
+              estado: "INACTIVO",
+              id: detalle.producto?.id || null,
+              idCategoria: detalle.producto?.idCategoria || null,
+              imagen: detalle.producto?.imagen || "https://via.placeholder.com/150",
+              litros: detalle.producto?.litros || null,
+              nombre: detalle.producto?.nombre || "Producto desconocido",
+              porcion: detalle.producto?.porcion || "",
+              precio: detalle.precio,
+              stock: detalle.producto?.stock || 0
+            };
+
+            console.log("Cargar producto:");
+            console.log(cargar);
+            console.log("Mesa ID:", pedido.mesa?.id);
+            agregarProducto(pedido.mesa?.id, cargar);
+          });
+        }
+      });
+
+
+
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+
+  useEffect(() => {
+    console.log("cargando")
+    cargarProductos()
+  }, []);
+
   const handleQuitar = (id) => {
+
     eliminarProducto(id);
   }
 
@@ -59,26 +123,33 @@ export const ProductosMozo = () => {
               <Combobox datos={datos} handleSelect={handleSelect} />
             </div>
 
-            <div className='col text-end'>
-              <NavLink to='/mozo/pedido'>
-                <Badge badgeContent={listaPedido.length} color="secondary">
+            <div className="col text-end">
+              <NavLink to="/mozo/pedido">
+                <Badge
+                  badgeContent={
+                    productosMesa.length
+                  }
+                  // Suma total de pedidos
+                  color="secondary"
+                >
                   <ShoppingCart color="action" />
                 </Badge>
               </NavLink>
             </div>
+
           </div>
 
-<br />
+          <br />
           <div className='contenedor-productos row '>
             {selectedOption === '1' ? (
-              productos.length > 0 ? (
-                productos.map(pro => (
+              platos.length > 0 ? (
+                platos.map(pro => (
                   <div className='col mb-3' key={pro.id}>
                     <CardProducto
-                      imagen={pro.image}
-                      titulo={pro.title}
-                      descripcion={pro.description}
-                      precio={pro.price}
+                      imagen={pro.imagen}
+                      titulo={pro.nombre}
+                      // descripcion={pro.descripcion}
+                      precio={pro.precio}
                       handleAgregar={() => handleAgregar(pro)}
                       handleQuitar={() => handleQuitar(pro.id)}
                     />
@@ -100,11 +171,11 @@ export const ProductosMozo = () => {
                   />
                 </div>
               ))
-              
+
             )}
           </div>
         </div>
-      </section>
+      </section >
 
     </>
   );

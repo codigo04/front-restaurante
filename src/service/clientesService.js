@@ -1,18 +1,17 @@
 import axios from "axios";
 
-const BASE_URL = 'http://localhost:8080'; 
-export const obtenerClientes = async (tokenUser) => {
-
-
+const BASE_URL = 'http://localhost:8080'; // Reemplaza con la URL real de tu API.
+const token = localStorage.getItem('token')
+const configToken = {
+    headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+    }
+}
+export const obtenerClientes = async () => {
 
     try {
 
-        const configToken = {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${tokenUser}`,
-            }
-        }
 
         const response = await axios.get(`${BASE_URL}/api/v1/admin/clientes/todos`, configToken);
         //  console.log("Clientes recibidos:", response.data.data);
@@ -24,3 +23,24 @@ export const obtenerClientes = async (tokenUser) => {
         throw error;
     }
 };
+
+
+export const saveCliente = async (dni) => {
+
+    try {
+
+        const response = await axios.post(`${BASE_URL}/api/v1/admin/clientes/crear`, dni,configToken);
+        //  console.log("Clientes recibidos:", response.data.data);
+        return response.data.data;
+
+    } catch (error) {
+        console.error('Error al obtener los Clientes', error);
+        // alert('CONCECTATE A TU SERVIDOR')
+        throw error;
+    }
+};
+
+
+
+
+

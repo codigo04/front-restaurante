@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { TituloDescription } from '../../components/Globals/TituloDescription';
 import { AuthContext } from '../../context/AuthProvider';
+import { Button } from '@mui/material';
 
 
 export const ClientesAdm = () => {
@@ -9,8 +10,8 @@ export const ClientesAdm = () => {
 
   // Función para eliminar un cliente
   const handleDelete = (idCliente) => {
-    const updatedClientes = filteredClientes.filter((cliente) => cliente.idCliente !== idCliente);
-    setFilteredClientes(updatedClientes); // Actualizamos la lista filtrada
+    //const updatedClientes = filteredClientes.filter((cliente) => cliente.idCliente !== idCliente);
+    //setFilteredClientes(updatedClientes); // Actualizamos la lista filtrada
   };
 
 
@@ -75,12 +76,16 @@ export const ClientesAdm = () => {
 
 
                       <td>
-                        <button
-                          className="btn btn-danger btn-sm"
+
+                        <Button
+
+                          variant="contained"
+                          sx={{  backgroundColor: "#ff6600", color: "#fff" }}
                           onClick={() => handleDelete(user.idCliente)}
                         >
-                          Eliminar
-                        </button>
+                          Ver 
+                        </Button>
+                        
                       </td>
                     </tr>
                   ))}

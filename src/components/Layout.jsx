@@ -1,14 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import '../assets/styles/navbar.css'
 import { Link, Outlet } from 'react-router-dom';
 import { Saludo } from './Globals/Saludo';
 import { Sidebar } from './Globals/Sidebar';
+import { AuthContext } from '../context/AuthProvider';
 // import { NavLink } from 'react-router-dom'
 
 
-export const Layout = ({ sidebar }) => {
+export const Layout = () => {
 
-
+    const { isLoading} = useContext(AuthContext); 
     const username = localStorage.getItem('username');
     return (
         <>

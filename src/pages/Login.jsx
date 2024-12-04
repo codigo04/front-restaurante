@@ -3,6 +3,9 @@ import '../assets/styles/Login.css'
 import logo from '../assets/img/logito.svg';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthProvider';
+import { toast } from 'react-toastify';
+import { NieveComponente } from '../components/Globals/NieveComponente';
+
 export const Login = () => {
 
 
@@ -31,29 +34,29 @@ export const Login = () => {
 
 
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
+    // useEffect(() => {
+    //     const token = localStorage.getItem('token');
+    //     if (token) {
 
-            //const decoded = JSON.parse(atob(token.split('.')[1])); // Decodificar token
-
-            //  const userRole = decoded.roles.find(r => r.authority);
-
-            console.log('isLoading')
-            console.log(isLoading)
-            if (rolUser) {
-                // setUserRole(rolUser);
-                setRoluser(rolUser)
-                setIsLoading(true)
-                navigate(getRuta(rolUser));
-            }
-        }
-    }, [navigate, role, setIsLoading]);
+        
+    //         console.log('isLoading')
+    //         console.log(isLoading)
+    //         if (rolUser) {  
+    //             setRoluser(rolUser)
+    //             // setIsLoading(true)
+    //         }
+    //     }
+    // }, []);
 
 
 
     const validateForm = () => {
         if (!username || !password || role === 'Elige tu tipo de usuario') {
+
+            toast.error("Por favor completa todos los campos", {
+                position: "top-center",
+            });
+
             setErrorMessage('Por favor completa todos los campos');
             return false;
         }
@@ -103,9 +106,16 @@ export const Login = () => {
 
                 } else {
                     setErrorMessage('El rol seleccionado no coincide con el usuario');
+
+                    toast.error(errorMessage, {
+                        position: "top-center",
+                    });
                 }
             } else {
                 setErrorMessage('Credenciales incorrectas');
+                toast.error('Credenciales incorrectas', {
+                    position: "top-center",
+                });
             }
 
         } catch (error) {
@@ -120,8 +130,9 @@ export const Login = () => {
 
     return (
         <>
-
+             
             <section className='container-fondo container-fluid d-flex flex-column align-items-center justify-content-center min-vh-100'>
+            
                 <div className='container-form'>
                     <form className='container-fondo-form mx-auto w-50' onSubmit={handleLogin}>
                         <img src={logo} className="card-img-top" alt="logo" />
