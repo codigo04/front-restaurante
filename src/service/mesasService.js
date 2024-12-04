@@ -76,7 +76,7 @@ export const actualizarEstadoMesa = async (nuevaMesa, idMesa) => {
 
 
 // /actualizar/{id}
-export const upadateEstadoMesa = async (nuevoEstado, idMesa) => {
+export const updateEstadoMesa = async (nuevoEstado, idMesa) => {
 
     const token = localStorage.getItem('token')
 

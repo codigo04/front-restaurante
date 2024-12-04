@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { Combobox } from '../../components/Globals/Combobox'
 import { CardProducto } from '../../components/mozo/CardProducto';
 import { ProductoContext } from '../../context/ProductosProvider';
@@ -9,6 +9,7 @@ import { ShoppingCart } from '@mui/icons-material'
 
 import { MesasContext } from '../../context/MesasProvider';
 import { MesaPedidoContext } from '../../context/MesaPedidoProvider';
+import { getPedidos } from '../../service/pedidoService';
 
 
 
@@ -35,11 +36,67 @@ export const ProductosMozo = () => {
 
 
   const handleAgregar = (compra) => {
-       console.log(compra)
+    console.log("asi llega el prpoducto")
+    console.log(compra)
+
     agregarProducto(mesaSelect, compra);
   }
 
+
+  const cargarProductos = async () => {
+    try {
+
+      const { data } = await getPedidos();
+
+      console.log("Data")
+      console.log(data)
+
+      const pedidosPendientes = data.filter(pedido => pedido.estado === "EN_PREPARACION");
+
+      console.log("detallePedidos filtrado")
+      console.log(pedidosPendientes)
+
+      pedidosPendientes.forEach(pedido => {
+        if (pedido.detallePedidos) {
+          pedido.detallePedidos.forEach(detalle => {
+            const cargar = {
+              cantidad: detalle.cantidad,
+              cliente:pedido?.cliente,
+              descripcion: detalle.producto?.descripcion || "Sin descripción",
+              estado: "INACTIVO",
+              id: detalle.producto?.id || null,
+              idCategoria: detalle.producto?.idCategoria || null,
+              imagen: detalle.producto?.imagen || "https://via.placeholder.com/150",
+              litros: detalle.producto?.litros || null,
+              nombre: detalle.producto?.nombre || "Producto desconocido",
+              porcion: detalle.producto?.porcion || "",
+              precio: detalle.precio,
+              stock: detalle.producto?.stock || 0
+            };
+
+            console.log("Cargar producto:");
+            console.log(cargar);
+            console.log("Mesa ID:", pedido.mesa?.id);
+            agregarProducto(pedido.mesa?.id, cargar);
+          });
+        }
+      });
+
+
+
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+
+  useEffect(() => {
+    console.log("cargando")
+    cargarProductos()
+  }, []);
+
   const handleQuitar = (id) => {
+
     eliminarProducto(id);
   }
 
@@ -72,53 +129,53 @@ export const ProductosMozo = () => {
                   badgeContent={
                     productosMesa.length
                   }
-                   // Suma total de pedidos
-                color="secondary"
+                  // Suma total de pedidos
+                  color="secondary"
                 >
-                <ShoppingCart color="action" />
-              </Badge>
-            </NavLink>
+                  <ShoppingCart color="action" />
+                </Badge>
+              </NavLink>
+            </div>
+
           </div>
 
-        </div>
-
-        <br />
-        <div className='contenedor-productos row '>
-          {selectedOption === '1' ? (
-            productos.length > 0 ? (
-              productos.map(pro => (
-                <div className='col mb-3' key={pro.id}>
+          <br />
+          <div className='contenedor-productos row '>
+            {selectedOption === '1' ? (
+              productos.length > 0 ? (
+                productos.map(pro => (
+                  <div className='col mb-3' key={pro.id}>
+                    <CardProducto
+                      imagen={pro.image}
+                      titulo={pro.title}
+                      descripcion={pro.description}
+                      precio={pro.price}
+                      handleAgregar={() => handleAgregar(pro)}
+                      handleQuitar={() => handleQuitar(pro.id)}
+                    />
+                  </div>
+                ))
+              ) : (
+                <div className='col-12 text-center'>No hay productos disponibles en esta categoría.</div>
+              )
+            ) : (
+              bebidas.map(bebi => (
+                <div className='col mb-3' key={bebi.id}>
                   <CardProducto
-                    imagen={pro.image}
-                    titulo={pro.title}
-                    descripcion={pro.description}
-                    precio={pro.price}
-                    handleAgregar={() => handleAgregar(pro)}
-                    handleQuitar={() => handleQuitar(pro.id)}
+                    imagen={bebi.imagen}
+                    titulo={bebi.nombre}
+                    descripcion={bebi.descripcion}
+                    precio={bebi.precio}
+                    handleAgregar={() => handleAgregar(bebi)}
+                    handleQuitar={() => handleQuitar(bebi.id)}
                   />
                 </div>
               ))
-            ) : (
-              <div className='col-12 text-center'>No hay productos disponibles en esta categoría.</div>
-            )
-          ) : (
-            bebidas.map(bebi => (
-              <div className='col mb-3' key={bebi.id}>
-                <CardProducto
-                  imagen={bebi.imagen}
-                  titulo={bebi.nombre}
-                  descripcion={bebi.descripcion}
-                  precio={bebi.precio}
-                  handleAgregar={() => handleAgregar(bebi)}
-                  handleQuitar={() => handleQuitar(bebi.id)}
-                />
-              </div>
-            ))
 
-          )}
+            )}
+          </div>
         </div>
-      </div>
-    </section >
+      </section >
 
     </>
   );

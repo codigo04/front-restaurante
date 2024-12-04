@@ -19,6 +19,12 @@ const pedidoReducer = (state, action) => {
       }));
 
     case '[pedido] agregar producto':
+      const mesaActual = state.find((mesa) => mesa.idMesa === action.payload.idMesa);
+      const productoExiste = mesaActual.pedidos.find(
+        (producto) => producto.id === action.payload.producto.id
+      );
+
+      if (productoExiste) return state;
 
       return state.map((mesa) =>
         mesa.idMesa === action.payload.idMesa
@@ -106,6 +112,8 @@ export const MesaPedidoProvider = ({ children }) => {
 
   const [pedidosAll, setPedidoAll] = useState([])
   // Función para cargar las mesas desde la API
+  console.log("pedidosAll")
+  console.log(pedidosAll)
 
   const cargarMesas = () => {
     dispatch({
@@ -168,7 +176,7 @@ export const MesaPedidoProvider = ({ children }) => {
       type: '[pedido] disminuir producto',
       payload: { idMesa, idProducto },
     };
-    
+
     dispatch(action);
   };
 
