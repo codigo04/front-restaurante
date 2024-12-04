@@ -8,13 +8,18 @@ import { actualizarEstadoPedido } from "../../service/pedidoService";
 export const Cajero = () => {
   const { messagesCaja } = useContext(WebSocketContext);
   const [pedidosAll, setPedidoAll] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { filtrados, getPedidoAllEstado } = useContext(PedidoContext);
   const [showPaymentDetails, setShowPaymentDetails] = useState(false);
   const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
   const [metodoPagoSeleccionado, setMetodoPagoSeleccionado] = useState(null);
 
   useEffect(() => {
-    getPedidoAllEstado("PENDIENTE"); // Filtrar pedidos por estado
+    const fetchPedidos = async () => {
+      setIsLoading(true);
+      await getPedidoAllEstado("PENDIENTE");
+    };
+    fetchPedidos();
   }, []);
 
   useEffect(() => {
@@ -50,12 +55,7 @@ export const Cajero = () => {
   const handlePrint = async () => {
     if (!pedidoSeleccionado) return;
     await obtenerPedioPDF(pedidoSeleccionado.idPedido);
-    await actualizarEstadoPedido(pedidoSeleccionado.idPedido, "ENTREGADO");
-    setPedidoAll((prevPedidoAll) =>
-      prevPedidoAll.filter(
-        (pedido) => pedido.idPedido !== pedidoSeleccionado.idPedido
-      )
-    );
+    await actualizarEstadoPedido(pedidoSeleccionado.idPedido, "PAGADO");
 
     setPedidoSeleccionado(null);
     setShowPaymentDetails(false);
@@ -130,13 +130,13 @@ export const Cajero = () => {
                 {pedidoSeleccionado && (
                   <>
                     <p className="mb-1">
-                      Subtotal: S/{" "}
+                      Subtotal: S/
                       {(
                         calcularTotal(pedidoSeleccionado.detallePedidos) / 1.18
                       ).toFixed(2)}
                     </p>
                     <p className="mb-1">
-                      IGV (18%): S/{" "}
+                      IGV (18%): S/
                       {(
                         calcularTotal(pedidoSeleccionado.detallePedidos) * 0.18
                       ).toFixed(2)}
@@ -149,9 +149,8 @@ export const Cajero = () => {
                     </h6>
                   </>
                 )}
-
                 <button
-                  className="btn btn-warning text-white w-100"
+                  className="btn btn-success text-white w-100"
                   disabled={!metodoPagoSeleccionado}
                   onClick={handlePrint}
                 >
