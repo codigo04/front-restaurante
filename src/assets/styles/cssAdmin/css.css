@@ -16,7 +16,7 @@
 }
 
 .card-gradient {
-	background: linear-gradient(90deg, #f76b1c, #ffb54d);
+	background: linear-gradient(90deg, #E66301, #F39A3A);
 	display: flex;
 	flex-direction: row;
 	padding: 1.5rem;
@@ -26,31 +26,34 @@
 }
 
 .card-gradient h2 {
-	font-size: 1.5em;
+	font-size: 1.2em;
 	margin: 0;
 }
 
 .card-gradient p {
 	color: white;
-	font-size: 2.5rem;
+	font-size: 3rem;
 	font-weight: bold;
 	margin: 0;
 }
 
 .icon-card {
+	background-color: rgb(255, 255, 255);
+	aspect-ratio: 1;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	width: 30%;
 	padding: 0;
+	border-radius: 50%;
 }
 
 .text-card {
 	color: white;
 	display: flex;
 	justify-content: center;
+	align-items: start;
 	flex-direction: column;
-	justify-content: center;
 	width: 70%;
 }
 

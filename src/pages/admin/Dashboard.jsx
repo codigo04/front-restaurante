@@ -1,13 +1,12 @@
 import { useContext, useState } from "react";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import FlatwareIcon from "@mui/icons-material/Flatware";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import SavingsIcon from "@mui/icons-material/Savings";
+import FastfoodIcon from "@mui/icons-material/Fastfood";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import "../../assets/styles/cssAdmin/css.css";
 import { Progress } from "../../components/adm/Progress";
 import pollo from "../../assets/img/adm/pollo.jpg";
 import { AuthContext } from "../../context/AuthProvider";
 import { useMediaQuery } from "@mui/material";
-import { pink } from "@mui/material/colors";
 
 const orders = [
 	{ client: "Cliente 1", table: 5, date: "14/08/2001", time: "10:00" },
@@ -56,34 +55,34 @@ export const Dashboard = () => {
 				<div className="row text-center my-4 " style={{ gap: isMobile ? "15px" : "0" }}>
 					<div className="col-md-4">
 						<div className="card-gradient">
-							<div className="icon-card">
-								<FlatwareIcon style={{ width: "3em", height: "3em", fill: "white" }} />
-							</div>
 							<div className="text-card">
-								<h2>Total Órdenes</h2>
 								<p>20</p>
+								<h2>Total Órdenes</h2>
+							</div>
+							<div className="icon-card">
+								<FastfoodIcon style={{ width: "3em", height: "3em", fill: "#EF8822" }} />
 							</div>
 						</div>
 					</div>
 					<div className="col-md-4">
 						<div className="card-gradient">
-							<div className="icon-card">
-								<AttachMoneyIcon sx={{ width: "3em", height: "3em", fill: "white" }} />
-							</div>
 							<div className="text-card">
-								<h2>Total Ingresos</h2>
 								<p>s/ 499.00</p>
+								<h2>Total Ingresos</h2>
+							</div>
+							<div className="icon-card">
+								<SavingsIcon sx={{ width: "3em", height: "3em", fill: "#EF8822" }} />
 							</div>
 						</div>
 					</div>
 					<div className="col-md-4">
 						<div className="card-gradient">
-							<div className="icon-card">
-								<AccountCircleIcon style={{ width: "3em", height: "3em", fill: "white" }} />
-							</div>
 							<div className="text-card">
-								<h2>Total Empleados</h2>
 								<p>{usuarios.length}</p>
+								<h2>Total Empleados</h2>
+							</div>
+							<div className="icon-card">
+								<PeopleAltIcon style={{ width: "3em", height: "3em", fill: "#EF8822" }} />
 							</div>
 						</div>
 					</div>
@@ -193,7 +192,7 @@ export const Dashboard = () => {
 								<h3>Detalles de la Orden</h3>
 
 								<button onClick={() => setSelectedOrde(null)} className="btn btn-secondary color-primario">
-									<i class="bi bi-x" style={{ color: "white" }}></i>
+									<i className="bi bi-x" style={{ color: "white" }}></i>
 								</button>
 							</div>
 							<div>
