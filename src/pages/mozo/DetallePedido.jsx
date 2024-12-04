@@ -10,6 +10,8 @@ import { connectWebSocket } from '../../service/websocket';
 import { WebSocketContext } from '../../context/WebSocketProvider';
 import { MesaPedidoContext } from '../../context/MesaPedidoProvider';
 import { Button } from '@mui/material';
+import { updateEstadoMesa } from '../../service/mesasService';
+
 
 export const DetallePedido = () => {
 
@@ -17,7 +19,7 @@ export const DetallePedido = () => {
 
     const { cambiarEstadoMesa, mostrarProductosMesa, mesasPedido, eliminarProducto, aumentarCantidad, disminuirCantidad } = useContext(MesaPedidoContext)
     const { mesaSelect, cambiarEstado } = useContext(MesasContext);
-    const { messagesCocina, setDetallePedido,sendMessageToBackend} = useContext(WebSocketContext);
+    const { messagesCocina, setDetallePedido, sendMessageToBackend } = useContext(WebSocketContext);
     const [dni, setDni] = useState({
         dni: ''
     })
@@ -28,11 +30,26 @@ export const DetallePedido = () => {
     const [mensaje, setMensaje] = useState(null);
     const [detalleP, setDetalleP] = useState([])
     const mesaSeleccionadaId = mesaSelect; // Cambia por el ID de la mesa que seleccionaste
+
     // Obtener la mesa seleccionada
     const mesaSeleccionada = mesasPedido.find((mesa) => mesa.idMesa === mesaSeleccionadaId);
-    const productosMesa = mesaSeleccionada ? mesaSeleccionada.pedidos : [];
 
+    const productosMesa = mesaSeleccionada ? mesaSeleccionada.pedidos : [];
+    console.log("mesaSeleccionada")
+    console.log(mesaSeleccionada)
+    console.log("productosMesa")
     console.log(productosMesa)
+
+
+    useEffect(() => {
+        if (productosMesa.length > 0) {
+            const cliente = productosMesa[0].cliente; //cliente es el mismo para todos los productos de la mesa
+            setIdCliente(cliente?.idCliente)
+            setDni({ dni: cliente?.dni })
+            setNombre(cliente?.nombre);
+            setApellido(cliente?.apellido); 
+        }
+    }, [productosMesa]);
 
     const [pedido, setPedido] = useState({
         fechaPedido: '',
@@ -147,6 +164,9 @@ export const DetallePedido = () => {
             });
             // Cambiar el estado de la mesa
             mandarMozo()
+
+
+
             handleCambiarEstadoMesa();
 
 
@@ -159,8 +179,24 @@ export const DetallePedido = () => {
         }
     };
 
-    const handleCambiarEstadoMesa = useCallback(() => {
-        cambiarEstadoMesa(mesaSelect, "OCUPADA");
+    const handleCambiarEstadoMesa = useCallback(async () => {
+
+        try {
+          
+            const estadoMesa = {
+                estado: "OCUPADA"
+            };
+
+            // Cambiar el estado de la mesa de manera local
+            cambiarEstadoMesa(mesaSelect, "OCUPADA"); 
+
+            // Actualizar el estado de la mesa en la base de datos
+            await updateEstadoMesa(estadoMesa, mesaSelect); 
+
+        } catch (error) {
+            console.error("Error al cambiar el estado de la mesa:", error);
+        }
+
     }, [mesaSelect, cambiarEstadoMesa]);
 
 
@@ -204,10 +240,10 @@ export const DetallePedido = () => {
             console.log("Detalle del pedido recibido:", detallePedido);
 
 
-              
+
             // Actualiza el estado con los detalles del pedido
             setDetallePedido(detallePedido);
-            sendMessageToBackend('/app/mozo/cocina',detallePedido);
+            sendMessageToBackend('/app/mozo/cocina', detallePedido);
 
         } catch (error) {
             // Maneja errores y muestra una notificación
@@ -229,7 +265,7 @@ export const DetallePedido = () => {
 
 
 
-    
+
 
 
     return (
@@ -253,6 +289,8 @@ export const DetallePedido = () => {
 
 
                                 productosMesa.map(producto => (
+
+
                                     <tr>
 
                                         <td>
@@ -348,13 +386,13 @@ export const DetallePedido = () => {
                                         })}
                                     />
                                 </div>
-                                
+
 
                                 <Button
-                                   className='mb-3'
+                                    className='mb-3'
                                     variant="contained"
                                     sx={{ backgroundColor: "#ff6600", color: "#fff" }}
-                                    onClick={() => handleSearchCliente()} 
+                                    onClick={() => handleSearchCliente()}
                                 >
                                     {/* <NavLink to="/mozo/mesas" >Confirmar Pedido</NavLink> */}
                                     Buscar
