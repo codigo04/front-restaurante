@@ -34,7 +34,6 @@ export const CerrarCaja = () => {
         }
       } catch (error) {
         console.error("Error fetching data:", error);
-        toast.error("Error al cargar los datos");
       } finally {
         setIsLoading(false);
       }
@@ -92,7 +91,7 @@ export const CerrarCaja = () => {
                     type="number"
                     className="form-control"
                     id="montoInicial"
-                    value={montoInicial}
+                    placeholder="0:00"
                     onChange={(e) => setMontoInicial(Number(e.target.value))}
                   />
                 </div>
@@ -138,7 +137,10 @@ export const CerrarCaja = () => {
                     type="number"
                     className="form-control"
                     id="montoFinal"
-                    value={montoFinal}
+                    value={(
+                      Number(cajaActual?.montoInicial || 0) +
+                      Number(totalVentas || 0)
+                    ).toFixed(2)}
                     onChange={(e) => setMontoFinal(Number(e.target.value))}
                   />
                 </div>
