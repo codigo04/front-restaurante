@@ -1,31 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  Button,
-  Card,
-  CardContent,
-  Typography,
-  Grid,
-  Box,
-} from "@mui/material";
 import { PedidoContext } from "../../context/PedidoProvider";
 import { toast } from "react-toastify";
 import { WebSocketContext } from "../../context/WebSocketProvider ";
+import { obtenerPedioPDF } from "../../service/reportes";
+import { actualizarEstadoPedido } from "../../service/pedidoService";
 
 export const Cajero = () => {
-
-
   const { messagesCaja } = useContext(WebSocketContext);
-
-  const [pedidosAll, setPedidoAll] = useState([])
-
-  const { filtrados, getPedidoAllEstado,getPedidoAll } = useContext(PedidoContext);
-
+  const [pedidosAll, setPedidoAll] = useState([]);
+  const { filtrados, getPedidoAllEstado } = useContext(PedidoContext);
+  const [showPaymentDetails, setShowPaymentDetails] = useState(false);
+  const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
+  const [metodoPagoSeleccionado, setMetodoPagoSeleccionado] = useState(null);
 
   useEffect(() => {
-    
     getPedidoAllEstado("PENDIENTE"); // Filtrar pedidos por estado
   }, []);
-
 
   useEffect(() => {
     if (filtrados.length > 0) {
@@ -33,125 +23,145 @@ export const Cajero = () => {
     }
   }, [filtrados]);
 
-
   useEffect(() => {
-    
     if (messagesCaja.length > 0) {
-      toast.success("Nuevo Pedido Recivido de mozo", {
+      toast.success("Nuevo Pedido Recibido de mozo", {
         position: "top-right",
       });
     }
 
-
     setPedidoAll((prevPedidoAll) => [...prevPedidoAll, ...messagesCaja]);
   }, [messagesCaja]);
 
+  const handleCobrar = (pedido) => {
+    setPedidoSeleccionado(pedido);
+    setShowPaymentDetails(true);
+  };
+  const calcularTotal = (detallePedidos) => {
+    return detallePedidos.reduce((total, item) => {
+      return total + item.cantidad * item.precio;
+    }, 0);
+  };
 
+  const handleMetodoPago = (metodo) => {
+    setMetodoPagoSeleccionado(metodo);
+  };
 
+  const handlePrint = async () => {
+    if (!pedidoSeleccionado) return;
+    await obtenerPedioPDF(pedidoSeleccionado.idPedido);
+    await actualizarEstadoPedido(pedidoSeleccionado.idPedido, "ENTREGADO");
+    setPedidoAll((prevPedidoAll) =>
+      prevPedidoAll.filter(
+        (pedido) => pedido.idPedido !== pedidoSeleccionado.idPedido
+      )
+    );
 
-  console.log("pedidos cocina")
-  console.log(filtrados)
-
-
-
-
+    setPedidoSeleccionado(null);
+    setShowPaymentDetails(false);
+    setMetodoPagoSeleccionado(null);
+  };
   return (
     <div className="container mt-5">
-      <Grid container spacing={4}>
+      <div className="row g-4">
         {/* Lista de Mesas */}
-        <Grid item xs={12} md={8}>
-          <Typography variant="h5" gutterBottom>
-            Lista de Mesas por cobrar:
-          </Typography>
+        <div className="col-12 col-md-8">
+          <h5 className="mb-3">Lista de Mesas por cobrar:</h5>
           {pedidosAll.map((pedido, index) => (
-            <Card
-              key={index}
-              sx={{
-                mb: 2,
-                borderRadius: 2,
-                boxShadow: 3,
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                p: 2,
-              }}
-            >
-              <Box>
-                <Typography variant="subtitle1" fontWeight="bold">
-                  NUMERO DE MESA: {pedido.mesa.numeroMesa}
-                </Typography>
-                <Typography variant="body2">
-                  Nombre del Cliente : {pedido.cliente?.nombre}
-                </Typography>
-              </Box>
-              <Button
-                variant="contained"
-                sx={{ backgroundColor: "#ff6600", color: "#fff" }}
-              >
-                Cobrar
-              </Button>
-            </Card>
+            <div key={index} className="card mb-3">
+              <div className="card-body d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 className="fw-bold">
+                    NUMERO DE MESA: {pedido.mesa.numeroMesa}
+                  </h6>
+                  <p className="mb-0">
+                    Nombre del Cliente: {pedido.cliente?.nombre}
+                  </p>
+                </div>
+                <button onClick={() => handleCobrar(pedido)}>Cobrar</button>
+              </div>
+            </div>
           ))}
-        </Grid>
+        </div>
 
         {/* Detalle de Cobro */}
-        <Grid item xs={12} md={4}>
-          <Typography variant="h5" gutterBottom>
-            Detalle de Cobro
-          </Typography>
-          <Card sx={{ borderRadius: 2, boxShadow: 3 }}>
-            <CardContent>
-              {/* Métodos de Pago */}
-              <Typography variant="subtitle1" gutterBottom>
-                Método de Pago:
-              </Typography>
-              <div className="d-flex mb-3">
-                {["Yape", "Efectivo", "Plin", "Visa"].map((metodo) => (
-                  <Button
-                    key={metodo}
-                    variant="outlined"
-                    startIcon={
-                      <span className="material-icons">
-                        {metodo === "Yape" ? "qr" : "T"}
-                      </span>
-                    }
-                    sx={{ mr: 1 }}
-                  >
-                    {metodo}
-                  </Button>
-                ))}
+        {showPaymentDetails && (
+          <div className="col-12 col-md-4">
+            <h5 className="mb-3">Detalle de Cobro</h5>
+            <div className="card">
+              <div className="card-body">
+                <h6 className="mb-3">Método de Pago:</h6>
+                <div className="d-flex gap-2 mb-3">
+                  {["Yape", "Efectivo", "Plin", "Visa"].map((metodo) => (
+                    <button
+                      key={metodo}
+                      className={`btn ${
+                        metodoPagoSeleccionado === metodo
+                          ? "btn-primary"
+                          : "btn-outline-primary"
+                      }`}
+                      onClick={() => handleMetodoPago(metodo)}
+                    >
+                      <i className="material-icons">
+                        {metodo === "Yape" ? "QR " : ""}
+                      </i>
+                      {metodo}
+                    </button>
+                  ))}
+                </div>
+
+                <h6 className="mb-3">Detalle:</h6>
+                <ul className="list-group mb-3">
+                  {pedidoSeleccionado?.detallePedidos.map((item, index) => (
+                    <li
+                      key={index}
+                      className="list-group-item d-flex justify-content-between align-items-center"
+                    >
+                      <div>
+                        <span className="fw-bold">{item.cantidad}x</span>{" "}
+                        {item.producto.nombre}
+                      </div>
+                      <span>S/ {(item.cantidad * item.precio).toFixed(2)}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Totales */}
+                {pedidoSeleccionado && (
+                  <>
+                    <p className="mb-1">
+                      Subtotal: S/{" "}
+                      {(
+                        calcularTotal(pedidoSeleccionado.detallePedidos) / 1.18
+                      ).toFixed(2)}
+                    </p>
+                    <p className="mb-1">
+                      IGV (18%): S/{" "}
+                      {(
+                        calcularTotal(pedidoSeleccionado.detallePedidos) * 0.18
+                      ).toFixed(2)}
+                    </p>
+                    <h6 className="fw-bold mb-3">
+                      Total a Pagar: S/{" "}
+                      {calcularTotal(pedidoSeleccionado.detallePedidos).toFixed(
+                        2
+                      )}
+                    </h6>
+                  </>
+                )}
+
+                <button
+                  className="btn btn-warning text-white w-100"
+                  disabled={!metodoPagoSeleccionado}
+                  onClick={handlePrint}
+                >
+                  Imprimir Comprobante
+                </button>
               </div>
-
-              {/* Detalle del Pedido */}
-              <Typography variant="subtitle1" gutterBottom>
-                Detalle:
-              </Typography>
-              <ul className="list-group mb-3">
-                <li className="list-group-item d-flex justify-content-between align-items-center">
-                  3x Pollo a la brasa
-                  <span>s/120.00</span>
-                </li>
-              </ul>
-
-              {/* Total a Pagar */}
-              <Typography>Subtotal: s/98.40</Typography>
-              <Typography>IGV (18%): s/21.60</Typography>
-              <Typography variant="h6" fontWeight="bold">
-                Monto Total a pagar: s/120.00
-              </Typography>
-
-              {/* Botón para Imprimir Comprobante */}
-              <Button
-                fullWidth
-                variant="contained"
-                sx={{ mt: 2, backgroundColor: "#ff6600", color: "#fff" }}
-              >
-                Imprimir Comprobante
-              </Button>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
