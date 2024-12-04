@@ -1,20 +1,25 @@
 import React, { useContext, useEffect, useState } from "react";
 import { PedidoContext } from "../../context/PedidoProvider";
 import { toast } from "react-toastify";
-import { WebSocketContext } from "../../context/WebSocketProvider ";
+import { WebSocketContext } from "../../context/WebSocketProvider";
 import { obtenerPedioPDF } from "../../service/reportes";
 import { actualizarEstadoPedido } from "../../service/pedidoService";
 
 export const Cajero = () => {
   const { messagesCaja } = useContext(WebSocketContext);
   const [pedidosAll, setPedidoAll] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { filtrados, getPedidoAllEstado } = useContext(PedidoContext);
   const [showPaymentDetails, setShowPaymentDetails] = useState(false);
   const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
   const [metodoPagoSeleccionado, setMetodoPagoSeleccionado] = useState(null);
 
   useEffect(() => {
-    getPedidoAllEstado("PENDIENTE"); // Filtrar pedidos por estado
+    const fetchPedidos = async () => {
+      setIsLoading(true);
+      await getPedidoAllEstado("PENDIENTE");
+    };
+    fetchPedidos();
   }, []);
 
   useEffect(() => {
@@ -51,11 +56,6 @@ export const Cajero = () => {
     if (!pedidoSeleccionado) return;
     await obtenerPedioPDF(pedidoSeleccionado.idPedido);
     await actualizarEstadoPedido(pedidoSeleccionado.idPedido, "ENTREGADO");
-    setPedidoAll((prevPedidoAll) =>
-      prevPedidoAll.filter(
-        (pedido) => pedido.idPedido !== pedidoSeleccionado.idPedido
-      )
-    );
 
     setPedidoSeleccionado(null);
     setShowPaymentDetails(false);
