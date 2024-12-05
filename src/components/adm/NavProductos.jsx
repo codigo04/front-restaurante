@@ -5,7 +5,7 @@ export const NavProductos = ({setEstado}) => {
    
 
     return (
-        <div>
+        <div className='ms-5'>
             <ul  className="nav nav-pills nav-fill gap-2 p-1 small  rounded-5 shadow-sm" id="pillNav2" role="tablist" style={{
                 '--bs-nav-link-color': 'black',
                 '--bs-nav-pills-link-active-color': 'white',
