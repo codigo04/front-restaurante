@@ -105,8 +105,13 @@ export const Dashboard = () => {
 					</div>
 					<div className="col-md-4">
 						<div className="card-gradient">
-							<h2>{usuarios.length}</h2>
-							<p>Total Empleados</p>
+							<div className="text-card">
+								<p>{usuarios.length}</p>
+								<h2>Total Empleados</h2>
+							</div>
+							<div className="icon-card">
+								<PeopleAltIcon style={{ width: "3em", height: "3em", fill: "#EF8822" }} />
+							</div>
 						</div>
 					</div>
 				</div>
