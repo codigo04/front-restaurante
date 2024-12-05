@@ -90,24 +90,26 @@ export const ProductosProvider = ({ children }) => {
 
     };
 
-    useEffect(() => {
-        setPlatos(state.filter(producto => producto.idCategoria === 1)); // Platos (categoría 1)
-        setBebidas(state.filter(producto => producto.idCategoria === 2)); // Bebidas (categoría 2)
-    }, [state]);
-
     const agregarProduct = (newProducto) => {
         dispatch({
-            type: '[producto] editar producto',
+            type: '[producto] agregar producto',
             payload: newProducto,
         });
 
     };
 
+    useEffect(() => {
+        setPlatos(state.filter(producto => producto.idCategoria === 1)); // Platos (categoría 1)
+        setBebidas(state.filter(producto => producto.idCategoria === 2)); // Bebidas (categoría 2)
+    }, [state]);
+
+
+
     const deleteProduct = (idProducto) => {
 
 
         try {
-       
+
 
             dispatch({
                 type: '[producto] eliminar producto',

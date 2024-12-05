@@ -20,7 +20,7 @@ export const MainCocina = () => {
 
 	console.log("pedidos filtrados")
 	console.log(filtrados)
-	
+
 	useEffect(() => {
 		console.log("pedidos filtrados 2")
 		getPedidoAllEstado("EN_PREPARACION");
@@ -35,18 +35,21 @@ export const MainCocina = () => {
 		}
 
 		setPedidoAllCocina((prevPedidoAll) => [
-            ...prevPedidoAll.filter(p => !messagesCocina.some(m => m.idPedido === p.idPedido)),
-            ...messagesCocina
-        ]);
+			...prevPedidoAll.filter(p => !messagesCocina.some(m => m.idPedido === p.idPedido)),
+			...messagesCocina
+		]);
 
 
 	}, [messagesCocina]);
 
 
 	useEffect(() => {
-		if (filtrados.length > 0) {
-			setPedidoAllCocina(filtrados);
-		}
+     if (filtrados.length > 0) {
+		console.log("si entro")
+		setPedidoAllCocina(filtrados);
+	 }
+	 console.log("no entro")
+
 	}, [filtrados]);
 
 	console.log("pedidos cocina")
@@ -67,7 +70,7 @@ export const MainCocina = () => {
 				prevPedidos.filter(p => p.idPedido !== pedido.idPedido)
 			);
 
-			
+
 			sendMessageToBackend('/app/cocina/mozo', pedidoActualizado);
 		} catch (error) {
 			console.error(error)
@@ -89,10 +92,10 @@ export const MainCocina = () => {
 							? (
 
 								<Typography variant="body1">No hay pedidos en preparación.</Typography>)
-							:(
+							: (
 								pedidosAllCocina.map((pedido) => (
-								<Card key={pedido.pedidoId} pedido={pedido} handlePedido={handlePedido} />
-							)))}
+									<Card key={pedido.pedidoId} pedido={pedido} handlePedido={handlePedido} />
+								)))}
 					</div>
 				</section>
 			</section>
