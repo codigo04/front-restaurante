@@ -12,6 +12,7 @@ import { Button, Typography, useMediaQuery } from "@mui/material";
 import { Navigate, useNavigate } from "react-router-dom";
 import { MesaPedidoContext } from "../../context/MesaPedidoProvider";
 import { PedidoContext } from "../../context/PedidoProvider";
+import DashboardCard from "../../components/adm/DashboardCard";
 
 const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Nobiembre", "Diciembre"];
 
@@ -80,46 +81,18 @@ export const Dashboard = () => {
 	return (
 		<>
 			<section className="container-fluid">
-				<div className="row text-center my-4 " style={{ gap: isMobile ? "15px" : "0" }}>
-					<div className="col-md-4">
-						<div className="card-gradient">
-							<div className="text-card">
-								<p>{todos.length}</p>
-								<h2>Total Pedidos</h2>
-							</div>
-							<div className="icon-card">
-								<FastfoodIcon style={{ width: "3em", height: "3em", fill: "#EF8822" }} />
-							</div>
-						</div>
-					</div>
-					<div className="col-md-4">
-						<div className="card-gradient">
-							<div className="text-card">
-								<p>s/ 499.00</p>
-								<h2>s/ {totalDeHoy.toFixed(2)}</h2>
-							</div>
-							<div className="icon-card">
-								<SavingsIcon sx={{ width: "3em", height: "3em", fill: "#EF8822" }} />
-							</div>
-						</div>
-					</div>
-					<div className="col-md-4">
-						<div className="card-gradient">
-							<div className="text-card">
-								<p>{usuarios.length}</p>
-								<h2>Total Empleados</h2>
-							</div>
-							<div className="icon-card">
-								<PeopleAltIcon style={{ width: "3em", height: "3em", fill: "#EF8822" }} />
-							</div>
-						</div>
-					</div>
+				{/* Cards Dashboard */}
+				<div className="row text-center my-4 flex flex-wrap" style={{ gap: isMobile ? "15px" : "0" }}>
+					<DashboardCard count={todos.length} title="Total Pedidos" Icon={FastfoodIcon} />
+					<DashboardCard count={`s/ ${totalDeHoy.toFixed(2)}`} title="Total Ingresos" Icon={SavingsIcon} />
+					<DashboardCard count={usuarios.length} title="Total Empleados" Icon={PeopleAltIcon} />
 				</div>
+
 				{/* pedidos recientes */}
-				<div className="container-fluid  ">
-					<div className="row" style={{ gap: isMobile ? "15px" : "0" }}>
+				<div className="container-fluid">
+					<div className="flex flex-col gap-3 md:flex md:flex-row md:gap-3">
 						{/* Pedidos Recientes Solicitados */}
-						<div className="col-md-6 container-color">
+						<div className="container-color basis-1/2 md:basis-full">
 							<article className="">
 								<Typography variant="h5" fontWeight="bold">
 									Pedidos Recientes Solicitados
@@ -159,7 +132,7 @@ export const Dashboard = () => {
 						</div>
 
 						{/* Ganancia Mensual */}
-						<div className="col-md-6" style={{ paddingRight: "0" }}>
+						<div className="container-color basis-1/2 md:basis-full">
 							<div className="monthly-earnings container-color">
 								<Typography variant="h5" fontWeight="bold">
 									Ganancia Mensual
@@ -200,20 +173,20 @@ export const Dashboard = () => {
 				</div>
 
 				{/* productos en tendencia */}
-				<div className="">
+				<div className="container-fluid">
 					<div className="my-4 container-fluid container-color">
 						<h3>Productos en Tendencia</h3>
-						<div className="row" style={{ gap: isMobile ? "15px" : "0" }}>
-							<div className="col-md-3">
+						<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+							<div>
 								<img src={pollo} className="img-fluid" alt="Producto 1" />
 							</div>
-							<div className="col-md-3">
+							<div>
 								<img src={pollo} className="img-fluid" alt="Producto 2" />
 							</div>
-							<div className="col-md-3">
+							<div>
 								<img src={pollo} className="img-fluid" alt="Producto 3" />
 							</div>
-							<div className="col-md-3">
+							<div>
 								<img src={pollo} className="img-fluid" alt="Producto 4" />
 							</div>
 						</div>

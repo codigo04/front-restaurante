@@ -26,7 +26,7 @@ export const Sidebar = () => {
 		{ ruta: "/cajero/historial-cierres-caja", nombre: "Historial de cierres", rol: "CAJA" },
 	];
 
-	const [isOpen, setIsOpen] = useState(true);
+	const [isOpen, setIsOpen] = useState(false);
 
 	const toggleSidebar = () => {
 		setIsOpen(!isOpen);
@@ -34,13 +34,24 @@ export const Sidebar = () => {
 	const sidebarWidth = "169px";
 	return (
 		<>
-			{" "}
+			{/* Overlay oscuro */}
+			<div
+				className={`fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300 ${isOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}
+				onClick={toggleSidebar}
+				style={{ zIndex: "999" }}
+			></div>
+
 			{/* Botón de alternancia */}
 			<aside
 				className="sidebar bg-dark text-white transition-all duration-300 container-sidebar "
 				style={{
+					position: "fixed", // Añadir esta línea
+					top: "0", // Asegura que el sidebar esté en la parte superior
+					left: "0", // Asegura que el sidebar esté alineado a la izquierda
+					height: "100%", // Asegura que el sidebar ocupe toda la altura de la pantalla
 					width: isOpen ? sidebarWidth : "0",
 					padding: "0",
+					zIndex: "1000",
 				}}
 			>
 				<div className="container catainer-responsy">
@@ -70,10 +81,10 @@ export const Sidebar = () => {
 				>
 					<ul className="list-unstyled">
 						{links
-							//.filter((link) => link.rol === rolUser)
+							.filter((link) => link.rol === rolUser)
 							.map((link) => (
 								<li key={link.ruta} className="">
-									<Link to={link.ruta} className="text-black ">
+									<Link to={link.ruta} className="text-black" onClick={() => setIsOpen(false)}>
 										{link.nombre}
 									</Link>
 								</li>

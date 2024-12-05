@@ -59,10 +59,10 @@ export const App = () => {
 										<Route
 											path="/"
 											element={
-                        // Comentar para probar el login
-												// <ProtectedRoute>
-												<Layout />
-												// </ProtectedRoute>
+												// Comentar para probar el login
+												<ProtectedRoute>
+													<Layout />
+												</ProtectedRoute>
 											}
 										>
 											{/* Rutas protegidas */}
