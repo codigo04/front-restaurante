@@ -53,11 +53,15 @@ export const GestionComida = () => {
         if (!tokenUser) return
 
         const producto = {
-            id: 2,
+
             nombre: formData.nombre,
             precio: formData.precio,
             descripcion: formData.descripcion,
+            imagen: "https://chewinghappiness.com/wp-content/uploads/2021/02/Pollo-a-la-braza-4-1-500x500.jpg",
+            estado: "ACTIVO",
+            porcion: "no se aun",
             stock: formData.stock,
+            litros: "5000",
             idCategoria: 1
 
         }
@@ -243,7 +247,7 @@ export const GestionComida = () => {
 
                 <div className="col-md-6 text-center contendor-img">
                     <img src={GestionComidaimg} alt="Plato" className="img-fluid img-fluid-tamanno" />
-                </div>
+                </div>  
             </div>
 
             {isModalOpen && (

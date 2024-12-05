@@ -1,5 +1,6 @@
-import React, { createContext, useEffect, useReducer } from 'react'
+import React, { createContext, useContext, useEffect, useReducer } from 'react'
 import { getPedidos } from '../service/pedidoService';
+import { AuthContext } from './AuthProvider';
 export const PedidoContext = createContext()
 
 const initialState = {
@@ -12,8 +13,8 @@ const pedidoReducer = (state, action) => {
 
   switch (action.type) {
     case "[pedido] cargar pedidos":
-
-      return { ...state, todos: action.payload, filtrados: action.payload }; // Cargar todos los pedidos
+      //Antes  { ...state, todos: action.payload, filtrados: action.payload };
+      return { ...state, todos: action.payload }; // Cargar todos los pedidos
 
     case "[pedido] cargar pedidos estado":
 
@@ -33,6 +34,8 @@ const pedidoReducer = (state, action) => {
 export const PedidoProvider = ({ children }) => {
 
   const [state, dispatch] = useReducer(pedidoReducer, initialState);
+  const { auth } = useContext(AuthContext);
+
 
   const getPedidoAll = async () => {
     try {
@@ -53,21 +56,21 @@ export const PedidoProvider = ({ children }) => {
   }
 
   const getPedidoAllEstado = async (estado) => {
-    
-      const action = {
-        type: '[pedido] cargar pedidos estado',
-        payload: estado,
-      };
 
-      dispatch(action);
+    const action = {
+      type: '[pedido] cargar pedidos estado',
+      payload: estado,
+    };
 
-   
+    dispatch(action);
+
+
   }
 
 
   useEffect(() => {
     getPedidoAll()
-  }, []);
+  }, [auth]);
 
   return (
     <PedidoContext.Provider

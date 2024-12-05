@@ -20,6 +20,7 @@ export const PedidosListos = () => {
 
     useEffect(() => {
         getPedidoAllEstado("ENTREGADO"); // Filtrar pedidos por estado
+        console.log("Pedidos cargados por estado:", filtrados);
     }, []);
 
     useEffect(() => {
