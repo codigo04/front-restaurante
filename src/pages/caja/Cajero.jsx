@@ -4,6 +4,16 @@ import { toast } from "react-toastify";
 import { WebSocketContext } from "../../context/WebSocketProvider";
 import { obtenerPedioPDF } from "../../service/reportes";
 import { actualizarEstadoPedido } from "../../service/pedidoService";
+import { CuerpoModal } from "../../components/modals/CuerpoModal";
+import { updateEstadoMesa } from "../../service/mesasService";
+import { LuPrinter } from "react-icons/lu";
+import { MdOutlinePayment } from "react-icons/md";
+import {
+  FaCreditCard,
+  FaMobileAlt,
+  FaMoneyBillWave,
+  FaQrcode,
+} from "react-icons/fa";
 
 export const Cajero = () => {
   const { messagesCaja } = useContext(WebSocketContext);
@@ -29,12 +39,6 @@ export const Cajero = () => {
   }, [filtrados]);
 
   useEffect(() => {
-    if (messagesCaja.length > 0) {
-      toast.success("Nuevo Pedido Recibido de mozo", {
-        position: "top-right",
-      });
-    }
-
     setPedidoAll((prevPedidoAll) => [...prevPedidoAll, ...messagesCaja]);
   }, [messagesCaja]);
 
@@ -51,114 +55,185 @@ export const Cajero = () => {
   const handleMetodoPago = (metodo) => {
     setMetodoPagoSeleccionado(metodo);
   };
-
   const handlePrint = async () => {
     if (!pedidoSeleccionado) return;
     await obtenerPedioPDF(pedidoSeleccionado.idPedido);
     await actualizarEstadoPedido(pedidoSeleccionado.idPedido, "PAGADO");
+    await updateEstadoMesa(
+      { estado: "DISPONIBLE" },
+      pedidoSeleccionado.mesa.idMesa
+    );
 
     setPedidoSeleccionado(null);
     setShowPaymentDetails(false);
     setMetodoPagoSeleccionado(null);
   };
+
   return (
-    <div className="container mt-5">
+    <div className="container ">
       <div className="row g-4">
         {/* Lista de Mesas */}
-        <div className="col-12 col-md-8">
-          <h5 className="mb-3">Lista de Mesas por cobrar:</h5>
-          {pedidosAll.map((pedido, index) => (
-            <div key={index} className="card mb-3">
-              <div className="card-body d-flex justify-content-between align-items-center">
-                <div>
-                  <h6 className="fw-bold">
-                    NUMERO DE MESA: {pedido.mesa.numeroMesa}
-                  </h6>
-                  <p className="mb-0">
-                    Nombre del Cliente: {pedido.cliente?.nombre}
-                  </p>
-                </div>
-                <button onClick={() => handleCobrar(pedido)}>Cobrar</button>
-              </div>
+        <div className="col-12 ">
+          <div className="card shadow-sm">
+            <div className="card-header bg-white py-3">
+              <h5 className="mb-0">Mesas por Cobrar</h5>
             </div>
-          ))}
+            <div className="card-body p-0">
+              {pedidosAll.length === 0 ? (
+                <div className="text-center p-4 text-muted">
+                  No hay mesas pendientes por cobrar
+                </div>
+              ) : (
+                <div className="list-group list-group-flush">
+                  {pedidosAll.map((pedido, index) => (
+                    <div key={pedido.id || index} className="list-group-item">
+                      <div className="d-flex justify-content-between align-items-center py-2">
+                        <div>
+                          <div className="d-flex align-items-center gap-2">
+                            <span className="badge bg-primary rounded-pill">
+                              Mesa {pedido.mesa.numeroMesa}
+                            </span>
+                            <h6 className="mb-0">
+                              {pedido.cliente?.nombre || "Cliente"}
+                            </h6>
+                          </div>
+                        </div>
+                        <button
+                          className="btn btn-warning px-4"
+                          onClick={() => handleCobrar(pedido)}
+                        >
+                          <MdOutlinePayment />
+                          Cobrar
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
-        {/* Detalle de Cobro */}
+        {/* Modal de Cobro */}
         {showPaymentDetails && (
-          <div className="col-12 col-md-4">
-            <h5 className="mb-3">Detalle de Cobro</h5>
-            <div className="card">
-              <div className="card-body">
-                <h6 className="mb-3">Método de Pago:</h6>
-                <div className="d-flex gap-2 mb-3">
-                  {["Yape", "Efectivo", "Plin", "Visa"].map((metodo) => (
-                    <button
-                      key={metodo}
-                      className={`btn ${
-                        metodoPagoSeleccionado === metodo
-                          ? "btn-primary"
-                          : "btn-outline-primary"
-                      }`}
-                      onClick={() => handleMetodoPago(metodo)}
-                    >
-                      <i className="material-icons">
-                        {metodo === "Yape" ? "QR " : ""}
-                      </i>
-                      {metodo}
-                    </button>
-                  ))}
+          <CuerpoModal
+            titulo="Detalle de Cobro"
+            onClose={() => setShowPaymentDetails(false)}
+          >
+            <div className="card border-0 shadow-sm">
+              <div className="card-body p-4">
+                {/* Métodos de Pago */}
+                <div className="mb-4">
+                  <h6 className="text-muted mb-3">Método de Pago</h6>
+                  <div className="row g-2">
+                    {["Yape", "Efectivo", "Plin", "Visa"].map((metodo) => (
+                      <div key={metodo} className="col-6">
+                        <button
+                          className={`btn btn-lg w-100 ${
+                            metodoPagoSeleccionado === metodo
+                              ? "btn-primary"
+                              : "btn-outline-primary"
+                          }`}
+                          onClick={() => handleMetodoPago(metodo)}
+                        >
+                          <div className="d-flex align-items-center justify-content-center gap-2">
+                            {metodo === "Yape" && <FaQrcode />}
+                            {metodo === "Efectivo" && <FaMoneyBillWave />}
+                            {metodo === "Plin" && <FaMobileAlt />}
+                            {metodo === "Visa" && <FaCreditCard />}
+                            <span>{metodo}</span>
+                          </div>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
-                <h6 className="mb-3">Detalle:</h6>
-                <ul className="list-group mb-3">
-                  {pedidoSeleccionado?.detallePedidos.map((item, index) => (
-                    <li
-                      key={index}
-                      className="list-group-item d-flex justify-content-between align-items-center"
-                    >
-                      <div>
-                        <span className="fw-bold">{item.cantidad}x</span>{" "}
-                        {item.producto.nombre}
+                <hr className="my-4" />
+
+                {/* Detalle del Pedido */}
+                <div className="mb-4">
+                  <h6 className="text-muted mb-3">Detalle del Pedido</h6>
+                  <div className="list-group">
+                    {pedidoSeleccionado?.detallePedidos.map((item, index) => (
+                      <div
+                        key={index}
+                        className="list-group-item d-flex justify-content-between align-items-center py-3"
+                      >
+                        <div className="d-flex align-items-center gap-2">
+                          <span className="badge bg-primary rounded-pill">
+                            {item.cantidad}x
+                          </span>
+                          <span className="fw-medium">
+                            {item.producto.nombre}
+                          </span>
+                        </div>
+                        <span className="fw-bold">
+                          S/ {(item.cantidad * item.precio).toFixed(2)}
+                        </span>
                       </div>
-                      <span>S/ {(item.cantidad * item.precio).toFixed(2)}</span>
-                    </li>
-                  ))}
-                </ul>
+                    ))}
+                  </div>
+                </div>
 
                 {/* Totales */}
                 {pedidoSeleccionado && (
-                  <>
-                    <p className="mb-1">
-                      Subtotal: S/
-                      {(
-                        calcularTotal(pedidoSeleccionado.detallePedidos) / 1.18
-                      ).toFixed(2)}
-                    </p>
-                    <p className="mb-1">
-                      IGV (18%): S/
-                      {(
-                        calcularTotal(pedidoSeleccionado.detallePedidos) * 0.18
-                      ).toFixed(2)}
-                    </p>
-                    <h6 className="fw-bold mb-3">
-                      Total a Pagar: S/{" "}
-                      {calcularTotal(pedidoSeleccionado.detallePedidos).toFixed(
-                        2
-                      )}
-                    </h6>
-                  </>
+                  <div className="bg-light p-4 rounded-3">
+                    <div className="row g-2">
+                      <div className="col-6">
+                        <span className="text-muted">Subtotal</span>
+                      </div>
+                      <div className="col-6 text-end">
+                        <span>
+                          S/{" "}
+                          {(
+                            calcularTotal(pedidoSeleccionado.detallePedidos) /
+                            1.18
+                          ).toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="col-6">
+                        <span className="text-muted">IGV (18%)</span>
+                      </div>
+                      <div className="col-6 text-end">
+                        <span>
+                          S/{" "}
+                          {(
+                            calcularTotal(pedidoSeleccionado.detallePedidos) *
+                            0.18
+                          ).toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="col-12">
+                        <hr className="my-2" />
+                      </div>
+                      <div className="col-6">
+                        <span className="h5 mb-0">Total</span>
+                      </div>
+                      <div className="col-6 text-end">
+                        <span className="h5 mb-0">
+                          S/{" "}
+                          {calcularTotal(
+                            pedidoSeleccionado.detallePedidos
+                          ).toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 )}
+
+                {/* Botón de Impresión */}
                 <button
-                  className="btn btn-success text-white w-100"
+                  className="btn btn-success btn-lg w-100 mt-4 d-flex align-items-center justify-content-center gap-2"
                   disabled={!metodoPagoSeleccionado}
                   onClick={handlePrint}
                 >
-                  Imprimir Comprobante
+                  <LuPrinter />
+                  <span>Imprimir Comprobante</span>
                 </button>
               </div>
             </div>
-          </div>
+          </CuerpoModal>
         )}
       </div>
     </div>

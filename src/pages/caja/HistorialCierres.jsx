@@ -19,7 +19,6 @@ export const HistorialCierres = () => {
         setIsLoading(false);
       }
     };
-
     fetchCierres();
   }, []);
 

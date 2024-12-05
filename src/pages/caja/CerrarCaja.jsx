@@ -76,7 +76,7 @@ export const CerrarCaja = () => {
   }
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-6">
       <div className="row g-4">
         <div className="col-12">
           {!isCajaAbierta ? (
