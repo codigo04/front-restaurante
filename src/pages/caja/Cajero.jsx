@@ -25,6 +25,7 @@ export const Cajero = () => {
   const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
   const [metodoPagoSeleccionado, setMetodoPagoSeleccionado] = useState(null);
   const [isCajaAbierta, setIsCajaAbierta] = useState(false);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const fetchPedidos = async () => {
@@ -32,7 +33,7 @@ export const Cajero = () => {
       await getPedidoAllEstado("PENDIENTE");
     };
     fetchPedidos();
-  }, []);
+  }, [getPedidoAllEstado]);
 
   useEffect(() => {
     if (filtrados.length > 0) {
@@ -56,7 +57,6 @@ export const Cajero = () => {
         }
       } catch (error) {
         console.error("Error al verificar el estado de la caja:", error);
-        toast.error("Error al verificar el estado de la caja.");
       }
     };
     verificarCaja();
@@ -92,6 +92,17 @@ export const Cajero = () => {
     setMetodoPagoSeleccionado(null);
   };
 
+  const handleSearchPedido = (e) => {
+    setSearch(e.target.value);
+  };
+
+  const filterPedidos = pedidosAll.filter((pedido) => {
+    return (
+      pedido.cliente?.nombre?.toLowerCase().includes(search.toLowerCase()) ||
+      false
+    );
+  });
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
@@ -101,6 +112,14 @@ export const Cajero = () => {
             <h5 className="text-xl font-semibold text-gray-800">
               Mesas por Cobrar
             </h5>
+            <div>
+              <input
+                type="search"
+                placeholder="Buscar..."
+                onChange={handleSearchPedido}
+                className="w-full p-2 rounded-lg border border-gray-300"
+              />
+            </div>
           </div>
 
           <div className="divide-y divide-gray-200">
@@ -109,15 +128,17 @@ export const Cajero = () => {
                 No hay mesas pendientes por cobrar
               </div>
             ) : (
-              pedidosAll.map((pedido, index) => (
-                <div key={pedido.id || index} className="p-4 hover:bg-gray-50">
+              filterPedidos.map((pedido, index) => (
+                <div key={pedido.id || index} className="p-4 hover:bg-gray-100">
                   <div className="flex justify-between items-center">
                     <div className="flex items-center space-x-4">
                       <span className="px-3 py-1 bg-blue-600 text-white rounded-full text-sm">
                         Mesa {pedido.mesa.numeroMesa}
                       </span>
                       <h6 className="font-medium text-gray-900">
-                        {pedido.cliente?.nombre || "Cliente"}
+                        {pedido.cliente
+                          ? `${pedido.cliente.nombre} ${pedido.cliente.apellido}`
+                          : "Cliente"}
                       </h6>
                     </div>
                     <button
@@ -149,7 +170,7 @@ export const Cajero = () => {
                     <button
                       key={metodo}
                       onClick={() => handleMetodoPago(metodo)}
-                      className={`p-4 rounded-lg border-2 flex items-center justify-center space-x-2 transition-all
+                      className={`p-2 rounded-lg border-2 flex items-center justify-center space-x-2 transition-all
                         ${
                           metodoPagoSeleccionado === metodo
                             ? "bg-orange-600 text-white border-black-600"
@@ -166,10 +187,10 @@ export const Cajero = () => {
                 </div>
               </div>
 
-              <div className="my-6 border-t border-gray-200" />
+              <div className="my-3 border-t border-gray-200" />
 
               {/* Detalle del Pedido */}
-              <div className="space-y-4">
+              <div className="space-y-2">
                 <h6 className="text-gray-500 font-medium">
                   Detalle del Pedido
                 </h6>
@@ -197,8 +218,8 @@ export const Cajero = () => {
 
               {/* Totales */}
               {pedidoSeleccionado && (
-                <div className="mt-6 bg-gray-50 rounded-lg p-4 space-y-3">
-                  <div className="flex justify-between">
+                <div className="mt-2 bg-gray-100 rounded-lg p-2 space-y-3">
+                  <div className="flex justify-between text-sm">
                     <span className="text-gray-500">Subtotal</span>
                     <span>
                       S/{" "}
@@ -207,7 +228,7 @@ export const Cajero = () => {
                       ).toFixed(2)}
                     </span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between text-sm">
                     <span className="text-gray-500">IGV (18%)</span>
                     <span>
                       S/{" "}
@@ -217,7 +238,7 @@ export const Cajero = () => {
                     </span>
                   </div>
                   <div className="border-t border-gray-200 my-2" />
-                  <div className="flex justify-between text-lg font-semibold">
+                  <div className="flex justify-between text-sm font-semibold">
                     <span>Total</span>
                     <span>
                       S/{" "}
@@ -233,11 +254,11 @@ export const Cajero = () => {
               <button
                 onClick={handlePrint}
                 disabled={!metodoPagoSeleccionado}
-                className={`mt-6 w-full py-3 rounded-lg flex items-center justify-center space-x-2 transition-colors
+                className={`mt-1 w-full py-3 rounded-lg flex items-center justify-center space-x-2 transition-colors
                   ${
                     !metodoPagoSeleccionado
                       ? "bg-gray-300 cursor-not-allowed"
-                      : "bg-green-600 hover:bg-green-700 text-white"
+                      : "bg-orange-600 hover:bg-orange-700 text-white"
                   }`}
               >
                 <LuPrinter />
