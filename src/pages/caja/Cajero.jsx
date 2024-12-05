@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { PedidoContext } from "../../context/PedidoProvider";
-import { toast } from "react-toastify";
 import { WebSocketContext } from "../../context/WebSocketProvider";
 import { obtenerPedioPDF } from "../../service/reportes";
 import { actualizarEstadoPedido } from "../../service/pedidoService";
@@ -14,6 +13,8 @@ import {
   FaMoneyBillWave,
   FaQrcode,
 } from "react-icons/fa";
+import { obtenerCajaActual } from "../../service/cajaService";
+import { toast } from "react-toastify";
 
 export const Cajero = () => {
   const { messagesCaja } = useContext(WebSocketContext);
@@ -23,6 +24,7 @@ export const Cajero = () => {
   const [showPaymentDetails, setShowPaymentDetails] = useState(false);
   const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
   const [metodoPagoSeleccionado, setMetodoPagoSeleccionado] = useState(null);
+  const [isCajaAbierta, setIsCajaAbierta] = useState(false);
 
   useEffect(() => {
     const fetchPedidos = async () => {
@@ -42,7 +44,29 @@ export const Cajero = () => {
     setPedidoAll((prevPedidoAll) => [...prevPedidoAll, ...messagesCaja]);
   }, [messagesCaja]);
 
+  useEffect(() => {
+    const verificarCaja = async () => {
+      try {
+        const response = await obtenerCajaActual();
+        if (response.data.abierta) {
+          setIsCajaAbierta(true);
+        } else {
+          setIsCajaAbierta(false);
+          toast.warning("Debe aperturar la caja antes de cobrar.");
+        }
+      } catch (error) {
+        console.error("Error al verificar el estado de la caja:", error);
+        toast.error("Error al verificar el estado de la caja.");
+      }
+    };
+    verificarCaja();
+  }, []);
+
   const handleCobrar = (pedido) => {
+    if (!isCajaAbierta) {
+      toast.warning("Debe aperturar la caja antes de cobrar.");
+      return;
+    }
     setPedidoSeleccionado(pedido);
     setShowPaymentDetails(true);
   };
@@ -63,54 +87,50 @@ export const Cajero = () => {
       { estado: "DISPONIBLE" },
       pedidoSeleccionado.mesa.idMesa
     );
-
     setPedidoSeleccionado(null);
     setShowPaymentDetails(false);
     setMetodoPagoSeleccionado(null);
   };
 
   return (
-    <div className="container ">
-      <div className="row g-4">
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-7xl mx-auto">
         {/* Lista de Mesas */}
-        <div className="col-12 ">
-          <div className="card shadow-sm">
-            <div className="card-header bg-white py-3">
-              <h5 className="mb-0">Mesas por Cobrar</h5>
-            </div>
-            <div className="card-body p-0">
-              {pedidosAll.length === 0 ? (
-                <div className="text-center p-4 text-muted">
-                  No hay mesas pendientes por cobrar
-                </div>
-              ) : (
-                <div className="list-group list-group-flush">
-                  {pedidosAll.map((pedido, index) => (
-                    <div key={pedido.id || index} className="list-group-item">
-                      <div className="d-flex justify-content-between align-items-center py-2">
-                        <div>
-                          <div className="d-flex align-items-center gap-2">
-                            <span className="badge bg-primary rounded-pill">
-                              Mesa {pedido.mesa.numeroMesa}
-                            </span>
-                            <h6 className="mb-0">
-                              {pedido.cliente?.nombre || "Cliente"}
-                            </h6>
-                          </div>
-                        </div>
-                        <button
-                          className="btn btn-warning px-4"
-                          onClick={() => handleCobrar(pedido)}
-                        >
-                          <MdOutlinePayment />
-                          Cobrar
-                        </button>
-                      </div>
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+          <div className="border-b border-gray-200 px-6 py-4">
+            <h5 className="text-xl font-semibold text-gray-800">
+              Mesas por Cobrar
+            </h5>
+          </div>
+
+          <div className="divide-y divide-gray-200">
+            {pedidosAll.length === 0 ? (
+              <div className="p-8 text-center text-gray-500">
+                No hay mesas pendientes por cobrar
+              </div>
+            ) : (
+              pedidosAll.map((pedido, index) => (
+                <div key={pedido.id || index} className="p-4 hover:bg-gray-50">
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center space-x-4">
+                      <span className="px-3 py-1 bg-blue-600 text-white rounded-full text-sm">
+                        Mesa {pedido.mesa.numeroMesa}
+                      </span>
+                      <h6 className="font-medium text-gray-900">
+                        {pedido.cliente?.nombre || "Cliente"}
+                      </h6>
                     </div>
-                  ))}
+                    <button
+                      onClick={() => handleCobrar(pedido)}
+                      className="inline-flex items-center px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors"
+                    >
+                      <MdOutlinePayment className="mr-2" />
+                      <span>Cobrar</span>
+                    </button>
+                  </div>
                 </div>
-              )}
-            </div>
+              ))
+            )}
           </div>
         </div>
 
@@ -120,118 +140,109 @@ export const Cajero = () => {
             titulo="Detalle de Cobro"
             onClose={() => setShowPaymentDetails(false)}
           >
-            <div className="card border-0 shadow-sm">
-              <div className="card-body p-4">
-                {/* Métodos de Pago */}
-                <div className="mb-4">
-                  <h6 className="text-muted mb-3">Método de Pago</h6>
-                  <div className="row g-2">
-                    {["Yape", "Efectivo", "Plin", "Visa"].map((metodo) => (
-                      <div key={metodo} className="col-6">
-                        <button
-                          className={`btn btn-lg w-100 ${
-                            metodoPagoSeleccionado === metodo
-                              ? "btn-primary"
-                              : "btn-outline-primary"
-                          }`}
-                          onClick={() => handleMetodoPago(metodo)}
-                        >
-                          <div className="d-flex align-items-center justify-content-center gap-2">
-                            {metodo === "Yape" && <FaQrcode />}
-                            {metodo === "Efectivo" && <FaMoneyBillWave />}
-                            {metodo === "Plin" && <FaMobileAlt />}
-                            {metodo === "Visa" && <FaCreditCard />}
-                            <span>{metodo}</span>
-                          </div>
-                        </button>
-                      </div>
-                    ))}
-                  </div>
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              {/* Métodos de Pago */}
+              <div className="space-y-4">
+                <h6 className="text-gray-500 font-medium">Método de Pago</h6>
+                <div className="grid grid-cols-2 gap-4">
+                  {["Yape", "Efectivo", "Plin", "Visa"].map((metodo) => (
+                    <button
+                      key={metodo}
+                      onClick={() => handleMetodoPago(metodo)}
+                      className={`p-4 rounded-lg border-2 flex items-center justify-center space-x-2 transition-all
+                        ${
+                          metodoPagoSeleccionado === metodo
+                            ? "bg-orange-600 text-white border-black-600"
+                            : "border-gray-300 text-gray-700 hover:border-orange-600 hover:text-orange-600"
+                        }`}
+                    >
+                      {metodo === "Yape" && <FaQrcode />}
+                      {metodo === "Efectivo" && <FaMoneyBillWave />}
+                      {metodo === "Plin" && <FaMobileAlt />}
+                      {metodo === "Visa" && <FaCreditCard />}
+                      <span>{metodo}</span>
+                    </button>
+                  ))}
                 </div>
-
-                <hr className="my-4" />
-
-                {/* Detalle del Pedido */}
-                <div className="mb-4">
-                  <h6 className="text-muted mb-3">Detalle del Pedido</h6>
-                  <div className="list-group">
-                    {pedidoSeleccionado?.detallePedidos.map((item, index) => (
-                      <div
-                        key={index}
-                        className="list-group-item d-flex justify-content-between align-items-center py-3"
-                      >
-                        <div className="d-flex align-items-center gap-2">
-                          <span className="badge bg-primary rounded-pill">
-                            {item.cantidad}x
-                          </span>
-                          <span className="fw-medium">
-                            {item.producto.nombre}
-                          </span>
-                        </div>
-                        <span className="fw-bold">
-                          S/ {(item.cantidad * item.precio).toFixed(2)}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Totales */}
-                {pedidoSeleccionado && (
-                  <div className="bg-light p-4 rounded-3">
-                    <div className="row g-2">
-                      <div className="col-6">
-                        <span className="text-muted">Subtotal</span>
-                      </div>
-                      <div className="col-6 text-end">
-                        <span>
-                          S/{" "}
-                          {(
-                            calcularTotal(pedidoSeleccionado.detallePedidos) /
-                            1.18
-                          ).toFixed(2)}
-                        </span>
-                      </div>
-                      <div className="col-6">
-                        <span className="text-muted">IGV (18%)</span>
-                      </div>
-                      <div className="col-6 text-end">
-                        <span>
-                          S/{" "}
-                          {(
-                            calcularTotal(pedidoSeleccionado.detallePedidos) *
-                            0.18
-                          ).toFixed(2)}
-                        </span>
-                      </div>
-                      <div className="col-12">
-                        <hr className="my-2" />
-                      </div>
-                      <div className="col-6">
-                        <span className="h5 mb-0">Total</span>
-                      </div>
-                      <div className="col-6 text-end">
-                        <span className="h5 mb-0">
-                          S/{" "}
-                          {calcularTotal(
-                            pedidoSeleccionado.detallePedidos
-                          ).toFixed(2)}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Botón de Impresión */}
-                <button
-                  className="btn btn-success btn-lg w-100 mt-4 d-flex align-items-center justify-content-center gap-2"
-                  disabled={!metodoPagoSeleccionado}
-                  onClick={handlePrint}
-                >
-                  <LuPrinter />
-                  <span>Imprimir Comprobante</span>
-                </button>
               </div>
+
+              <div className="my-6 border-t border-gray-200" />
+
+              {/* Detalle del Pedido */}
+              <div className="space-y-4">
+                <h6 className="text-gray-500 font-medium">
+                  Detalle del Pedido
+                </h6>
+                <div className="space-y-3">
+                  {pedidoSeleccionado?.detallePedidos.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex justify-between items-center py-2"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <span className="px-3 py-1 bg-blue-600 text-white rounded-full text-sm">
+                          {item.cantidad}x
+                        </span>
+                        <span className="font-medium">
+                          {item.producto.nombre}
+                        </span>
+                      </div>
+                      <span className="font-bold">
+                        S/ {(item.cantidad * item.precio).toFixed(2)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Totales */}
+              {pedidoSeleccionado && (
+                <div className="mt-6 bg-gray-50 rounded-lg p-4 space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Subtotal</span>
+                    <span>
+                      S/{" "}
+                      {(
+                        calcularTotal(pedidoSeleccionado.detallePedidos) / 1.18
+                      ).toFixed(2)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">IGV (18%)</span>
+                    <span>
+                      S/{" "}
+                      {(
+                        calcularTotal(pedidoSeleccionado.detallePedidos) * 0.18
+                      ).toFixed(2)}
+                    </span>
+                  </div>
+                  <div className="border-t border-gray-200 my-2" />
+                  <div className="flex justify-between text-lg font-semibold">
+                    <span>Total</span>
+                    <span>
+                      S/{" "}
+                      {calcularTotal(pedidoSeleccionado.detallePedidos).toFixed(
+                        2
+                      )}
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* Botón de Impresión */}
+              <button
+                onClick={handlePrint}
+                disabled={!metodoPagoSeleccionado}
+                className={`mt-6 w-full py-3 rounded-lg flex items-center justify-center space-x-2 transition-colors
+                  ${
+                    !metodoPagoSeleccionado
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : "bg-green-600 hover:bg-green-700 text-white"
+                  }`}
+              >
+                <LuPrinter />
+                <span>Imprimir Comprobante</span>
+              </button>
             </div>
           </CuerpoModal>
         )}

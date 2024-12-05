@@ -36,72 +36,101 @@ import { PedidosListos } from "./pages/mozo/PedidosListos";
 import { NieveComponente } from "./components/Globals/NieveComponente";
 
 export const App = () => {
-	return (
-		<>
-			<AuthProvider>
-				<WebSocketProvider>
-					<PedidoProvider>
-						<MesasProvider>
-							<MesaPedidoProvider>
-								<ProductosProvider>
-									<Routes>
-										<Route path="/" element={<Navigate to="/login" />} />
+  return (
+    <>
+      <AuthProvider>
+        <WebSocketProvider>
+          <PedidoProvider>
+            <MesasProvider>
+              <MesaPedidoProvider>
+                <ProductosProvider>
+                  <Routes>
+                    <Route path="/" element={<Navigate to="/login" />} />
 
-										<Route
-											path="/login"
-											element={
-												<NieveComponente>
-													<Login />
-												</NieveComponente>
-											}
-										/>
+                    <Route
+                      path="/login"
+                      element={
+                        <NieveComponente>
+                          <Login />
+                        </NieveComponente>
+                      }
+                    />
 
-										<Route
-											path="/"
-											element={
-                        // Comentar para probar el login
-												// <ProtectedRoute>
-												<Layout />
-												// </ProtectedRoute>
-											}
-										>
-											{/* Rutas protegidas */}
+                    <Route
+                      path="/"
+                      element={
+                        <ProtectedRoute>
+                          <Layout />
+                        </ProtectedRoute>
+                      }
+                    >
+                      {/* Rutas protegidas */}
 
-											<Route path="/cajero" element={<Cajero />} />
-											<Route path="/moso" element={<Moso />} />
+                      <Route path="/cajero" element={<Cajero />} />
+                      <Route path="/moso" element={<Moso />} />
 
-											{/* Rutas del admin */}
-											<Route path="/admin/dashboard" element={<Dashboard />} />
-											<Route path="/admin/productos" element={<ProdutosAdm />} />
-											<Route path="/admin/ordenes" element={<OrdenesAdm />} />
-											<Route path="/admin/clientes" element={<ClientesAdm />}></Route>
-											<Route path="/admin/empleados" element={<EmpleadosAdm />}></Route>
-											<Route path="/admin/mesas" element={<MesasAdm />}></Route>
-											<Route path="/admin/estadisticas" element={<EstadisticasAdm />}></Route>
+                      {/* Rutas del admin */}
+                      <Route path="/admin/dashboard" element={<Dashboard />} />
+                      <Route
+                        path="/admin/productos"
+                        element={<ProdutosAdm />}
+                      />
+                      <Route path="/admin/ordenes" element={<OrdenesAdm />} />
+                      <Route
+                        path="/admin/clientes"
+                        element={<ClientesAdm />}
+                      ></Route>
+                      <Route
+                        path="/admin/empleados"
+                        element={<EmpleadosAdm />}
+                      ></Route>
+                      <Route path="/admin/mesas" element={<MesasAdm />}></Route>
+                      <Route
+                        path="/admin/estadisticas"
+                        element={<EstadisticasAdm />}
+                      ></Route>
 
-											{/* mozo /mozo/pedido */}
-											<Route path="/mozo/mesas" element={<MesasMoso />}></Route>
-											<Route path="/mozo/productos" element={<ProductosMozo />}></Route>
-											<Route path="/mozo/pedido" element={<DetallePedido />}></Route>
-											<Route path="/mozo/pedido/listos" element={<PedidosListos />}></Route>
+                      {/* mozo /mozo/pedido */}
+                      <Route path="/mozo/mesas" element={<MesasMoso />}></Route>
+                      <Route
+                        path="/mozo/productos"
+                        element={<ProductosMozo />}
+                      ></Route>
+                      <Route
+                        path="/mozo/pedido"
+                        element={<DetallePedido />}
+                      ></Route>
+                      <Route
+                        path="/mozo/pedido/listos"
+                        element={<PedidosListos />}
+                      ></Route>
 
-											{/* cocina */}
-											<Route path="/cocina/pedidos" element={<Pedidos />}></Route>
+                      {/* cocina */}
+                      <Route
+                        path="/cocina/pedidos"
+                        element={<Pedidos />}
+                      ></Route>
 
-											{/* caja */}
-											<Route path="/cajero/inicio" element={<Cajero />}></Route>
-											<Route path="/cajero/cerrar-caja" element={<CerrarCaja />}></Route>
-											<Route path="/cajero/historial-cierres-caja" element={<HistorialCierres />}></Route>
-										</Route>
+                      {/* caja */}
+                      <Route path="/cajero/inicio" element={<Cajero />}></Route>
+                      <Route
+                        path="/cajero/cerrar-caja"
+                        element={<CerrarCaja />}
+                      ></Route>
+                      <Route
+                        path="/cajero/historial-cierres-caja"
+                        element={<HistorialCierres />}
+                      ></Route>
+                    </Route>
 
-										<Route path="*" element={<Navigate to="/login" />} />
-									</Routes>
-								</ProductosProvider>
-							</MesaPedidoProvider>
-						</MesasProvider>
-					</PedidoProvider>
-				</WebSocketProvider>
-			</AuthProvider>
-		</>
-	);
+                    <Route path="*" element={<Navigate to="/login" />} />
+                  </Routes>
+                </ProductosProvider>
+              </MesaPedidoProvider>
+            </MesasProvider>
+          </PedidoProvider>
+        </WebSocketProvider>
+      </AuthProvider>
+    </>
+  );
 };
