@@ -95,8 +95,8 @@ export const Dashboard = () => {
 					<div className="col-md-4">
 						<div className="card-gradient">
 							<div className="text-card">
-								<p>s/ 499.00</p>
-								<h2>s/ {totalDeHoy.toFixed(2)}</h2>
+								<p>s/ {totalDeHoy.toFixed(2)}</p>
+								<h2>Total Pedidos</h2>
 							</div>
 							<div className="icon-card">
 								<SavingsIcon sx={{ width: "3em", height: "3em", fill: "#EF8822" }} />
