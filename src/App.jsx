@@ -36,8 +36,11 @@ import { PedidosListos } from "./pages/mozo/PedidosListos";
 import { NieveComponente } from "./components/Globals/NieveComponente";
 
 export const App = () => {
+  console.log("process.env.BASE_URL")
+  console.log(import.meta.env.VITE_BASE_URL)
   return (
     <>
+    
       <AuthProvider>
         <WebSocketProvider>
           <PedidoProvider>

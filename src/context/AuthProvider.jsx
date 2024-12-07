@@ -104,9 +104,11 @@ export const AuthProvider = ({ children }) => {
 
 
     const iniciarSession = async (email, password) => {
+        console.log("process.env.BASE_URL")
+        console.log(import.meta.env.VITE_BASE_URL)
 
         try {
-            const response = await axios.post('http://localhost:8080/api/v1/autenticacion/signin', {
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/v1/autenticacion/signin`, {
                 email,
                 password
             });
@@ -125,7 +127,7 @@ export const AuthProvider = ({ children }) => {
             return token
         } catch (error) {
             console.error('Error al iniciar sesión:', error);
-
+            console.log(process.env.BASE_URL)
             setIsLoading(false)
             return null;
         }
