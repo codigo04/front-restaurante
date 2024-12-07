@@ -19,6 +19,8 @@
 	background: linear-gradient(90deg, #E66301, #F39A3A);
 	display: flex;
 	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
 	padding: 1.5rem;
 	border-radius: 10px;
 	text-align: center;
@@ -26,13 +28,11 @@
 }
 
 .card-gradient h2 {
-	font-size: 1.2em;
 	margin: 0;
 }
 
 .card-gradient p {
 	color: white;
-	font-size: 3rem;
 	font-weight: bold;
 	margin: 0;
 }
@@ -43,10 +43,11 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	width: 30%;
 	padding: 0;
 	border-radius: 50%;
-}
+	width: 80px; /* Establece el ancho máximo */
+	height: 80px; /* Establece la altura máxima */
+  }
 
 .text-card {
 	color: white;
@@ -54,7 +55,6 @@
 	justify-content: center;
 	align-items: start;
 	flex-direction: column;
-	width: 70%;
 }
 
 .container-color {
@@ -63,9 +63,6 @@
 	border-radius: 10px;
 }
 
-.container-fluid {
-	/* margin-top: 20px; */
-}
 
 h2 {
 	margin-bottom: 20px;

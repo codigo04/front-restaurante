@@ -19,7 +19,7 @@ export const Layout = () => {
                 <Sidebar></Sidebar>
 
 
-                <div className="content container-fluid">
+                <div className="content container-fluid ">
                     <Saludo nombre={username}></Saludo>
                     <Outlet></Outlet>
                 </div>

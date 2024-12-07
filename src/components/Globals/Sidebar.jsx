@@ -30,25 +30,39 @@ export const Sidebar = () => {
     },
   ];
 
-  const [isOpen, setIsOpen] = useState(true);
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
-  const sidebarWidth = "169px";
-  return (
-    <>
-      {" "}
-      {/* Botón de alternancia */}
-      <aside
-        className="sidebar bg-dark text-white transition-all duration-300 container-sidebar "
-        style={{
-          width: isOpen ? sidebarWidth : "0",
-          padding: "0",
-        }}
-      >
-        <div className="container catainer-responsy">
-          <img src={logo} className="card-img-top mb-3" alt="logo" />
+
+	const [isOpen, setIsOpen] = useState(false);
+
+	const toggleSidebar = () => {
+		setIsOpen(!isOpen);
+	};
+	const sidebarWidth = "169px";
+	return (
+		<>
+			{/* Overlay oscuro */}
+			<div
+				className={`fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300 ${isOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}
+				onClick={toggleSidebar}
+				style={{ zIndex: "999" }}
+			></div>
+
+			{/* Botón de alternancia */}
+			<aside
+				className="sidebar bg-dark text-white transition-all duration-300 container-sidebar "
+				style={{
+					position: "fixed", // Añadir esta línea
+					top: "0", // Asegura que el sidebar esté en la parte superior
+					left: "0", // Asegura que el sidebar esté alineado a la izquierda
+					height: "100%", // Asegura que el sidebar ocupe toda la altura de la pantalla
+					width: isOpen ? sidebarWidth : "0",
+					padding: "0",
+					zIndex: "1000",
+				}}
+			>
+				<div className="container catainer-responsy">
+					<img src={logo} className="card-img-top mb-3" alt="logo" />
+
 
           {/* Botón de alternancia cerca del logo */}
           <a
@@ -64,36 +78,33 @@ export const Sidebar = () => {
           </a>
         </div>
 
-        <nav
-          className="container container-navegacion"
-          style={{
-            overflow: "hidden",
-            transition: "width 0.3s ease",
-            visibility: isOpen ? "visible" : "hidden",
-          }}
-        >
-          <ul className="list-unstyled">
-            {links
-              .filter((link) => link.rol === rolUser)
-              .map((link) => (
-                <li key={link.ruta} className="">
-                  <Link to={link.ruta} className="text-black ">
-                    {link.nombre}
-                  </Link>
-                </li>
-              ))}
-            <li onClick={cerrarSesionAuth} className="">
-              <Link
-                to="/login"
-                className="text-black"
-                style={{ color: "black" }}
-              >
-                Salir
-              </Link>
-            </li>
-          </ul>
-        </nav>
-      </aside>
-    </>
-  );
+				<nav
+					className="container container-navegacion"
+					style={{
+						overflow: "hidden",
+						transition: "width 0.3s ease",
+						visibility: isOpen ? "visible" : "hidden",
+					}}
+				>
+					<ul className="list-unstyled">
+						{links
+							.filter((link) => link.rol === rolUser)
+							.map((link) => (
+								<li key={link.ruta} className="">
+									<Link to={link.ruta} className="text-black" onClick={() => setIsOpen(false)}>
+										{link.nombre}
+									</Link>
+								</li>
+							))}
+						<li onClick={cerrarSesionAuth} className="">
+							<Link to="/login" className="text-black" style={{ color: "black" }}>
+								Salir
+							</Link>
+						</li>
+					</ul>
+				</nav>
+			</aside>
+		</>
+	);
+
 };

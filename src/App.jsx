@@ -59,6 +59,7 @@ export const App = () => {
                       }
                     />
 
+
                     <Route
                       path="/"
                       element={
@@ -68,6 +69,7 @@ export const App = () => {
                       }
                     >
                       {/* Rutas protegidas */}
+
 
                       <Route path="/cajero" element={<Cajero />} />
                       <Route path="/moso" element={<Moso />} />
