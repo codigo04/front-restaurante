@@ -34,7 +34,7 @@ import { CerrarCaja } from "./pages/caja/CerrarCaja";
 import { HistorialCierres } from "./pages/caja/HistorialCierres";
 import { PedidosListos } from "./pages/mozo/PedidosListos";
 import { NieveComponente } from "./components/Globals/NieveComponente";
-import { Pedidos } from "./pages/cocina/pedidos";
+// import { Pedidos } from "./pages/cocina/pedidos";
 
 export const App = () => {
   
@@ -109,10 +109,10 @@ export const App = () => {
                       ></Route>
 
                       {/* cocina */}
-                      <Route
+                      {/* <Route
                         path="/cocina/pedidos"
                         element={<Pedidos />}
-                      ></Route>
+                      ></Route> */}
 
                       {/* caja */}
                       <Route path="/cajero/inicio" element={<Cajero />}></Route>
