@@ -1,3 +1,4 @@
+import React from 'react'
 import { MainCocina } from "./MainCocina";
 import './style-cocina.css'
 
@@ -9,3 +10,6 @@ export const Pedidos = () => {
 		</div>
 	);
 };
+
+
+

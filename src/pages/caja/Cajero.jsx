@@ -33,7 +33,7 @@ export const Cajero = () => {
       await getPedidoAllEstado("PENDIENTE");
     };
     fetchPedidos();
-  }, [getPedidoAllEstado]);
+  }, []);
 
   useEffect(() => {
     if (filtrados.length > 0) {
