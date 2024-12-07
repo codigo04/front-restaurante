@@ -44,11 +44,11 @@ export const MainCocina = () => {
 
 
 	useEffect(() => {
-     if (filtrados.length > 0) {
-		console.log("si entro")
-		setPedidoAllCocina(filtrados);
-	 }
-	 console.log("no entro")
+		if (filtrados.length > 0) {
+			console.log("si entro")
+			setPedidoAllCocina(filtrados);
+		}
+		console.log("no entro")
 
 	}, [filtrados]);
 
@@ -87,17 +87,25 @@ export const MainCocina = () => {
 				</article>
 
 				<section className="col-12">
-					<div className="d-flex justify-content-between flex-wrap">
-						{pedidosAllCocina.length === 0
-							? (
-
-								<Typography variant="body1">No hay pedidos en preparación.</Typography>)
-							: (
-								pedidosAllCocina.map((pedido) => (
-									<Card key={pedido.pedidoId} pedido={pedido} handlePedido={handlePedido} />
-								)))}
+					<div className="flex flex-wrap justify-center sm:justify-start gap-6">
+						{pedidosAllCocina.length === 0 ? (
+							<Typography variant="body1" className="text-center text-gray-500 w-full mt-6">
+								No hay pedidos en preparación.
+							</Typography>
+						) : (
+							pedidosAllCocina.map((pedido) => (
+								<Card
+									key={pedido.pedidoId}
+									pedido={pedido}
+									handlePedido={handlePedido}
+									className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 2xl:w-1/6 p-4"
+								/>
+							))
+						)}
 					</div>
 				</section>
+
+
 			</section>
 		</>
 	);

@@ -1,10 +1,10 @@
 import { CardList } from "./CardList"
 
-export const CardMain = ({ imagenUrl, platos, estado, cambiarEstado }) => {
+export const CardMain = ({ imagenUrl, platos, estado, cambiarEstado,setEstadoProducto }) => {
   return (
     <main className="card-body">
       <section className="container card">
-        <article className=" d-flex flex-row my-3">
+        {/* <article className=" d-flex flex-row my-3">
           <div className="card-image w-50">
             <img
               src={imagenUrl}
@@ -15,13 +15,13 @@ export const CardMain = ({ imagenUrl, platos, estado, cambiarEstado }) => {
           <div className="card-action w-50 flex-center">
 
           </div>
-        </article>
+        </article> */}
 
         <article>
           <div>
             <h4>Lista de platos</h4>
           </div>
-          <CardList platos={platos} />
+          <CardList setEstadoProducto={setEstadoProducto} platos={platos} />
         </article>
       </section>
     </main>
