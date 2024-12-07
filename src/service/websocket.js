@@ -4,7 +4,7 @@ import { Client } from "@stomp/stompjs"
 export const connectWebSocket = (onMessageReceivedMozo,onMessageReceivedCosina,onMessageReceivedCaja,onConnect) => {
 
     const stompCliente = new Client({
-        brokerURL: 'ws://localhost:8080/ws',
+        brokerURL: 'wss://spring-api-restaurante-v2.onrender.com/ws',   
         reconnectDelay: 5000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,

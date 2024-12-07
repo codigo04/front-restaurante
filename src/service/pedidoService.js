@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8080"; // Reemplaza con la URL real de tu API.
+const BASE_URL = import.meta.env.VITE_BASE_URL; // Reemplaza con la URL real de tu API.
 const token = localStorage.getItem("token");
 const configToken = {
   headers: {
