@@ -11,7 +11,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { ProdutosAdm } from "./pages/admin/ProdutosAdm";
 import { OrdenesAdm } from "./pages/admin/OrdenesAdm";
 import { ClientesAdm } from "./pages/admin/ClientesAdm";
-import { IngresosAdm } from "./pages/admin/IngresosAdm";
+
 import { EstadisticasAdm } from "./pages/admin/EstadisticasAdm";
 import { EmpleadosAdm } from "./pages/admin/EmpleadosAdm";
 import { MesasMoso } from "./pages/mozo/MesasMoso";
@@ -23,7 +23,7 @@ import { MesasAdm } from "./pages/admin/MesasAdm";
 import { MesasProvider } from "./context/MesasProvider";
 import { AuthProvider } from "./context/AuthProvider";
 import { Cajero } from "./pages/caja/Cajero";
-import { Pedidos } from "./pages/cocina/pedidos";
+
 import { WebSocketProvider } from "./context/WebSocketProvider";
 import { PedidoProvider } from "./context/PedidoProvider";
 
@@ -34,10 +34,10 @@ import { CerrarCaja } from "./pages/caja/CerrarCaja";
 import { HistorialCierres } from "./pages/caja/HistorialCierres";
 import { PedidosListos } from "./pages/mozo/PedidosListos";
 import { NieveComponente } from "./components/Globals/NieveComponente";
+import { Pedidos } from "./pages/cocina/pedidos";
 
 export const App = () => {
-  console.log("process.env.BASE_URL")
-  console.log(import.meta.env.VITE_BASE_URL)
+  
   return (
     <>
     
